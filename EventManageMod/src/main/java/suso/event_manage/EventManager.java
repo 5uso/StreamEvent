@@ -1,0 +1,161 @@
+package suso.event_manage;
+
+import com.mojang.brigadier.CommandDispatcher;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerLoginConnectionEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking;
+import net.minecraft.server.*;
+import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.world.GameRules;
+import org.slf4j.Logger;
+import suso.event_manage.data.EventData;
+import suso.event_manage.data.EventPlayerData;
+import suso.event_manage.mixin.MinecraftServerAccess;
+import suso.event_manage.mixin.PlayerManagerAccess;
+import suso.event_manage.state_handlers.IdleHandler;
+import suso.event_manage.state_handlers.StateHandler;
+import suso.event_manage.util.CommandUtil;
+
+import java.util.List;
+
+public class EventManager implements ModInitializer {
+    public enum ServerState {
+        IDLE, PRIMATICA_INGAME
+    }
+
+    private static EventManager instance;
+
+    private MinecraftServer server;
+    private EventData data;
+    private StateHandler handler;
+
+    private void onServerStart(MinecraftServer server) {
+        this.server = server;
+        this.setStateHandler(new IdleHandler());
+
+        PlayerManager pm = server.getPlayerManager();
+        Whitelist whitelist = pm.getWhitelist();
+        whitelist.values().clear();
+        pm.setWhitelistEnabled(true);
+
+        OperatorList ops = ((PlayerManagerAccess) pm).getOps();
+        ops.values().clear();
+
+        data = EventData.getInstance();
+        data.loadData(server);
+
+        setGameRules(server);
+    }
+
+    private void onServerTick(MinecraftServer server) {
+        PlayerManager pm = server.getPlayerManager();
+        List<ServerPlayerEntity> players = pm.getPlayerList();
+
+        handler.tick(this, server);
+        for(ServerPlayerEntity player : players) handler.tickPlayer(this, server, player, data.getPlayerData(player));
+    }
+
+    public void onPlayerJoin(ServerPlayerEntity player) {
+        if(!data.isPlayerRegistered(player)) {
+            data.registerPlayer(player);
+        }
+
+        handler.onPlayerJoin(this, server, player, data.getPlayerData(player));
+    }
+
+    public void onSave() {
+        Logger LOGGER = MinecraftServerAccess.getLOGGER();
+        LOGGER.info("Saving event data...");
+
+        data.saveData();
+
+        LOGGER.info("Event data saved");
+    }
+
+    public void cleanup(MinecraftServer server) {
+        handler.cleanup(this, server);
+    }
+
+    public void setStateHandler(StateHandler handler) {
+        Logger LOGGER = MinecraftServerAccess.getLOGGER();
+        LOGGER.info("Changing state to " + handler.getState());
+        if(this.handler != null) {
+            this.handler.cleanup(this, server);
+            this.handler.getStateCommands().unregister(server);
+        }
+        this.handler = handler;
+        this.handler.getStateCommands().register(server);
+    }
+
+    private static void setGameRules(MinecraftServer server) {
+        GameRules rules = server.getGameRules();
+        rules.get(GameRules.DO_FIRE_TICK).set(false, server);
+        rules.get(GameRules.DO_MOB_GRIEFING).set(false, server);
+        rules.get(GameRules.KEEP_INVENTORY).set(true, server);
+        rules.get(GameRules.DO_MOB_SPAWNING).set(false, server);
+        rules.get(GameRules.DO_MOB_LOOT).set(false, server);
+        rules.get(GameRules.DO_TILE_DROPS).set(true, server);
+        rules.get(GameRules.DO_ENTITY_DROPS).set(false, server);
+        rules.get(GameRules.COMMAND_BLOCK_OUTPUT).set(false, server);
+        rules.get(GameRules.NATURAL_REGENERATION).set(true, server);
+        rules.get(GameRules.DO_DAYLIGHT_CYCLE).set(false, server);
+        rules.get(GameRules.LOG_ADMIN_COMMANDS).set(false, server);
+        rules.get(GameRules.SHOW_DEATH_MESSAGES).set(true, server);
+        rules.get(GameRules.RANDOM_TICK_SPEED).set(0, server);
+        rules.get(GameRules.SEND_COMMAND_FEEDBACK).set(true, server);
+        rules.get(GameRules.REDUCED_DEBUG_INFO).set(false, server);
+        rules.get(GameRules.SPECTATORS_GENERATE_CHUNKS).set(true, server);
+        rules.get(GameRules.SPAWN_RADIUS).set(0, server);
+        rules.get(GameRules.DISABLE_ELYTRA_MOVEMENT_CHECK).set(true, server);
+        rules.get(GameRules.MAX_ENTITY_CRAMMING).set(-1, server);
+        rules.get(GameRules.DO_WEATHER_CYCLE).set(false, server);
+        rules.get(GameRules.DO_LIMITED_CRAFTING).set(true, server);
+        rules.get(GameRules.MAX_COMMAND_CHAIN_LENGTH).set(65536, server);
+        rules.get(GameRules.ANNOUNCE_ADVANCEMENTS).set(false, server);
+        rules.get(GameRules.DISABLE_RAIDS).set(true, server);
+        rules.get(GameRules.DO_INSOMNIA).set(false, server);
+        rules.get(GameRules.DO_IMMEDIATE_RESPAWN).set(false, server);
+        rules.get(GameRules.DROWNING_DAMAGE).set(true, server);
+        rules.get(GameRules.FALL_DAMAGE).set(true, server);
+        rules.get(GameRules.FIRE_DAMAGE).set(true, server);
+        rules.get(GameRules.FREEZE_DAMAGE).set(true, server);
+        rules.get(GameRules.DO_PATROL_SPAWNING).set(false, server);
+        rules.get(GameRules.DO_TRADER_SPAWNING).set(false, server);
+        rules.get(GameRules.DO_WARDEN_SPAWNING).set(false, server);
+        rules.get(GameRules.FORGIVE_DEAD_PLAYERS).set(true, server);
+        rules.get(GameRules.UNIVERSAL_ANGER).set(false, server);
+        rules.get(GameRules.PLAYERS_SLEEPING_PERCENTAGE).set(100, server);
+    }
+
+    public boolean isEventPlayer(ServerPlayerEntity player) {
+        EventPlayerData pd = data.getPlayerData(player);
+        if(pd == null) return false;
+        return pd.isPlayer;
+    }
+
+    public MinecraftServer getServer() {
+        return server;
+    }
+
+    public static EventManager getInstance() {
+        return instance;
+    }
+
+    @Override
+    public void onInitialize() {
+        instance = this;
+
+        ServerLifecycleEvents.SERVER_STARTED.register(this::onServerStart);
+        ServerTickEvents.END_SERVER_TICK.register(this::onServerTick);
+        ServerLifecycleEvents.SERVER_STOPPING.register(this::cleanup);
+
+        ServerLoginConnectionEvents.QUERY_START.register(ModCheck::handleConnection);
+        ServerLoginNetworking.registerGlobalReceiver(EvtBaseConstants.LOGIN_CHECK, ModCheck::handleResponse);
+
+        CommandRegistrationCallback.EVENT.register(CommandUtil::registerGlobalCommands);
+    }
+}

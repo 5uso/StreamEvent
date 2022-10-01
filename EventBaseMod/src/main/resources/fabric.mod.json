@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "event_base",
+  "version": "${version}",
+  "name": "Event_base",
+  "description": "",
+  "authors": ["Suso"],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/event_base/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "suso.event_base.client.Event_baseClient"
+    ],
+    "main": [
+      "suso.event_base.Event_base"
+    ]
+  },
+  "mixins": [
+    "event_base.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.9",
+    "fabric": "*",
+    "minecraft": "1.19.2"
+  }
+}

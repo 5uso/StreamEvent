@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "event_manage",
+  "version": "${version}",
+  "name": "Event_manage",
+  "description": "",
+  "authors": [
+    "Suso"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/event_manage/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "client": [
+    ],
+    "main": [
+      "suso.event_manage.EventManager"
+    ]
+  },
+  "mixins": [
+    "event_manage.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.9",
+    "fabric": "*",
+    "minecraft": "1.19.2"
+  }
+}
