@@ -220,6 +220,16 @@ public class EventData {
         return getPlayerData(player.getUuid());
     }
 
+    @Nullable
+    public EventTeamData getTeamData(String name) {
+        return teamData.get(name);
+    }
+
+    @Nullable
+    public EventTeamData getTeamData(Team team) {
+        return getTeamData(team.getName());
+    }
+
     public void saveData() {
         savePlayerData();
         saveTeamData();
