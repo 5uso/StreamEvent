@@ -8,7 +8,10 @@
     "MinecraftServerAccess",
     "MinecraftServerMixin",
     "PlayerManagerAccess",
-    "PlayerManagerMixin"
+    "PlayerManagerMixin",
+    "ServerPlayerEntityMixin",
+    "ServerPlayerInteractionManagerMixin",
+    "ServerPlayNetworkHandlerMixin"
   ],
   "client": [
   ],

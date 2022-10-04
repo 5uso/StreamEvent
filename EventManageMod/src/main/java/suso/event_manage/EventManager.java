@@ -3,13 +3,18 @@ package suso.event_manage;
 import com.mojang.brigadier.CommandDispatcher;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.*;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
 import org.slf4j.Logger;
 import suso.event_manage.data.EventData;
@@ -67,6 +72,18 @@ public class EventManager implements ModInitializer {
         handler.onPlayerJoin(this, server, player, data.getPlayerData(player));
     }
 
+    public void onPlayerRespawn(ServerPlayerEntity old, ServerPlayerEntity player, boolean alive) {
+        handler.onPlayerRespawn(this, server, player, data.getPlayerData(player));
+    }
+
+    public boolean onPlayerDeath(ServerPlayerEntity player, DamageSource damageSource, float damageAmount) {
+        return handler.onPlayerDeath(this, server, player, data.getPlayerData(player), damageSource, damageAmount);
+    }
+
+    public void onPlayerItemUsedOnBlock(ServerPlayerEntity player, BlockPos pos, ItemStack stack, Hand hand) {
+        handler.onPlayerItemUsedOnBlock(this, server, player, data.getPlayerData(player), pos, stack, hand);
+    }
+
     public void onSave() {
         Logger LOGGER = MinecraftServerAccess.getLOGGER();
         LOGGER.info("Saving event data...");
@@ -98,7 +115,7 @@ public class EventManager implements ModInitializer {
         rules.get(GameRules.KEEP_INVENTORY).set(true, server);
         rules.get(GameRules.DO_MOB_SPAWNING).set(false, server);
         rules.get(GameRules.DO_MOB_LOOT).set(false, server);
-        rules.get(GameRules.DO_TILE_DROPS).set(true, server);
+        rules.get(GameRules.DO_TILE_DROPS).set(false, server);
         rules.get(GameRules.DO_ENTITY_DROPS).set(false, server);
         rules.get(GameRules.COMMAND_BLOCK_OUTPUT).set(false, server);
         rules.get(GameRules.NATURAL_REGENERATION).set(true, server);
@@ -120,7 +137,7 @@ public class EventManager implements ModInitializer {
         rules.get(GameRules.DO_INSOMNIA).set(false, server);
         rules.get(GameRules.DO_IMMEDIATE_RESPAWN).set(false, server);
         rules.get(GameRules.DROWNING_DAMAGE).set(true, server);
-        rules.get(GameRules.FALL_DAMAGE).set(true, server);
+        rules.get(GameRules.FALL_DAMAGE).set(false, server);
         rules.get(GameRules.FIRE_DAMAGE).set(true, server);
         rules.get(GameRules.FREEZE_DAMAGE).set(true, server);
         rules.get(GameRules.DO_PATROL_SPAWNING).set(false, server);
@@ -135,6 +152,10 @@ public class EventManager implements ModInitializer {
         EventPlayerData pd = data.getPlayerData(player);
         if(pd == null) return false;
         return pd.isPlayer;
+    }
+
+    public boolean canDropItems(ServerPlayerEntity player) {
+        return handler.canDropItems(this, player, data.getPlayerData(player));
     }
 
     public MinecraftServer getServer() {
@@ -157,5 +178,8 @@ public class EventManager implements ModInitializer {
         ServerLoginNetworking.registerGlobalReceiver(EvtBaseConstants.LOGIN_CHECK, ModCheck::handleResponse);
 
         CommandRegistrationCallback.EVENT.register(CommandUtil::registerGlobalCommands);
+
+        ServerPlayerEvents.AFTER_RESPAWN.register(this::onPlayerRespawn);
+        ServerPlayerEvents.ALLOW_DEATH.register(this::onPlayerDeath);
     }
 }
