@@ -7,6 +7,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtString;
 import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.util.math.Vec3d;
+import suso.event_manage.util.RndSet;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -14,8 +15,6 @@ import java.util.Random;
 import java.util.Set;
 
 public class PrimaticaInfo {
-    private static final Random r = new Random();
-
     private static final Vec3d[] orbLocations = {
             new Vec3d(226.00, 125.00, 18.50),
             new Vec3d(209.5, 109.00, -5.5),
@@ -25,14 +24,10 @@ public class PrimaticaInfo {
             new Vec3d(209.5, 95, -34.5),
     };
 
-    private static final Set<Vec3d> orbLocationset = new HashSet<>(Arrays.asList(orbLocations));
+    private static final RndSet<Vec3d> orbLocationset = new RndSet<>(Arrays.asList(orbLocations));
 
-    public static Vec3d randomOrbLocation() {
-        return orbLocations[r.nextInt(orbLocations.length)];
-    }
-
-    public static Set<Vec3d> getOrbLocations() {
-        return new HashSet<>(orbLocationset);
+    public static RndSet<Vec3d> getOrbLocations() {
+        return new RndSet<>(orbLocationset);
     }
 
     public static NbtCompound SWORD;

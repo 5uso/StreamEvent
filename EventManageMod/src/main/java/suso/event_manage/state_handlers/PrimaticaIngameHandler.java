@@ -5,14 +5,17 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.thrown.SnowballEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.scoreboard.AbstractTeam;
+import net.minecraft.scoreboard.Team;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -29,22 +32,17 @@ import suso.event_manage.data.EventPlayerData;
 import suso.event_manage.game_info.PrimaticaInfo;
 import suso.event_manage.state_handlers.commands.PrimaticaIngameCommands;
 import suso.event_manage.state_handlers.commands.StateCommands;
-import suso.event_manage.util.InventoryUtil;
-import suso.event_manage.util.ParticleUtil;
-import suso.event_manage.util.ShaderUtil;
-import suso.event_manage.util.SoundUtil;
+import suso.event_manage.util.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class PrimaticaIngameHandler implements StateHandler {
     private long durationMillis;
     private final long startMillis;
     private long leftMillis;
 
-    private Set<Vec3d> possibleOrbSpots;
     private final Map<Vec3d, SnowballEntity> orbs;
     private int orbTarget;
 
@@ -54,7 +52,6 @@ public class PrimaticaIngameHandler implements StateHandler {
         this.durationMillis = durationMillis;
         this.startMillis = System.currentTimeMillis();
 
-        this.possibleOrbSpots = PrimaticaInfo.getOrbLocations();
         this.orbs = new HashMap<>();
         this.orbTarget = 3;
 
@@ -70,7 +67,7 @@ public class PrimaticaIngameHandler implements StateHandler {
         snowballList.forEach(Entity::kill);
 
         EventData edata = EventData.getInstance();
-        server.getPlayerManager().getPlayerList().forEach(player -> initPLayer(manager, server, player, edata.getPlayerData(player)));
+        server.getPlayerManager().getPlayerList().forEach(player -> initPlayer(manager, server, player, edata.getPlayerData(player)));
     }
 
     private void summonOrb(World world, Vec3d pos) {
@@ -84,9 +81,16 @@ public class PrimaticaIngameHandler implements StateHandler {
         world.spawnEntity(e);
     }
 
-    private void summonOrb(World world) {
-        Vec3d pos = PrimaticaInfo.randomOrbLocation();
-        if(!orbs.containsKey(pos) && possibleOrbSpots.contains(pos)) summonOrb(world, pos);
+    private void trySummonOrb(EventManager manager, World world) {
+        RndSet<Vec3d> possibleOrbSpots = PrimaticaInfo.getOrbLocations();
+        for(PlayerEntity player : world.getPlayers()) {
+            if(manager.isEventPlayer((ServerPlayerEntity) player)) {
+                possibleOrbSpots.removeIf(pos -> pos.distanceTo(player.getPos()) < 20.0);
+            }
+        }
+
+        Vec3d pos = possibleOrbSpots.getRandom();
+        if(!orbs.containsKey(pos)) summonOrb(world, pos);
     }
 
     private void collectOrb(MinecraftServer server, ServerPlayerEntity player, SnowballEntity orb) {
@@ -108,8 +112,20 @@ public class PrimaticaIngameHandler implements StateHandler {
     private boolean tickOrb(MinecraftServer server, SnowballEntity orb) {
         if(orb.isRemoved()) return true;
 
-        server.getOverworld().spawnParticles(new DustParticleEffect(new Vec3f(1.0f, 1.0f, 1.0f), 1.0f), orb.getX(), orb.getY() + 0.3, orb.getZ(), 1, 0.2, 0.2, 0.2, 0.0);
-        //TODO: Glow color of nearest team?
+        ServerWorld w = server.getOverworld();
+        w.spawnParticles(new DustParticleEffect(new Vec3f(1.0f, 1.0f, 1.0f), 1.0f), orb.getX(), orb.getY() + 0.3, orb.getZ(), 1, 0.2, 0.2, 0.2, 0.0);
+
+        PlayerEntity player = w.getClosestPlayer(orb, 20.0);
+        if(player instanceof ServerPlayerEntity sPlayer) {
+            server.getScoreboard().addPlayerToTeam(orb.getUuidAsString(), (Team) player.getScoreboardTeam());
+
+            if(player.getBoundingBox().intersects(orb.getBoundingBox().expand(0.1))) {
+                collectOrb(server, sPlayer, orb);
+                return true;
+            }
+        } else {
+            server.getScoreboard().clearPlayerTeam(orb.getUuidAsString());
+        }
 
         return false;
     }
@@ -118,7 +134,12 @@ public class PrimaticaIngameHandler implements StateHandler {
         durationMillis += millis;
     }
 
-    private void initPLayer(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data) {
+    private void useAgility(MinecraftServer server, ServerPlayerEntity player) {
+        player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 10, 0, false, false, true));
+        player.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, 10, 4, false, false, true));
+    }
+
+    private void initPlayer(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data) {
         InventoryUtil.clearPLayer(player);
         player.clearStatusEffects();
 
@@ -148,9 +169,7 @@ public class PrimaticaIngameHandler implements StateHandler {
         leftMillis = (startMillis + durationMillis) - System.currentTimeMillis();
 
         orbs.entrySet().removeIf(orb -> tickOrb(server, orb.getValue()));
-        if(orbs.size() < orbTarget) summonOrb(server.getOverworld());
-
-        possibleOrbSpots = PrimaticaInfo.getOrbLocations();
+        if(orbs.size() < orbTarget) trySummonOrb(manager, server.getOverworld());
     }
 
     @Override
@@ -160,25 +179,13 @@ public class PrimaticaIngameHandler implements StateHandler {
         if(!manager.isEventPlayer(player) || player.isDead()) return;
 
         player.getHungerManager().add(20, 0.0f);
-
-        Box bb = player.getBoundingBox();
-        orbs.entrySet().removeIf(orb -> {
-            SnowballEntity e = orb.getValue();
-            if(bb.intersects(e.getBoundingBox().expand(0.1))) {
-                collectOrb(server, player, e);
-                return true;
-            }
-            return false;
-        });
-
-        possibleOrbSpots.removeIf(pos -> pos.distanceTo(player.getPos()) < 20.0);
     }
 
     @Override
     public void onPlayerJoin(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data) {
         SoundUtil.playFadeSound(player, new Identifier("suso:main"), 1.0f, 1.0f, true);
 
-        initPLayer(manager, server, player, data);
+        initPlayer(manager, server, player, data);
     }
 
     @Override
