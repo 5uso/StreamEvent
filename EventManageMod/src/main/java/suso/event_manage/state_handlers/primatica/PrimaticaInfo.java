@@ -47,14 +47,7 @@ public class PrimaticaInfo {
         return powerupLocationset;
     }
 
-    public static NbtCompound SWORD;
-    public static NbtCompound BOW;
-    public static NbtCompound PICKAXE;
-    public static NbtCompound BLOCK;
-    public static NbtCompound HELMET;
-    public static NbtCompound CHESTPLATE;
-    public static NbtCompound LEGGINGS;
-    public static NbtCompound BOOTS;
+    public static NbtCompound SWORD, BOW, PICKAXE, BLOCK, HELMET, CHESTPLATE, LEGGINGS, BOOTS, AGILITY, BRIDGE;
     static {
         try {
             SWORD = StringNbtReader.parse("{id:'iron_sword',Count:1b,tag:{Unbreakable:1b}}");
@@ -65,6 +58,9 @@ public class PrimaticaInfo {
             CHESTPLATE = StringNbtReader.parse("{id:'leather_chestplate',Count:1b,tag:{Unbreakable:1b}}");
             LEGGINGS = StringNbtReader.parse("{id:'leather_leggings',Count:1b,tag:{Unbreakable:1b}}");
             BOOTS = StringNbtReader.parse("{id:'leather_boots',Count:1b,tag:{Unbreakable:1b}}");
+
+            AGILITY = StringNbtReader.parse("{id:'feather',Count:1b,tag:{CustomModelData:1}}");
+            BRIDGE = StringNbtReader.parse("{id:'feather',Count:1b,tag:{CustomModelData:2}}");
         } catch (CommandSyntaxException e) {
             e.printStackTrace();
             System.exit(0xDEADBEEF);

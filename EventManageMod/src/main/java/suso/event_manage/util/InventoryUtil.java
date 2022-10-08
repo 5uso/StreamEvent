@@ -32,4 +32,9 @@ public class InventoryUtil {
             player.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(player.playerScreenHandler.syncId, player.playerScreenHandler.nextRevision(), getStupidSlot(slot), item));
         }
     }
+
+    public static void giveItem(ServerPlayerEntity player, ItemStack item) {
+        player.getInventory().insertStack(item);
+        player.currentScreenHandler.sendContentUpdates();
+    }
 }

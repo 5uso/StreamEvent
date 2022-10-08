@@ -53,6 +53,11 @@ public class IdleHandler implements StateHandler {
     }
 
     @Override
+    public boolean onPlayerRightClick(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data, ItemStack stack, Hand hand) {
+        return false;
+    }
+
+    @Override
     public void cleanup(EventManager manager, MinecraftServer server) {
 
     }

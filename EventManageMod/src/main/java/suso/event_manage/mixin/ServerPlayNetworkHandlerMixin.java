@@ -2,9 +2,11 @@ package suso.event_manage.mixin;
 
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket.Action;
+import net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -38,5 +40,19 @@ public abstract class ServerPlayNetworkHandlerMixin {
             player.clearActiveItem();
             ci.cancel();
         }
+    }
+
+    @Inject(
+            method = "onPlayerInteractItem",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/item/ItemStack;isEmpty()Z"
+            ),
+            cancellable = true
+    )
+    private void interceptRightClick(PlayerInteractItemC2SPacket packet, CallbackInfo ci) {
+        Hand hand = packet.getHand();
+        ServerPlayerEntity player = this.getPlayer();
+        if(EventManager.getInstance().onPlayerRightClick(player, player.getStackInHand(hand), hand)) ci.cancel();;
     }
 }

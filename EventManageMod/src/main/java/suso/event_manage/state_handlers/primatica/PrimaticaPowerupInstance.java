@@ -2,10 +2,12 @@ package suso.event_manage.state_handlers.primatica;
 
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import suso.event_manage.state_handlers.TickableInstance;
+import suso.event_manage.util.InventoryUtil;
 
 import java.util.List;
 import java.util.Queue;
@@ -55,11 +57,10 @@ public class PrimaticaPowerupInstance implements TickableInstance {
 
     private void collectPowerup(ServerPlayerEntity player) {
         UUID id = player.getUuid();
-        handler.setHasPowerup(id, false);
         if(!handler.getHasPowerup(id)) {
             switch (type) {
-                case AGILITY -> handler.useAgility(player);
-                default -> handler.useBridge(player);
+                case AGILITY -> InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.AGILITY));
+                default -> InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.BRIDGE));
             }
             handler.setHasPowerup(id, true);
         }

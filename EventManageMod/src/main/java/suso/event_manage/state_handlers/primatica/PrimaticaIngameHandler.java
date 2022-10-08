@@ -7,23 +7,15 @@ import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.thrown.SnowballEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.particle.DustParticleEffect;
-import net.minecraft.particle.ItemStackParticleEffect;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.scoreboard.AbstractTeam;
-import net.minecraft.scoreboard.Team;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.World;
@@ -33,7 +25,10 @@ import suso.event_manage.data.EventPlayerData;
 import suso.event_manage.state_handlers.StateCommands;
 import suso.event_manage.state_handlers.StateHandler;
 import suso.event_manage.state_handlers.TickableInstance;
-import suso.event_manage.util.*;
+import suso.event_manage.util.InventoryUtil;
+import suso.event_manage.util.RndSet;
+import suso.event_manage.util.ShaderUtil;
+import suso.event_manage.util.SoundUtil;
 
 import java.util.*;
 
@@ -44,7 +39,6 @@ public class PrimaticaIngameHandler implements StateHandler {
 
     protected int powerupAmount;
     private static final int powerupTarget = 15;
-    private final Map<UUID, Boolean> playerHasPowerup;
     private long nextPowerupMillis;
 
     protected final Set<Vec3d> orbLocations;
@@ -54,22 +48,23 @@ public class PrimaticaIngameHandler implements StateHandler {
     private final List<TickableInstance> tickables;
     private final List<TickableInstance> tickablesToAdd;
 
+    private final Map<UUID, PrimaticaPlayerInfo> playerInfo;
+
     private final Random r = new Random();
 
     public PrimaticaIngameHandler(long durationMillis) {
         this.durationMillis = durationMillis;
         this.startMillis = System.currentTimeMillis();
-
-        this.playerHasPowerup = new HashMap<>();
         this.powerupAmount = 0;
+
+        this.orbLocations = new HashSet<>();
+        this.orbTarget = 10;
+        this.scores = new HashMap<>();
 
         this.tickables = new LinkedList<>();
         this.tickablesToAdd = new LinkedList<>();
 
-        this.orbLocations = new HashSet<>();
-        this.orbTarget = 10;
-
-        this.scores = new HashMap<>();
+        this.playerInfo = new HashMap<>();
 
         prepare();
     }
@@ -89,7 +84,7 @@ public class PrimaticaIngameHandler implements StateHandler {
         killEntities(server);
 
         EventData edata = EventData.getInstance();
-        server.getPlayerManager().getPlayerList().forEach(player -> initPlayer(manager, server, player, edata.getPlayerData(player)));
+        server.getPlayerManager().getPlayerList().forEach(player -> onPlayerJoin(EventManager.getInstance(), server, player, Objects.requireNonNull(edata.getPlayerData(player))));
     }
 
     private void trySummonOrb(EventManager manager, World world) {
@@ -131,26 +126,26 @@ public class PrimaticaIngameHandler implements StateHandler {
     }
 
     public void setHasPowerup(UUID id, boolean value) {
-        playerHasPowerup.put(id, value);
+        playerInfo.get(id).hasPowerup = value;
     }
 
     public boolean getHasPowerup(UUID id) {
-        return playerHasPowerup.get(id);
+        return playerInfo.get(id).hasPowerup;
     }
 
     protected void useAgility(ServerPlayerEntity player) {
         player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 200, 0, false, false, true));
         player.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, 200, 4, false, false, true));
 
-        playerHasPowerup.put(player.getUuid(), false);
+        setHasPowerup(player.getUuid(), false);
     }
 
     protected void useBridge(ServerPlayerEntity player) {
         tickablesToAdd.add(new PrimaticaBridgeInstance(player));
-        playerHasPowerup.put(player.getUuid(), false);
+        setHasPowerup(player.getUuid(), false);
     }
 
-    private void initPlayer(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data) {
+    private void initPlayer(ServerPlayerEntity player, EventPlayerData data) {
         InventoryUtil.clearPLayer(player);
         player.clearStatusEffects();
 
@@ -171,7 +166,7 @@ public class PrimaticaIngameHandler implements StateHandler {
 
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.INSTANT_HEALTH, 1, 100, false, false, false));
 
-            playerHasPowerup.put(player.getUuid(), false);
+            setHasPowerup(player.getUuid(), false);
         } else {
             player.changeGameMode(GameMode.SPECTATOR);
         }
@@ -188,7 +183,7 @@ public class PrimaticaIngameHandler implements StateHandler {
         tickables.addAll(tickablesToAdd);
         tickablesToAdd.clear();
 
-        orbTarget = 2 + (int)(Math.max(0, leftMillis - 30000) / (double)Math.max(0, durationMillis - 30000) * 8);
+        orbTarget =  2 + (int) Math.round(Math.max(0, leftMillis - 30000) / (double)Math.max(0, durationMillis - 30000) * 8);
         if(orbLocations.size() < orbTarget) trySummonOrb(manager, w);
 
         if(currTime >= nextPowerupMillis && powerupAmount < powerupTarget) trySummonPowerup(w);
@@ -196,19 +191,63 @@ public class PrimaticaIngameHandler implements StateHandler {
 
     @Override
     public void tickPlayer(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data) {
+        PrimaticaPlayerInfo info = playerInfo.get(player.getUuid());
+
         ShaderUtil.setShaderUniform(player, "MinigameTimer", Math.max((int) leftMillis, 0));
 
         if(!manager.isEventPlayer(player) || player.isDead()) return;
 
         player.getHungerManager().add(20, 0.0f);
         if(player.getY() < 20.0) player.kill();
+
+        if(player.getY() < 69.0 && !info.isUnderground) {
+            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_main"), 0.0f, 40);
+            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_loweq"), 0.0f, 40);
+            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_underground"), 1.0f, 40);
+            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_undergroundloweq"), 0.0f, 40);
+            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_skyline"), 0.0f, 40);
+            info.isUnderground = true;
+        }
+
+        if(player.getY() > 69.0 && info.isUnderground) {
+            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_main"), 1.0f, 40);
+            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_loweq"), 0.0f, 40);
+            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_underground"), 0.0f, 40);
+            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_undergroundloweq"), 0.0f, 40);
+            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_skyline"), 0.0f, 40);
+            info.isUnderground = false;
+        }
+
+        if(player.getY() > 112.0 && !info.isSkyline) {
+            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_main"), 0.0f, 40);
+            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_loweq"), 0.0f, 40);
+            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_underground"), 0.0f, 40);
+            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_undergroundloweq"), 0.0f, 40);
+            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_skyline"), 1.0f, 40);
+            info.isSkyline = true;
+        }
+
+        if(player.getY() < 112.0 && info.isSkyline) {
+            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_main"), 1.0f, 40);
+            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_loweq"), 0.0f, 40);
+            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_underground"), 0.0f, 40);
+            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_undergroundloweq"), 0.0f, 40);
+            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_skyline"), 0.0f, 40);
+            info.isSkyline = false;
+        }
     }
 
     @Override
     public void onPlayerJoin(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data) {
-        SoundUtil.playFadeSound(player, new Identifier("suso:main"), 1.0f, 1.0f, true);
+        if(playerInfo.get(player.getUuid()) == null) playerInfo.put(player.getUuid(), new PrimaticaPlayerInfo());
 
-        initPlayer(manager, server, player, data);
+        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1a_main"), 1.0f, 1.0f, true);
+        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1a_loweq"), 0.0f, 1.0f, true);
+        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1a_underground"), 0.0f, 1.0f, true);
+        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1a_undergroundloweq"), 0.0f, 1.0f, true);
+        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1a_skyline"), 0.0f, 1.0f, true);
+
+        initPlayer(player, data);
     }
 
     @Override
@@ -227,6 +266,20 @@ public class PrimaticaIngameHandler implements StateHandler {
         if(stack.itemMatches(i -> i.matchesId(new Identifier("minecraft:light_blue_concrete")))) {
             InventoryUtil.replaceSlot(player, hand == Hand.MAIN_HAND ? player.getInventory().selectedSlot : 99, ItemStack.fromNbt(PrimaticaInfo.BLOCK));
         }
+    }
+
+    @Override
+    public boolean onPlayerRightClick(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data, ItemStack stack, Hand hand) {
+        if(stack.itemMatches(r -> r.matchesId(new Identifier("minecraft:feather"))) && stack.getNbt() != null) {
+            int powerupId = stack.getNbt().getInt("CustomModelData");
+            switch (powerupId) {
+                case 1 -> useAgility(player);
+                case 2 -> useBridge(player);
+            }
+            InventoryUtil.replaceSlot(player, hand == Hand.MAIN_HAND ? player.getInventory().selectedSlot : 99, ItemStack.EMPTY);
+            return true;
+        }
+        return false;
     }
 
     @Override

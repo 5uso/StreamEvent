@@ -22,7 +22,7 @@ public abstract class ServerPlayerEntityMixin {
             cancellable = true
     )
     private void handleThrow(ItemStack stack, boolean throwRandomly, boolean retainOwnership, CallbackInfoReturnable<ItemEntity> cir) {
-        if(EventManager.getInstance().canDropItems((ServerPlayerEntity)(Object) this)) return;
+        if(EventManager.getInstance().canDropItems((ServerPlayerEntity)(Object) this) || !retainOwnership) return;
 
         ((PlayerEntity)(Object) this).getInventory().insertStack(stack);
         ((PlayerEntity)(Object) this).currentScreenHandler.sendContentUpdates();

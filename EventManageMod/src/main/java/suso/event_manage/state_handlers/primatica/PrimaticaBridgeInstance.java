@@ -23,7 +23,7 @@ public class PrimaticaBridgeInstance implements TickableInstance {
         this.world = owner.getWorld();
 
         this.direction = Vec3d.fromPolar(0.0f, owner.getYaw()).multiply(0.6);
-        this.position = owner.getPos().add(0.0, owner.isOnGround() ? -0.2 : -1.2, 0.0);
+        this.position = owner.getPos().add(0.0, Math.min(0.0, owner.getVelocity().y + 0.05) * 5.0 - 0.8, 0.0);
 
         this.ticksLeft = 20;
     }
