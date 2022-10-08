@@ -1,4 +1,4 @@
-package suso.event_manage.state_handlers;
+package suso.event_manage.state_handlers.idle;
 
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
@@ -9,9 +9,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameMode;
 import suso.event_manage.EventManager;
 import suso.event_manage.data.EventPlayerData;
-import suso.event_manage.state_handlers.commands.IdleCommands;
-import suso.event_manage.state_handlers.commands.PrimaticaIngameCommands;
-import suso.event_manage.state_handlers.commands.StateCommands;
+import suso.event_manage.state_handlers.StateHandler;
+import suso.event_manage.state_handlers.StateCommands;
 import suso.event_manage.util.InventoryUtil;
 
 public class IdleHandler implements StateHandler {

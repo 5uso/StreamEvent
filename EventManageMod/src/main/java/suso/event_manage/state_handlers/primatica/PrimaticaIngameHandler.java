@@ -1,8 +1,9 @@
-package suso.event_manage.state_handlers;
+package suso.event_manage.state_handlers.primatica;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -29,56 +30,66 @@ import net.minecraft.world.World;
 import suso.event_manage.EventManager;
 import suso.event_manage.data.EventData;
 import suso.event_manage.data.EventPlayerData;
-import suso.event_manage.game_info.PrimaticaInfo;
-import suso.event_manage.state_handlers.commands.PrimaticaIngameCommands;
-import suso.event_manage.state_handlers.commands.StateCommands;
+import suso.event_manage.state_handlers.StateCommands;
+import suso.event_manage.state_handlers.StateHandler;
+import suso.event_manage.state_handlers.TickableInstance;
 import suso.event_manage.util.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class PrimaticaIngameHandler implements StateHandler {
     private long durationMillis;
     private final long startMillis;
     private long leftMillis;
 
-    private final Map<Vec3d, SnowballEntity> orbs;
-    private int orbTarget;
+    protected int powerupAmount;
+    private static final int powerupTarget = 15;
+    private final Map<UUID, Boolean> playerHasPowerup;
+    private long nextPowerupMillis;
 
+    protected final Set<Vec3d> orbLocations;
+    private int orbTarget;
     private final Map<AbstractTeam, Integer> scores;
+
+    private final List<TickableInstance> tickables;
+    private final List<TickableInstance> tickablesToAdd;
+
+    private final Random r = new Random();
 
     public PrimaticaIngameHandler(long durationMillis) {
         this.durationMillis = durationMillis;
         this.startMillis = System.currentTimeMillis();
 
-        this.orbs = new HashMap<>();
-        this.orbTarget = 3;
+        this.playerHasPowerup = new HashMap<>();
+        this.powerupAmount = 0;
+
+        this.tickables = new LinkedList<>();
+        this.tickablesToAdd = new LinkedList<>();
+
+        this.orbLocations = new HashSet<>();
+        this.orbTarget = 10;
 
         this.scores = new HashMap<>();
 
         prepare();
     }
 
-    private void prepare() {
-        EventManager manager = EventManager.getInstance();
-        MinecraftServer server = manager.getServer();
+    private void killEntities(MinecraftServer server) {
         List<? extends Entity> snowballList = server.getOverworld().getEntitiesByType(EntityType.SNOWBALL, e -> true);
         snowballList.forEach(Entity::kill);
 
-        EventData edata = EventData.getInstance();
-        server.getPlayerManager().getPlayerList().forEach(player -> initPlayer(manager, server, player, edata.getPlayerData(player)));
+        List<? extends Entity> armorStandList = server.getOverworld().getEntitiesByType(EntityType.ARMOR_STAND, e -> e.getScoreboardTags().contains("primatica_powerup"));
+        armorStandList.forEach(Entity::kill);
     }
 
-    private void summonOrb(World world, Vec3d pos) {
-        SnowballEntity e = new SnowballEntity(world, pos.x, pos.y, pos.z);
+    private void prepare() {
+        EventManager manager = EventManager.getInstance();
+        MinecraftServer server = manager.getServer();
 
-        e.setNoGravity(true);
-        e.setGlowing(true);
-        e.addScoreboardTag("primatica_objective");
+        killEntities(server);
 
-        orbs.put(pos, e);
-        world.spawnEntity(e);
+        EventData edata = EventData.getInstance();
+        server.getPlayerManager().getPlayerList().forEach(player -> initPlayer(manager, server, player, edata.getPlayerData(player)));
     }
 
     private void trySummonOrb(EventManager manager, World world) {
@@ -90,53 +101,53 @@ public class PrimaticaIngameHandler implements StateHandler {
         }
 
         Vec3d pos = possibleOrbSpots.getRandom();
-        if(!orbs.containsKey(pos)) summonOrb(world, pos);
+        if(!orbLocations.contains(pos)) tickables.add(new PrimaticaOrbInstance(world, pos, this));
     }
 
-    private void collectOrb(MinecraftServer server, ServerPlayerEntity player, SnowballEntity orb) {
-        orb.kill();
+    private void trySummonPowerup(World world) {
+        RndSet<Vec3d> possiblePowerupSpots = PrimaticaInfo.getPowerupLocations();
 
-        server.getOverworld().spawnParticles(new ItemStackParticleEffect(ParticleTypes.ITEM, new ItemStack(Registry.ITEM.get(new Identifier("minecraft:snowball")))), orb.getX(), orb.getY() + 0.3, orb.getZ(), 100, 0.0, 0.0, 0.0, 1.0);
-
-        SoundUtil.playSound(player, new Identifier("minecraft:entity.player.levelup"), SoundCategory.MASTER, orb.getPos(), 1.0f, 2.0f);
-        SoundUtil.playSound(server.getPlayerManager().getPlayerList(), new Identifier("minecraft:item.totem.use"), SoundCategory.MASTER, orb.getPos(), 0.5f, 2.0f);
-
-        AbstractTeam team = player.getScoreboardTeam();
-        int score = scores.getOrDefault(team, 0) + 1;
-        scores.put(team, score);
-        System.out.println(team == null ? "None" : team.getName() + ": " + score);
-
-        server.getOverworld().spawnParticles(new DustParticleEffect(ParticleUtil.teamColor(team), 2.0f), player.getX(), player.getY() + 0.3, player.getZ(), 20, 1.0, 1.0, 1.0, 2.0);
-    }
-
-    private boolean tickOrb(MinecraftServer server, SnowballEntity orb) {
-        if(orb.isRemoved()) return true;
-
-        ServerWorld w = server.getOverworld();
-        w.spawnParticles(new DustParticleEffect(new Vec3f(1.0f, 1.0f, 1.0f), 1.0f), orb.getX(), orb.getY() + 0.3, orb.getZ(), 1, 0.2, 0.2, 0.2, 0.0);
-
-        PlayerEntity player = w.getClosestPlayer(orb, 20.0);
-        if(player instanceof ServerPlayerEntity sPlayer) {
-            server.getScoreboard().addPlayerToTeam(orb.getUuidAsString(), (Team) player.getScoreboardTeam());
-
-            if(player.getBoundingBox().intersects(orb.getBoundingBox().expand(0.1))) {
-                collectOrb(server, sPlayer, orb);
-                return true;
-            }
-        } else {
-            server.getScoreboard().clearPlayerTeam(orb.getUuidAsString());
+        Vec3d pos = possiblePowerupSpots.getRandom();
+        List<ArmorStandEntity> other = world.getEntitiesByClass(ArmorStandEntity.class, Box.of(pos, 0.1, 0.1, 0.1), e -> e.getScoreboardTags().contains("primatica_powerup"));
+        if(other.isEmpty()) {
+            int possible = PrimaticaInfo.Powerups.values().length;
+            PrimaticaInfo.Powerups type = PrimaticaInfo.Powerups.values()[r.nextInt(possible)];
+            tickables.add(new PrimaticaPowerupInstance(world, pos, r.nextFloat(0.0f, 360.0f), type, this));
         }
 
-        return false;
+        nextPowerupMillis = System.currentTimeMillis() + r.nextLong(5000, 15000);
+    }
+
+    public int getTeamScore(AbstractTeam team) {
+        return scores.getOrDefault(team, 0);
+    }
+
+    public void setTeamScore(AbstractTeam team, int score) {
+        if(team != null) scores.put(team, score);
     }
 
     public void increaseDuration(long millis) {
         durationMillis += millis;
     }
 
-    private void useAgility(MinecraftServer server, ServerPlayerEntity player) {
-        player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 10, 0, false, false, true));
-        player.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, 10, 4, false, false, true));
+    public void setHasPowerup(UUID id, boolean value) {
+        playerHasPowerup.put(id, value);
+    }
+
+    public boolean getHasPowerup(UUID id) {
+        return playerHasPowerup.get(id);
+    }
+
+    protected void useAgility(ServerPlayerEntity player) {
+        player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 200, 0, false, false, true));
+        player.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, 200, 4, false, false, true));
+
+        playerHasPowerup.put(player.getUuid(), false);
+    }
+
+    protected void useBridge(ServerPlayerEntity player) {
+        tickablesToAdd.add(new PrimaticaBridgeInstance(player));
+        playerHasPowerup.put(player.getUuid(), false);
     }
 
     private void initPlayer(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data) {
@@ -159,6 +170,8 @@ public class PrimaticaIngameHandler implements StateHandler {
             InventoryUtil.replaceSlot(player, 100, ItemStack.fromNbt(PrimaticaInfo.BOOTS));
 
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.INSTANT_HEALTH, 1, 100, false, false, false));
+
+            playerHasPowerup.put(player.getUuid(), false);
         } else {
             player.changeGameMode(GameMode.SPECTATOR);
         }
@@ -166,19 +179,29 @@ public class PrimaticaIngameHandler implements StateHandler {
 
     @Override
     public void tick(EventManager manager, MinecraftServer server) {
-        leftMillis = (startMillis + durationMillis) - System.currentTimeMillis();
+        World w = server.getOverworld();
+        long currTime = System.currentTimeMillis();
 
-        orbs.entrySet().removeIf(orb -> tickOrb(server, orb.getValue()));
-        if(orbs.size() < orbTarget) trySummonOrb(manager, server.getOverworld());
+        leftMillis = (startMillis + durationMillis) - currTime;
+
+        tickables.removeIf(TickableInstance::ifTickRemove);
+        tickables.addAll(tickablesToAdd);
+        tickablesToAdd.clear();
+
+        orbTarget = 2 + (int)(Math.max(0, leftMillis - 30000) / (double)Math.max(0, durationMillis - 30000) * 8);
+        if(orbLocations.size() < orbTarget) trySummonOrb(manager, w);
+
+        if(currTime >= nextPowerupMillis && powerupAmount < powerupTarget) trySummonPowerup(w);
     }
 
     @Override
     public void tickPlayer(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data) {
-        ShaderUtil.setShaderUniform(player, "MinigameTimer", (int)leftMillis);
+        ShaderUtil.setShaderUniform(player, "MinigameTimer", Math.max((int) leftMillis, 0));
 
         if(!manager.isEventPlayer(player) || player.isDead()) return;
 
         player.getHungerManager().add(20, 0.0f);
+        if(player.getY() < 20.0) player.kill();
     }
 
     @Override
@@ -208,8 +231,7 @@ public class PrimaticaIngameHandler implements StateHandler {
 
     @Override
     public void cleanup(EventManager manager, MinecraftServer server) {
-        List<? extends Entity> snowballList = server.getOverworld().getEntitiesByType(EntityType.SNOWBALL, e -> true);
-        snowballList.forEach(Entity::kill);
+        killEntities(server);
 
         for(ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
             InventoryUtil.clearPLayer(player);

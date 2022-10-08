@@ -8,7 +8,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import suso.event_manage.EventManager;
 import suso.event_manage.data.EventPlayerData;
-import suso.event_manage.state_handlers.commands.StateCommands;
 
 public interface StateHandler {
     void tick(EventManager manager, MinecraftServer server);

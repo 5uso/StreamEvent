@@ -1,31 +1,33 @@
 package suso.event_manage;
 
-import com.mojang.brigadier.CommandDispatcher;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.*;
-import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
+import net.minecraft.world.World;
 import org.slf4j.Logger;
 import suso.event_manage.data.EventData;
 import suso.event_manage.data.EventPlayerData;
 import suso.event_manage.mixin.MinecraftServerAccess;
 import suso.event_manage.mixin.PlayerManagerAccess;
-import suso.event_manage.state_handlers.IdleHandler;
+import suso.event_manage.state_handlers.idle.IdleHandler;
 import suso.event_manage.state_handlers.StateHandler;
 import suso.event_manage.util.CommandUtil;
 
 import java.util.List;
+import java.util.Set;
 
 public class EventManager implements ModInitializer {
     public enum ServerState {
@@ -91,6 +93,12 @@ public class EventManager implements ModInitializer {
         data.saveData();
 
         LOGGER.info("Event data saved");
+    }
+
+    public void onEntityLoad(Entity entity, World world) {
+        Set<String> tags = entity.getScoreboardTags();
+        if(tags.contains("volatile_firstload")) entity.kill();
+        else if(tags.contains("volatile")) tags.add("volatile_firstload");
     }
 
     public void cleanup(MinecraftServer server) {
@@ -181,5 +189,7 @@ public class EventManager implements ModInitializer {
 
         ServerPlayerEvents.AFTER_RESPAWN.register(this::onPlayerRespawn);
         ServerPlayerEvents.ALLOW_DEATH.register(this::onPlayerDeath);
+
+        ServerEntityEvents.ENTITY_LOAD.register(this::onEntityLoad);
     }
 }

@@ -1,4 +1,4 @@
-package suso.event_manage.state_handlers.commands;
+package suso.event_manage.state_handlers.idle;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -7,7 +7,8 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.LiteralTextContent;
 import net.minecraft.text.MutableText;
 import suso.event_manage.EventManager;
-import suso.event_manage.state_handlers.PrimaticaIngameHandler;
+import suso.event_manage.state_handlers.StateCommands;
+import suso.event_manage.state_handlers.primatica.PrimaticaIngameHandler;
 import suso.event_manage.util.CommandUtil;
 
 public class IdleCommands implements StateCommands {

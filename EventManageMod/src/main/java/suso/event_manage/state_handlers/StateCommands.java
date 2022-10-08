@@ -1,4 +1,4 @@
-package suso.event_manage.state_handlers.commands;
+package suso.event_manage.state_handlers;
 
 import net.minecraft.server.MinecraftServer;
 
