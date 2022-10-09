@@ -25,7 +25,7 @@ public class PrimaticaGravityInstance implements TickableInstance {
         entity.setNoGravity(true);
         entity.addScoreboardTag("primatica_gravity");
         entity.addScoreboardTag("volatile");
-        entity.setVelocity(owner.getRotationVector().multiply(2.0));
+        entity.setVelocity(owner.getRotationVector().multiply(1.75));
         world.spawnEntity(entity);
 
         time = 0;
@@ -36,7 +36,7 @@ public class PrimaticaGravityInstance implements TickableInstance {
         if(entity.isRemoved() || ++time > 100) return true;
 
         if(time == 6) {
-            entity.setVelocity(entity.getVelocity().multiply(0.1));
+            entity.setVelocity(entity.getVelocity().multiply(0.15));
             entity.setGlowing(true);
         } else if(time > 6) {
             Vec3d pos = entity.getPos();
@@ -61,10 +61,10 @@ public class PrimaticaGravityInstance implements TickableInstance {
             for(Entity e : world.getEntitiesByType(EntityType.CREEPER, e -> true)) {
                 Vec3d playerPos = e.getPos();
                 double distance = playerPos.distanceTo(pos);
-                if(distance < 10.0) {
+                if(distance < 5.0) {
                     Vec3d motion = e.getVelocity();
                     Vec3d gravityDirection = pos.subtract(playerPos).normalize();
-                    double factor = distance / 2.5 + 1.75;
+                    double factor = distance / 0.5 + 2.0;
                     double magnitude = 1 / (factor * factor);
 
                     motion = motion.add(gravityDirection.multiply(magnitude));
