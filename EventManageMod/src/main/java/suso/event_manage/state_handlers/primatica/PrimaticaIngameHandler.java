@@ -236,6 +236,10 @@ public class PrimaticaIngameHandler implements StateHandler {
             SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_skyline"), 0.0f, 40);
             info.isSkyline = false;
         }
+
+        float speed = ((float) player.getVelocity().length() - 0.5f) / 2.0f;
+        speed = Math.min(Math.max(0.0f, speed), 2.0f);
+        SoundUtil.updateFadeVolume(player, new Identifier("suso:falling"), speed, 0);
     }
 
     @Override
@@ -247,6 +251,7 @@ public class PrimaticaIngameHandler implements StateHandler {
         SoundUtil.playFadeSound(player, new Identifier("eniah:music.1a_underground"), 0.0f, 1.0f, true);
         SoundUtil.playFadeSound(player, new Identifier("eniah:music.1a_undergroundloweq"), 0.0f, 1.0f, true);
         SoundUtil.playFadeSound(player, new Identifier("eniah:music.1a_skyline"), 0.0f, 1.0f, true);
+        SoundUtil.playFadeSound(player, new Identifier("suso:falling"), 0.0f, 1.0f, true);
 
         initPlayer(player, data);
     }
