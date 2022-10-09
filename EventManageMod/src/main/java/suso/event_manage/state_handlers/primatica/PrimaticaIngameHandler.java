@@ -46,7 +46,6 @@ public class PrimaticaIngameHandler implements StateHandler {
     private final Map<AbstractTeam, Integer> scores;
 
     private final List<TickableInstance> tickables;
-    private final List<TickableInstance> tickablesToAdd;
 
     private final Map<UUID, PrimaticaPlayerInfo> playerInfo;
 
@@ -62,7 +61,6 @@ public class PrimaticaIngameHandler implements StateHandler {
         this.scores = new HashMap<>();
 
         this.tickables = new LinkedList<>();
-        this.tickablesToAdd = new LinkedList<>();
 
         this.playerInfo = new HashMap<>();
 
@@ -141,7 +139,12 @@ public class PrimaticaIngameHandler implements StateHandler {
     }
 
     protected void useBridge(ServerPlayerEntity player) {
-        tickablesToAdd.add(new PrimaticaBridgeInstance(player));
+        tickables.add(new PrimaticaBridgeInstance(player));
+        setHasPowerup(player.getUuid(), false);
+    }
+
+    protected void useGravity(ServerPlayerEntity player) {
+        tickables.add(new PrimaticaGravityInstance(player));
         setHasPowerup(player.getUuid(), false);
     }
 
@@ -180,8 +183,6 @@ public class PrimaticaIngameHandler implements StateHandler {
         leftMillis = (startMillis + durationMillis) - currTime;
 
         tickables.removeIf(TickableInstance::ifTickRemove);
-        tickables.addAll(tickablesToAdd);
-        tickablesToAdd.clear();
 
         orbTarget =  2 + (int) Math.round(Math.max(0, leftMillis - 30000) / (double)Math.max(0, durationMillis - 30000) * 8);
         if(orbLocations.size() < orbTarget) trySummonOrb(manager, w);
@@ -275,6 +276,7 @@ public class PrimaticaIngameHandler implements StateHandler {
             switch (powerupId) {
                 case 1 -> useAgility(player);
                 case 2 -> useBridge(player);
+                case 3 -> useGravity(player);
             }
             InventoryUtil.replaceSlot(player, hand == Hand.MAIN_HAND ? player.getInventory().selectedSlot : 99, ItemStack.EMPTY);
             return true;
