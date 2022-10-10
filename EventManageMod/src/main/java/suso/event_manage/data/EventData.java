@@ -157,7 +157,7 @@ public class EventData {
 
     public void loadTeamData(MinecraftServer server) {
         Scoreboard s = server.getScoreboard();
-        for(Team team : s.getTeams()) s.removeTeam(team);
+        s.getTeams().clear();
 
         teamData.clear();
 

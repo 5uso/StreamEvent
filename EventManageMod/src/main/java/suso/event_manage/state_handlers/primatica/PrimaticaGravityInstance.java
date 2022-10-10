@@ -1,23 +1,22 @@
 package suso.event_manage.state_handlers.primatica;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.projectile.thrown.SnowballEntity;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 import suso.event_manage.state_handlers.TickableInstance;
 
 public class PrimaticaGravityInstance implements TickableInstance {
     private final SnowballEntity entity;
     private final ServerWorld world;
+    private final PrimaticaIngameHandler handler;
 
     private int time;
 
-    public PrimaticaGravityInstance(ServerPlayerEntity owner) {
-        world = owner.getWorld();
+    public PrimaticaGravityInstance(ServerPlayerEntity owner, PrimaticaIngameHandler handler) {
+        this.world = owner.getWorld();
+        this.handler = handler;
 
         Vec3d pos = owner.getEyePos();
 
@@ -45,30 +44,20 @@ public class PrimaticaGravityInstance implements TickableInstance {
 
                 Vec3d playerPos = player.getPos();
                 double distance = playerPos.distanceTo(pos);
-                if(distance < 10.0) {
+                if(distance < 10.0 && !handler.getPlayerInfo(player.getUuid()).withinEMPPrev) {
                     Vec3d motion = player.getVelocity();
                     Vec3d gravityDirection = pos.subtract(playerPos).normalize();
-                    double factor = distance / 5.0 + 0.5;
+                    double factor = distance / 3.0 + 0.5;
                     double magnitude = 1 / (factor * factor);
 
                     motion = motion.add(gravityDirection.multiply(magnitude));
                     player.setVelocity(motion);
 
                     player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(player));
-                }
-            }
 
-            for(Entity e : world.getEntitiesByType(EntityType.CREEPER, e -> true)) {
-                Vec3d playerPos = e.getPos();
-                double distance = playerPos.distanceTo(pos);
-                if(distance < 5.0) {
-                    Vec3d motion = e.getVelocity();
-                    Vec3d gravityDirection = pos.subtract(playerPos).normalize();
-                    double factor = distance / 0.5 + 2.0;
-                    double magnitude = 1 / (factor * factor);
-
-                    motion = motion.add(gravityDirection.multiply(magnitude));
-                    e.setVelocity(motion);
+                    PrimaticaPlayerInfo info = handler.getPlayerInfo(player.getUuid());
+                    info.withinGravityNow = true;
+                    info.changePitch(0.95f + (float)distance / 200.0f, 0);
                 }
             }
         }

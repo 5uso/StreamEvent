@@ -13,6 +13,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
@@ -127,8 +129,8 @@ public class PrimaticaIngameHandler implements StateHandler {
         playerInfo.get(id).hasPowerup = value;
     }
 
-    public boolean getHasPowerup(UUID id) {
-        return playerInfo.get(id).hasPowerup;
+    public PrimaticaPlayerInfo getPlayerInfo(UUID id) {
+        return playerInfo.get(id);
     }
 
     protected void useAgility(ServerPlayerEntity player) {
@@ -144,8 +146,17 @@ public class PrimaticaIngameHandler implements StateHandler {
     }
 
     protected void useGravity(ServerPlayerEntity player) {
-        tickables.add(new PrimaticaGravityInstance(player));
+        tickables.add(new PrimaticaGravityInstance(player, this));
         setHasPowerup(player.getUuid(), false);
+    }
+
+    protected void useEMP(ServerPlayerEntity player) {
+        HitResult hit = player.raycast(4.0, player.server.getTickTime(), true);
+        if(hit instanceof BlockHitResult bhit) {
+            BlockPos pos = bhit.getBlockPos().add(bhit.getSide().getVector());
+            tickables.add(new PrimaticaEMPInstance(player, pos, this));
+            setHasPowerup(player.getUuid(), false);
+        }
     }
 
     private void initPlayer(ServerPlayerEntity player, EventPlayerData data) {
@@ -201,41 +212,12 @@ public class PrimaticaIngameHandler implements StateHandler {
         player.getHungerManager().add(20, 0.0f);
         if(player.getY() < 20.0) player.kill();
 
-        if(player.getY() < 69.0 && !info.isUnderground) {
-            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_main"), 0.0f, 40);
-            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_loweq"), 0.0f, 40);
-            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_underground"), 1.0f, 40);
-            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_undergroundloweq"), 0.0f, 40);
-            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_skyline"), 0.0f, 40);
-            info.isUnderground = true;
-        }
-
-        if(player.getY() > 69.0 && info.isUnderground) {
-            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_main"), 1.0f, 40);
-            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_loweq"), 0.0f, 40);
-            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_underground"), 0.0f, 40);
-            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_undergroundloweq"), 0.0f, 40);
-            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_skyline"), 0.0f, 40);
-            info.isUnderground = false;
-        }
-
-        if(player.getY() > 112.0 && !info.isSkyline) {
-            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_main"), 0.0f, 40);
-            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_loweq"), 0.0f, 40);
-            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_underground"), 0.0f, 40);
-            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_undergroundloweq"), 0.0f, 40);
-            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_skyline"), 1.0f, 40);
-            info.isSkyline = true;
-        }
-
-        if(player.getY() < 112.0 && info.isSkyline) {
-            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_main"), 1.0f, 40);
-            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_loweq"), 0.0f, 40);
-            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_underground"), 0.0f, 40);
-            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_undergroundloweq"), 0.0f, 40);
-            SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_skyline"), 0.0f, 40);
-            info.isSkyline = false;
-        }
+        info.setUnderground(player.getY() < 69.0);
+        info.setSkyline(player.getY() >= 112.0);
+        info.setWithinEMP(info.withinEMPNow);
+        info.withinEMPNow = false;
+        info.setWithinGravity(info.withinGravityNow);
+        info.withinGravityNow = false;
 
         float speed = ((float) player.getVelocity().length() - 0.5f) / 2.0f;
         speed = Math.min(Math.max(0.0f, speed), 2.0f);
@@ -244,7 +226,7 @@ public class PrimaticaIngameHandler implements StateHandler {
 
     @Override
     public void onPlayerJoin(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data) {
-        if(playerInfo.get(player.getUuid()) == null) playerInfo.put(player.getUuid(), new PrimaticaPlayerInfo());
+        if(playerInfo.get(player.getUuid()) == null) playerInfo.put(player.getUuid(), new PrimaticaPlayerInfo(player));
 
         SoundUtil.playFadeSound(player, new Identifier("eniah:music.1a_main"), 1.0f, 1.0f, true);
         SoundUtil.playFadeSound(player, new Identifier("eniah:music.1a_loweq"), 0.0f, 1.0f, true);
@@ -258,12 +240,15 @@ public class PrimaticaIngameHandler implements StateHandler {
 
     @Override
     public void onPlayerRespawn(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data) {
-
+        playerInfo.get(player.getUuid()).changePitch(1.0f, 0);
     }
 
     @Override
     public boolean onPlayerDeath(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data, DamageSource damageSource, float damageAmount) {
         player.setSpawnPoint(server.getOverworld().getRegistryKey(), new BlockPos(216.0, 80.00, -14.0), 30.0f, true, false);
+
+        PrimaticaPlayerInfo info = playerInfo.get(player.getUuid());
+        info.changePitch(0.5f, 40);
         return true;
     }
 
@@ -282,6 +267,7 @@ public class PrimaticaIngameHandler implements StateHandler {
                 case 1 -> useAgility(player);
                 case 2 -> useBridge(player);
                 case 3 -> useGravity(player);
+                case 4 -> useEMP(player);
             }
             InventoryUtil.replaceSlot(player, hand == Hand.MAIN_HAND ? player.getInventory().selectedSlot : 99, ItemStack.EMPTY);
             return true;

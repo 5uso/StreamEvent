@@ -47,7 +47,7 @@ public class PrimaticaInfo {
         return powerupLocationset;
     }
 
-    public static NbtCompound SWORD, BOW, PICKAXE, BLOCK, HELMET, CHESTPLATE, LEGGINGS, BOOTS, AGILITY, BRIDGE, GRAVITY;
+    public static NbtCompound SWORD, BOW, PICKAXE, BLOCK, HELMET, CHESTPLATE, LEGGINGS, BOOTS, AGILITY, BRIDGE, GRAVITY, EMP;
     static {
         try {
             SWORD = StringNbtReader.parse("{id:'iron_sword',Count:1b,tag:{Unbreakable:1b}}");
@@ -62,6 +62,7 @@ public class PrimaticaInfo {
             AGILITY = StringNbtReader.parse("{id:'feather',Count:1b,tag:{CustomModelData:1}}");
             BRIDGE = StringNbtReader.parse("{id:'feather',Count:1b,tag:{CustomModelData:2}}");
             GRAVITY = StringNbtReader.parse("{id:'feather',Count:1b,tag:{CustomModelData:3}}");
+            EMP = StringNbtReader.parse("{id:'feather',Count:1b,tag:{CustomModelData:4,CanPlaceOn:['#minecraft:all'],HideFlags:16}}");
         } catch (CommandSyntaxException e) {
             e.printStackTrace();
             System.exit(0xDEADBEEF);

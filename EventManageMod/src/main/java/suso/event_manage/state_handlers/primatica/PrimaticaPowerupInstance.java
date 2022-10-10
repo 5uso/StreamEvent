@@ -57,12 +57,12 @@ public class PrimaticaPowerupInstance implements TickableInstance {
 
     private void collectPowerup(ServerPlayerEntity player) {
         UUID id = player.getUuid();
-        if(!handler.getHasPowerup(id)) {
+        if(!handler.getPlayerInfo(id).hasPowerup) {
             switch (type) {
                 case AGILITY -> InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.AGILITY));
                 case BRIDGE -> InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.BRIDGE));
-                default -> InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.GRAVITY));
-
+                case GRAVITY -> InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.GRAVITY));
+                default -> InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.EMP));
             }
             handler.setHasPowerup(id, true);
         }
