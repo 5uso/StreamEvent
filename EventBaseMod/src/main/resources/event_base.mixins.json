@@ -10,6 +10,7 @@
     "client.GameRendererAccess",
     "client.GameRendererMixin",
     "client.GlUniformUtilImpl",
+    "client.IdentifierMixin",
     "client.PostProcessMixin",
     "client.SoundManagerAccess",
     "client.SoundManagerMixin",
