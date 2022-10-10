@@ -1,8 +1,11 @@
 package suso.event_manage.state_handlers.primatica;
 
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import suso.event_manage.util.SoundUtil;
+
+import java.util.UUID;
 
 public class PrimaticaPlayerInfo {
     public boolean isUnderground = false;
@@ -15,11 +18,14 @@ public class PrimaticaPlayerInfo {
 
     public boolean hasPowerup = false;
 
-    private final ServerPlayerEntity player;
+    private final UUID player;
+    private final ServerWorld world;
 
     public PrimaticaPlayerInfo(ServerPlayerEntity player) {
-        this.player = player;
+        this.player = player.getUuid();
+        this.world = player.getWorld();
     }
+
 
     public void setUnderground(boolean value) {
         if(value != isUnderground) {
@@ -37,7 +43,6 @@ public class PrimaticaPlayerInfo {
 
     public void setWithinEMP(boolean value) {
         if(value != withinEMPPrev) {
-            System.out.println(withinEMPPrev + " -> " + value);
             withinEMPPrev = value;
             transition(3);
         }
@@ -68,6 +73,7 @@ public class PrimaticaPlayerInfo {
     }
 
     private void transitionMain(int ticks) {
+        ServerPlayerEntity player = (ServerPlayerEntity) world.getPlayerByUuid(this.player);
         SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_main"), 1.0f, ticks);
         SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_loweq"), 0.0f, ticks);
         SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_underground"), 0.0f, ticks);
@@ -76,6 +82,7 @@ public class PrimaticaPlayerInfo {
     }
 
     private void transitionLowEQ(int ticks) {
+        ServerPlayerEntity player = (ServerPlayerEntity) world.getPlayerByUuid(this.player);
         SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_main"), 0.0f, ticks);
         SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_loweq"), 1.0f, ticks);
         SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_underground"), 0.0f, ticks);
@@ -84,6 +91,7 @@ public class PrimaticaPlayerInfo {
     }
 
     private void transitionUnderground(int ticks) {
+        ServerPlayerEntity player = (ServerPlayerEntity) world.getPlayerByUuid(this.player);
         SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_main"), 0.0f, ticks);
         SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_loweq"), 0.0f, ticks);
         SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_underground"), 1.0f, ticks);
@@ -92,6 +100,7 @@ public class PrimaticaPlayerInfo {
     }
 
     private void transitionUndergroundLowEQ(int ticks) {
+        ServerPlayerEntity player = (ServerPlayerEntity) world.getPlayerByUuid(this.player);
         SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_main"), 0.0f, ticks);
         SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_loweq"), 0.0f, ticks);
         SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_underground"), 0.0f, ticks);
@@ -100,6 +109,7 @@ public class PrimaticaPlayerInfo {
     }
 
     private void transitionSkyline(int ticks) {
+        ServerPlayerEntity player = (ServerPlayerEntity) world.getPlayerByUuid(this.player);
         SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_main"), 0.0f, ticks);
         SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_loweq"), 0.0f, ticks);
         SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1a_underground"), 0.0f, ticks);
@@ -108,6 +118,7 @@ public class PrimaticaPlayerInfo {
     }
 
     public void changePitch(float pitch, int ticks) {
+        ServerPlayerEntity player = (ServerPlayerEntity) world.getPlayerByUuid(this.player);
         SoundUtil.updateFadePitch(player, new Identifier("eniah:music.1a_main"), pitch, ticks);
         SoundUtil.updateFadePitch(player, new Identifier("eniah:music.1a_loweq"), pitch, ticks);
         SoundUtil.updateFadePitch(player, new Identifier("eniah:music.1a_underground"), pitch, ticks);
