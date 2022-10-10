@@ -12,6 +12,8 @@
     "client.GlUniformUtilImpl",
     "client.PostProcessMixin",
     "client.SoundManagerAccess",
+    "client.SoundManagerMixin",
+    "client.SoundSystemMixin",
     "client.SoundSystemUtilImpl"
   ],
   "injectors": {
