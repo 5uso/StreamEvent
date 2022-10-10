@@ -16,13 +16,15 @@ import java.util.Random;
 public class SoundUtil {
     private static final Random r = new Random();
 
-    public static void playFadeSound(ServerPlayerEntity player, Identifier id, float startingVolume, float startingPitch, boolean loop) {
+    public static void playFadeSound(ServerPlayerEntity player, Identifier id, float startingVolume, float startingPitch, boolean loop, SoundCategory category, boolean apply) {
         PacketByteBuf p = PacketByteBufs.create();
 
         p.writeString(id.toString());
         p.writeFloat(startingVolume);
         p.writeFloat(startingPitch);
         p.writeBoolean(loop);
+        p.writeByte(category.ordinal());
+        p.writeBoolean(apply);
 
         ServerPlayNetworking.send(player, EvtBaseConstants.PLAY_FADE_SOUND, p);
     }

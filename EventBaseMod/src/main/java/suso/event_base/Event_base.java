@@ -20,6 +20,7 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.LiteralTextContent;
 import net.minecraft.text.MutableText;
 import net.minecraft.util.Formatting;
@@ -43,6 +44,8 @@ public class Event_base implements ModInitializer {
             p.writeFloat(FloatArgumentType.getFloat(context, "volume"));
             p.writeFloat(FloatArgumentType.getFloat(context, "pitch"));
             p.writeBoolean(BoolArgumentType.getBool(context, "loop"));
+            p.writeByte(SoundCategory.RECORDS.ordinal());
+            p.writeBoolean(true);
 
             ServerPlayNetworking.send(context.getSource().getPlayer(), EvtBaseConstants.PLAY_FADE_SOUND, p);
             return 1;

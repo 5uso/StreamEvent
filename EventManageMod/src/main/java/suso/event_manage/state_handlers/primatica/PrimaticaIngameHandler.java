@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
@@ -228,12 +229,12 @@ public class PrimaticaIngameHandler implements StateHandler {
     public void onPlayerJoin(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data) {
         if(playerInfo.get(player.getUuid()) == null) playerInfo.put(player.getUuid(), new PrimaticaPlayerInfo(player));
 
-        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1a_main"), 1.0f, 1.0f, true);
-        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1a_loweq"), 0.0f, 1.0f, true);
-        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1a_underground"), 0.0f, 1.0f, true);
-        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1a_undergroundloweq"), 0.0f, 1.0f, true);
-        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1a_skyline"), 0.0f, 1.0f, true);
-        SoundUtil.playFadeSound(player, new Identifier("suso:falling"), 0.0f, 1.0f, true);
+        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1a_main"), 1.0f, 1.0f, true, SoundCategory.RECORDS, false);
+        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1a_loweq"), 0.0f, 1.0f, true, SoundCategory.RECORDS, false);
+        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1a_underground"), 0.0f, 1.0f, true, SoundCategory.RECORDS, false);
+        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1a_undergroundloweq"), 0.0f, 1.0f, true, SoundCategory.RECORDS, false);
+        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1a_skyline"), 0.0f, 1.0f, true, SoundCategory.RECORDS, false);
+        SoundUtil.playFadeSound(player, new Identifier("suso:falling"), 0.0f, 1.0f, true, SoundCategory.PLAYERS, true);
 
         initPlayer(player, data);
     }
