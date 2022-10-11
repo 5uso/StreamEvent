@@ -1,5 +1,6 @@
 package suso.event_manage.mixin;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -9,6 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import suso.event_manage.EventManager;
 
@@ -29,5 +31,15 @@ public abstract class ServerPlayerEntityMixin {
 
         cir.setReturnValue(new ItemEntity(this.getWorld(), 0.0, 0.0, 0.0, ItemStack.EMPTY));
         cir.cancel();
+    }
+
+    @Inject(
+            method = "onLanding",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void handleLand(CallbackInfo ci) {
+        if(((Entity)(Object) this).fallDistance < 1.5 || ((PlayerEntity)(Object) this).getAbilities().flying) return;
+        if(EventManager.getInstance().onPlayerLand((ServerPlayerEntity)(Object) this)) ci.cancel();
     }
 }

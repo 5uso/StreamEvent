@@ -17,6 +17,7 @@ public interface StateHandler {
     boolean onPlayerDeath(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data, DamageSource damageSource, float damageAmount);
     void onPlayerItemUsedOnBlock(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data, BlockPos pos, ItemStack stack, Hand hand);
     boolean onPlayerRightClick(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data, ItemStack stack, Hand hand);
+    boolean onPlayerLand(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data);
     void cleanup(EventManager manager, MinecraftServer server);
     boolean canDropItems(EventManager manager, ServerPlayerEntity player, EventPlayerData data);
     StateCommands getStateCommands();

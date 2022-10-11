@@ -90,6 +90,10 @@ public class EventManager implements ModInitializer {
         return handler.onPlayerRightClick(this, server, player, data.getPlayerData(player), stack, hand);
     }
 
+    public boolean onPlayerLand(ServerPlayerEntity player) {
+        return handler.onPlayerLand(this, server, player, data.getPlayerData(player));
+    }
+
     public void onSave() {
         Logger LOGGER = MinecraftServerAccess.getLOGGER();
         LOGGER.info("Saving event data...");

@@ -58,6 +58,11 @@ public class IdleHandler implements StateHandler {
     }
 
     @Override
+    public boolean onPlayerLand(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data) {
+        return false;
+    }
+
+    @Override
     public void cleanup(EventManager manager, MinecraftServer server) {
 
     }

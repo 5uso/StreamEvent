@@ -8,6 +8,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -220,7 +221,7 @@ public class PrimaticaIngameHandler implements StateHandler {
         info.setWithinGravity(info.withinGravityNow);
         info.withinGravityNow = false;
 
-        float speed = ((float) player.getVelocity().length() - 0.5f) / 2.0f;
+        float speed = ((float) player.getVelocity().length() - 0.5f) / 3.0f;
         speed = Math.min(Math.max(0.0f, speed), 2.0f);
         SoundUtil.updateFadeVolume(player, new Identifier("suso:falling"), speed, 0);
     }
@@ -273,6 +274,13 @@ public class PrimaticaIngameHandler implements StateHandler {
             InventoryUtil.replaceSlot(player, hand == Hand.MAIN_HAND ? player.getInventory().selectedSlot : 99, ItemStack.EMPTY);
             return true;
         }
+        return false;
+    }
+
+    @Override
+    public boolean onPlayerLand(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data) {
+        player.addVelocity(0.0, player.fallDistance / 5.0, 0.0);
+        player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(player));
         return false;
     }
 
