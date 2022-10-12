@@ -10,7 +10,7 @@ import java.util.Map;
 
 @Mixin(CommandNode.class)
 public class CommandNodeUtilImpl<S> implements ICommandNodeUtil {
-    @Shadow @Final private Map<String, CommandNode<S>> children;
+    @Shadow(remap = false) @Final private Map<String, CommandNode<S>> children;
 
     @Override
     public void removeChild(String key) {
