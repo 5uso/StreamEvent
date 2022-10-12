@@ -33,4 +33,18 @@ public class BlockItemMixin {
             }
         }
     }
+
+    @Redirect(
+            method = "place(Lnet/minecraft/item/ItemPlacementContext;)Lnet/minecraft/util/ActionResult;",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/item/ItemStack;decrement(I)V"
+            )
+    )
+    private void dontDecrementIfInfinite(ItemStack instance, int amount) {
+        NbtCompound nbt = instance.getNbt();
+        if(nbt != null && nbt.getBoolean("infinite")) return;
+
+        instance.decrement(amount);
+    }
 }

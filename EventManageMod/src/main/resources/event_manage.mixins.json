@@ -4,6 +4,7 @@
   "package": "suso.event_manage.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "BlockItemMixin",
     "CommandNodeUtilImpl",
     "MinecraftServerAccess",
     "MinecraftServerMixin",

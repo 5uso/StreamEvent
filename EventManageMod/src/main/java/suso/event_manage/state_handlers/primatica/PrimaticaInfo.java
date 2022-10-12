@@ -53,7 +53,7 @@ public class PrimaticaInfo {
             SWORD = StringNbtReader.parse("{id:'iron_sword',Count:1b,tag:{Unbreakable:1b}}");
             BOW = StringNbtReader.parse("{id:'bow',Count:1b,tag:{Enchantments:[{id:'minecraft:punch',lvl:1s},{id:'minecraft:infinity',lvl:1s}],Unbreakable:1b}}");
             PICKAXE = StringNbtReader.parse("{id:'iron_pickaxe',Count:1b,tag:{CanDestroy:['#minecraft:concrete'],Unbreakable:1b,Enchantments:[{id:'minecraft:efficiency',lvl:10s}]}}");
-            BLOCK =  StringNbtReader.parse("{id:'light_blue_concrete',Count:2b,tag:{CanPlaceOn:['#minecraft:all'],HideFlags:16}}");
+            BLOCK =  StringNbtReader.parse("{id:'light_blue_concrete',Count:1b,tag:{infinite:1b,CanPlaceOn:['#minecraft:all'],HideFlags:16}}");
             HELMET = StringNbtReader.parse("{id:'leather_helmet',Count:1b,tag:{Unbreakable:1b}}");
             CHESTPLATE = StringNbtReader.parse("{id:'leather_chestplate',Count:1b,tag:{Unbreakable:1b}}");
             LEGGINGS = StringNbtReader.parse("{id:'leather_leggings',Count:1b,tag:{Unbreakable:1b}}");

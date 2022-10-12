@@ -4,6 +4,7 @@
   "package": "suso.event_base.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "BlockItemMixin",
   ],
   "client": [
     "client.CoreMixin",
