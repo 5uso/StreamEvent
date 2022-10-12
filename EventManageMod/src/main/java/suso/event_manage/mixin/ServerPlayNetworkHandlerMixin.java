@@ -63,7 +63,7 @@ public abstract class ServerPlayNetworkHandlerMixin {
             )
     )
     private void dontKickFlying(ServerPlayNetworkHandler instance, Text reason) {
-        System.out.println("Didn't kick for flying"); //TODO
+        //System.out.println("Didn't kick for flying");
     }
 
     @Redirect(
@@ -75,7 +75,7 @@ public abstract class ServerPlayNetworkHandlerMixin {
             )
     )
     private void dontKickFlyingVehicle(ServerPlayNetworkHandler instance, Text reason) {
-        System.out.println("Didn't kick for flying vehicle"); //TODO
+        //System.out.println("Didn't kick for flying vehicle");
     }
 
     @Redirect(
@@ -86,7 +86,7 @@ public abstract class ServerPlayNetworkHandlerMixin {
             )
     )
     private boolean dontMoveTooQuickly(ServerPlayNetworkHandler instance) {
-        System.out.println("Didn't snap player back"); //TODO
+        //System.out.println("Didn't snap player back");
         return true;
     }
 
@@ -98,7 +98,7 @@ public abstract class ServerPlayNetworkHandlerMixin {
             )
     )
     private boolean dontMoveVehicleTooQuickly(ServerPlayNetworkHandler instance) {
-        System.out.println("Didn't snap player vehicle back"); //TODO
+        //System.out.println("Didn't snap player vehicle back");
         return true;
     }
 }

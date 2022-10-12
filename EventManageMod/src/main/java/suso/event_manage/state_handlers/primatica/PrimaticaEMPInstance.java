@@ -25,7 +25,7 @@ public class PrimaticaEMPInstance implements TickableInstance {
         position = new Vec3d(pos.getX(), pos.getY(), pos.getZ()).add(0.5, 0.5, 0.5);
         this.handler = handler;
 
-        ticksLeft = 120;
+        ticksLeft = 200;
     }
 
     @Override
