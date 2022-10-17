@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.s2c.play.PlaySoundIdS2CPacket;
+import net.minecraft.network.packet.s2c.play.StopSoundS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
@@ -55,5 +56,9 @@ public class SoundUtil {
 
     public static void playSound(List<ServerPlayerEntity> players, Identifier sound, SoundCategory category, Vec3d pos, float volume, float pitch) {
         for(ServerPlayerEntity player : players) playSound(player, sound, category, pos, volume, pitch);
+    }
+
+    public static void stopSound(ServerPlayerEntity player, Identifier sound, SoundCategory category) {
+        player.networkHandler.sendPacket(new StopSoundS2CPacket(sound, category));
     }
 }
