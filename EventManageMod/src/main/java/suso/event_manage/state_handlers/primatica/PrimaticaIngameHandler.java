@@ -324,6 +324,8 @@ public class PrimaticaIngameHandler implements StateHandler {
     }
 
     @Override
+    public void onPlayerJump(ServerPlayerEntity player, EventPlayerData data, BlockPos jumpingPos) {
+    }
     @Override
     public void cleanup() {
         MinecraftServer server = EventManager.getInstance().getServer();

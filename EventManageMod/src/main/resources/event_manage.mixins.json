@@ -8,6 +8,7 @@
     "CommandNodeUtilImpl",
     "MinecraftServerAccess",
     "MinecraftServerMixin",
+    "PlayerEntityMixin",
     "PlayerManagerAccess",
     "PlayerManagerMixin",
     "ServerPlayerEntityMixin",
