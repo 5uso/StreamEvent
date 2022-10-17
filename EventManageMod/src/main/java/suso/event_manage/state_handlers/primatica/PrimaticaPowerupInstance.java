@@ -2,9 +2,13 @@ package suso.event_manage.state_handlers.primatica;
 
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import suso.event_manage.state_handlers.TickableInstance;
 import suso.event_manage.util.InventoryUtil;
@@ -24,6 +28,14 @@ public class PrimaticaPowerupInstance implements TickableInstance {
         this.world = world;
         this.handler = handler;
 
+        BlockPos finalPos = findSuitablePos(pos);
+        if(finalPos == null) {
+            entity = null;
+            return;
+        }
+
+        pos = new Vec3d(finalPos.getX() + 0.5, finalPos.getY(), finalPos.getZ() + 0.5);
+
         entity = new ArmorStandEntity(world, pos.x, pos.y, pos.z);
         entity.setNoGravity(true);
         entity.setYaw(rotation);
@@ -36,7 +48,7 @@ public class PrimaticaPowerupInstance implements TickableInstance {
 
     @Override
     public boolean tick() {
-        if(entity.isRemoved()) return true;
+        if(entity == null || entity.isRemoved()) return true;
 
         PlayerEntity player = world.getClosestPlayer(entity, 20.0);
         if(player instanceof ServerPlayerEntity sPlayer) {
@@ -51,8 +63,10 @@ public class PrimaticaPowerupInstance implements TickableInstance {
 
     @Override
     public void remove() {
-        entity.kill();
-        handler.powerupAmount--;
+        if(entity != null) {
+            entity.kill();
+            handler.powerupAmount--;
+        }
     }
 
     private void collectPowerup(ServerPlayerEntity player) {
@@ -66,5 +80,27 @@ public class PrimaticaPowerupInstance implements TickableInstance {
             }
             handler.setHasPowerup(id, true);
         }
+    }
+
+    private BlockPos findSuitablePos(Vec3d original) {
+        BlockPos pos = new BlockPos(original);
+        for(int i = 0; i < 3; i++) {
+            if(isPosSuitable(pos)) return pos;
+
+            Vec3d vecPos = new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+            for(float a = 0.0f; a < 359.0f; a += 30.0f) {
+                BlockPos apos = new BlockPos(vecPos.add(Vec3d.fromPolar(0.0f, a).multiply(2.0)));
+                if(isPosSuitable(apos)) return apos;
+            }
+
+            pos = pos.up();
+        }
+
+        return null;
+    }
+
+    private boolean isPosSuitable(BlockPos pos) {
+        BlockPos below = pos.down();
+        return !world.getBlockState(pos).isSolidBlock(world, pos) && world.getBlockState(below).isSolidBlock(world, below);
     }
 }
