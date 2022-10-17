@@ -77,6 +77,16 @@ public class PrimaticaPowerupInstance implements TickableInstance {
                 case BRIDGE -> InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.BRIDGE));
                 case GRAVITY -> InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.GRAVITY));
                 case EMP -> InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.EMP));
+                case ARROW -> {
+                    Inventory playerInventory = player.getInventory();
+                    int size = playerInventory.size();
+                    int slot = 0;
+                    for(int i = 0; i < size; i++) {
+                        if(playerInventory.getStack(i).itemMatches(item -> item.matchesId(new Identifier("minecraft:bow"))))
+                            slot = i == 40 ? 99 : i;
+                    }
+                    InventoryUtil.replaceSlot(player, slot, ItemStack.fromNbt(PrimaticaInfo.ARROW_BOW));
+                }
                 case GUNK -> InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.GUNK));
             }
             handler.setHasPowerup(id, true);

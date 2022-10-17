@@ -376,6 +376,32 @@ public class PrimaticaIngameHandler implements StateHandler {
 
     @Override
     public boolean onPlayerShoot(ServerPlayerEntity player, EventPlayerData data, ItemStack bow, int useTicks) {
+        if(bow.getNbt() == null || bow.getNbt().getInt("CustomModelData") != 1) return false;
+        if(useTicks < 20) return true;
+
+        bow.decrement(1);
+        if(bow.getCount() < 1) {
+            bow = ItemStack.EMPTY;
+
+            Inventory playerInventory = player.getInventory();
+            int size = playerInventory.size();
+            boolean hasMoreBows = false;
+            for(int i = 0; i < size; i++) {
+                if(playerInventory.getStack(i).itemMatches(item -> item.matchesId(new Identifier("minecraft:bow")))) {
+                    hasMoreBows = true;
+                    break;
+                }
+            }
+
+            if(!hasMoreBows) {
+                bow = ItemStack.fromNbt(PrimaticaInfo.BOW);
+                setHasPowerup(player.getUuid(), false);
+            }
+        }
+        InventoryUtil.replaceSlot(player, player.getActiveHand() == Hand.MAIN_HAND ? player.getInventory().selectedSlot : 99, bow);
+
+        tickables.add(new PrimaticaArrowInstance(player));
+
         return true;
     }
 
