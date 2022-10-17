@@ -186,6 +186,9 @@ public class EventManager implements ModInitializer {
     public void onInitialize() {
         instance = this;
 
+        CustomBlocks.register();
+        CustomItems.register();
+
         ServerLifecycleEvents.SERVER_STARTED.register(this::onServerStart);
         ServerTickEvents.END_SERVER_TICK.register(this::onServerTick);
         ServerLifecycleEvents.SERVER_STOPPING.register(this::cleanup);
