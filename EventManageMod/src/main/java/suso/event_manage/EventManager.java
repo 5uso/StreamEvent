@@ -101,6 +101,9 @@ public class EventManager implements ModInitializer {
     public void onPlayerJump(ServerPlayerEntity player, BlockPos jumpingPos) {
         handler.onPlayerJump(player, data.getPlayerData(player), jumpingPos);
     }
+
+    public boolean onPlayerShoot(ServerPlayerEntity player, ItemStack bow, int useTicks) {
+        return handler.onPlayerShoot(player, data.getPlayerData(player), bow, useTicks);
     }
 
     public void onSave() {
