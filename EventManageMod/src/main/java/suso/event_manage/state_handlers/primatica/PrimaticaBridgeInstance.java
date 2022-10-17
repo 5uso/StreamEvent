@@ -1,5 +1,7 @@
 package suso.event_manage.state_handlers.primatica;
 
+import net.minecraft.block.BlockState;
+import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -16,11 +18,16 @@ public class PrimaticaBridgeInstance implements TickableInstance {
     private Vec3d position;
 
     private final World world;
+    private final BlockState block;
 
     private int ticksLeft;
 
     public PrimaticaBridgeInstance(ServerPlayerEntity owner) {
         this.world = owner.getWorld();
+
+        AbstractTeam team = owner.getScoreboardTeam();
+        Identifier blockId = new Identifier(PrimaticaInfo.getCorrespondingBlock(team == null ? 7 :team.getColor().getColorIndex()));
+        this.block = Registry.BLOCK.get(blockId).getDefaultState();
 
         this.direction = Vec3d.fromPolar(0.0f, owner.getYaw()).multiply(0.6);
         this.position = owner.getPos().add(0.0, Math.min(0.0, owner.getVelocity().y + 0.05) * 5.0 - 0.8, 0.0);
@@ -35,7 +42,7 @@ public class PrimaticaBridgeInstance implements TickableInstance {
         position = position.add(direction);
         BlockPos pos = new BlockPos(position);
         if(world.getBlockState(pos).isAir()) {
-            world.setBlockState(pos, Registry.BLOCK.get(new Identifier("stone")).getDefaultState());
+            world.setBlockState(pos, block);
             SoundUtil.playSound(((ServerWorld) world).getPlayers(), new Identifier("minecraft:block.scaffolding.place"), SoundCategory.MASTER, position, 1.0f, 1.0f);
         }
 
