@@ -40,7 +40,27 @@ public class ServerPlayerEntityMixin implements ServerPlayerEntityExtended {
     private void handleLand(CallbackInfo ci) {
         if(((Entity)(Object) this).fallDistance < 1.5 || ((PlayerEntity)(Object) this).getAbilities().flying) return;
         if(EventManager.getInstance().onPlayerLand((ServerPlayerEntity)(Object) this)) ci.cancel();
+    @Inject(
+            method = "tick",
+            at = @At("RETURN")
+    )
+    private void updatePosDelta(CallbackInfo ci) {
+        Vec3d newPos = ((Entity)(Object) this).getPos();
+        boolean temp = currPos.equals(newPos);
+        if(!temp || samePrevTick) {
+            prevPos = currPos;
+            currPos = newPos;
+        }
+        samePrevTick = temp;
     }
+    private boolean samePrevTick = true;
+    private Vec3d currPos = ((Entity)(Object) this).getPos();
+    private Vec3d prevPos = currPos;
+    @Override
+    public Vec3d getPosDelta() {
+        return currPos.subtract(prevPos);
+    }
+
     private boolean isJumpPressed = false;
     @Override
     public void setJumpPressed(boolean isJumpPressed) {
