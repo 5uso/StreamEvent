@@ -12,6 +12,7 @@
     "client.GameRendererMixin",
     "client.GlUniformUtilImpl",
     "client.IdentifierMixin",
+    "client.KeyboardInputMixin",
     "client.PostProcessMixin",
     "client.SoundManagerAccess",
     "client.SoundManagerMixin",

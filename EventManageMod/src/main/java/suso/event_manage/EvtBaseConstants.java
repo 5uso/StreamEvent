@@ -10,5 +10,7 @@ public class EvtBaseConstants {
     public static final Identifier SET_SHADER_UNIFORM = new Identifier("suso:set_shader_uniform");
     public static final Identifier SET_POST_SHADER = new Identifier("suso:set_post_shader");
 
+    public static final Identifier JUMP_INPUT = new Identifier("suso:jump_input");
+
     public static final Identifier LOGIN_CHECK = new Identifier("suso:login_check");
 }

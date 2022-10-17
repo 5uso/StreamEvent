@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
@@ -25,6 +26,7 @@ import suso.event_manage.mixin.PlayerManagerAccess;
 import suso.event_manage.state_handlers.idle.IdleHandler;
 import suso.event_manage.state_handlers.StateHandler;
 import suso.event_manage.util.CommandUtil;
+import suso.event_manage.util.MiscUtil;
 
 import java.util.List;
 import java.util.Set;
@@ -202,5 +204,7 @@ public class EventManager implements ModInitializer {
         ServerPlayerEvents.ALLOW_DEATH.register(this::onPlayerDeath);
 
         ServerEntityEvents.ENTITY_LOAD.register(this::onEntityLoad);
+
+        ServerPlayNetworking.registerGlobalReceiver(EvtBaseConstants.JUMP_INPUT, MiscUtil::handleJumpInput);
     }
 }

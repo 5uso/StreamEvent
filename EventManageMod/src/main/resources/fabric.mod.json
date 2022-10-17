@@ -25,5 +25,10 @@
     "fabricloader": ">=0.14.9",
     "fabric": "*",
     "minecraft": "1.19.2"
+  },
+  "custom": {
+    "loom:injected_interfaces": {
+      "net/minecraft/class_3222": ["suso/event_manage/injected_interfaces/ServerPlayerEntityExtended"]
+    }
   }
 }

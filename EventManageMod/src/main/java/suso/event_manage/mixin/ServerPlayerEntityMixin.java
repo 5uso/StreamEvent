@@ -5,19 +5,18 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import suso.event_manage.EventManager;
+import suso.event_manage.injected_interfaces.ServerPlayerEntityExtended;
 
 @Mixin(ServerPlayerEntity.class)
-public abstract class ServerPlayerEntityMixin {
-    @Shadow public abstract ServerWorld getWorld();
-
+public class ServerPlayerEntityMixin implements ServerPlayerEntityExtended {
     @Inject(
             method = "dropItem",
             at = @At("HEAD"),
@@ -29,7 +28,7 @@ public abstract class ServerPlayerEntityMixin {
         ((PlayerEntity)(Object) this).getInventory().insertStack(stack);
         ((PlayerEntity)(Object) this).currentScreenHandler.sendContentUpdates();
 
-        cir.setReturnValue(new ItemEntity(this.getWorld(), 0.0, 0.0, 0.0, ItemStack.EMPTY));
+        cir.setReturnValue(new ItemEntity(((Entity)(Object) this).world, 0.0, 0.0, 0.0, ItemStack.EMPTY));
         cir.cancel();
     }
 
@@ -42,4 +41,15 @@ public abstract class ServerPlayerEntityMixin {
         if(((Entity)(Object) this).fallDistance < 1.5 || ((PlayerEntity)(Object) this).getAbilities().flying) return;
         if(EventManager.getInstance().onPlayerLand((ServerPlayerEntity)(Object) this)) ci.cancel();
     }
+    private boolean isJumpPressed = false;
+    @Override
+    public void setJumpPressed(boolean isJumpPressed) {
+        this.isJumpPressed = isJumpPressed;
+    }
+    @Override
+    public boolean isJumpPressed() {
+        return isJumpPressed;
+    }
+
+
 }
