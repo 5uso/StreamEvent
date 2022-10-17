@@ -1,5 +1,7 @@
 package suso.event_manage.state_handlers.primatica;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageSource;
@@ -7,7 +9,11 @@ import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtInt;
+import net.minecraft.nbt.NbtString;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.MinecraftServer;
@@ -21,11 +27,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import suso.event_manage.EventManager;
 import suso.event_manage.data.EventData;
 import suso.event_manage.data.EventPlayerData;
+import suso.event_manage.injected_interfaces.ServerPlayerEntityExtended;
+import suso.event_manage.state_handlers.PlayerScheduleInstance;
 import suso.event_manage.state_handlers.StateCommands;
 import suso.event_manage.state_handlers.StateHandler;
 import suso.event_manage.state_handlers.TickableInstance;
@@ -169,17 +179,34 @@ public class PrimaticaIngameHandler implements StateHandler {
         if(data.isPlayer) {
             player.changeGameMode(GameMode.ADVENTURE);
 
-            InventoryUtil.replaceSlot(player, 0, ItemStack.fromNbt(PrimaticaInfo.SWORD));
-            InventoryUtil.replaceSlot(player, 1, ItemStack.fromNbt(PrimaticaInfo.BOW));
-            InventoryUtil.replaceSlot(player, 2, ItemStack.fromNbt(PrimaticaInfo.PICKAXE));
-            InventoryUtil.replaceSlot(player, 3, ItemStack.fromNbt(PrimaticaInfo.BLOCK));
+            NbtCompound blockNbt = PrimaticaInfo.BLOCK.copy();
+            NbtCompound helmetNbt = PrimaticaInfo.HELMET.copy();
+            NbtCompound chestplateNbt = PrimaticaInfo.CHESTPLATE.copy();
+            NbtCompound leggingsNbt = PrimaticaInfo.LEGGINGS.copy();
+            NbtCompound bootsNbt = PrimaticaInfo.BOOTS.copy();
+            AbstractTeam team = player.getScoreboardTeam();
+            if(team != null && team.getColor().getColorValue() != null) {
+                blockNbt.put("id", NbtString.of(PrimaticaInfo.getCorrespondingBlock(team.getColor().getColorIndex())));
+
+                NbtCompound armorDisplay = new NbtCompound();
+                armorDisplay.put("color", NbtInt.of(team.getColor().getColorValue()));
+                helmetNbt.getCompound("tag").put("display", armorDisplay);
+                chestplateNbt.getCompound("tag").put("display", armorDisplay);
+                leggingsNbt.getCompound("tag").put("display", armorDisplay);
+                bootsNbt.getCompound("tag").put("display", armorDisplay);
+            }
+
+            InventoryUtil.replaceSlot(player, 0, ItemStack.fromNbt(PrimaticaInfo.BOW));
+            InventoryUtil.replaceSlot(player, 1, ItemStack.fromNbt(PrimaticaInfo.PICKAXE));
+
+            InventoryUtil.replaceSlot(player, 2, ItemStack.fromNbt(blockNbt));
 
             InventoryUtil.replaceSlot(player, 9, new ItemStack(Registry.ITEM.get(new Identifier("minecraft:arrow"))));
 
-            InventoryUtil.replaceSlot(player, 103, ItemStack.fromNbt(PrimaticaInfo.HELMET));
-            InventoryUtil.replaceSlot(player, 102, ItemStack.fromNbt(PrimaticaInfo.CHESTPLATE));
-            InventoryUtil.replaceSlot(player, 101, ItemStack.fromNbt(PrimaticaInfo.LEGGINGS));
-            InventoryUtil.replaceSlot(player, 100, ItemStack.fromNbt(PrimaticaInfo.BOOTS));
+            InventoryUtil.replaceSlot(player, 103, ItemStack.fromNbt(helmetNbt));
+            InventoryUtil.replaceSlot(player, 102, ItemStack.fromNbt(chestplateNbt));
+            InventoryUtil.replaceSlot(player, 101, ItemStack.fromNbt(leggingsNbt));
+            InventoryUtil.replaceSlot(player, 100, ItemStack.fromNbt(bootsNbt));
 
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.INSTANT_HEALTH, 1, 100, false, false, false));
 
