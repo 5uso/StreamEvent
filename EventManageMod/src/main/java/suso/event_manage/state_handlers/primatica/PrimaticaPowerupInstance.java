@@ -76,7 +76,8 @@ public class PrimaticaPowerupInstance implements TickableInstance {
                 case AGILITY -> InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.AGILITY));
                 case BRIDGE -> InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.BRIDGE));
                 case GRAVITY -> InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.GRAVITY));
-                default -> InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.EMP));
+                case EMP -> InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.EMP));
+                case GUNK -> InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.GUNK));
             }
             handler.setHasPowerup(id, true);
         }

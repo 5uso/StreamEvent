@@ -172,6 +172,25 @@ public class PrimaticaIngameHandler implements StateHandler {
         }
     }
 
+    protected void useGunk(ServerPlayerEntity player) {
+        tickables.add(new PrimaticaGunkInstance(player));
+        setHasPowerup(player.getUuid(), false);
+    }
+
+    private boolean gunkMatchesTeam(String gunk, @Nullable AbstractTeam team) {
+        if(team == null) return false;
+        return PrimaticaInfo.getCorrespondingGunk(team.getColor().getColorIndex()).equals(gunk);
+    }
+
+    private void applyGunkJumpEffects(ServerPlayerEntity player, boolean ownTeam, double bounceHeight) {
+        if(ownTeam) {
+            Vec3d posDelta = ((ServerPlayerEntityExtended) player).getPosDelta();
+            player.setVelocity(posDelta.x * 4.0, Math.max(1.5, bounceHeight), posDelta.z * 4.0);
+        } else player.setVelocity(0.0, 0.1, 0.0);
+
+        player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(player));
+    }
+
     private void initPlayer(ServerPlayerEntity player, EventPlayerData data) {
         InventoryUtil.clearPLayer(player);
         player.clearStatusEffects();
@@ -309,6 +328,7 @@ public class PrimaticaIngameHandler implements StateHandler {
                 case 2 -> useBridge(player);
                 case 3 -> useGravity(player);
                 case 4 -> useEMP(player);
+                case 5 -> useGunk(player);
             }
             InventoryUtil.replaceSlot(player, hand == Hand.MAIN_HAND ? player.getInventory().selectedSlot : 99, ItemStack.EMPTY);
             return true;
@@ -317,14 +337,41 @@ public class PrimaticaIngameHandler implements StateHandler {
     }
 
     @Override
-        player.addVelocity(0.0, player.fallDistance / 5.0, 0.0);
-        player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(player));
     public boolean onPlayerLand(ServerPlayerEntity player, EventPlayerData data, double heightDifference, BlockPos landingPos) {
+        if(player.fallDistance < 0.75) return false;
+
+        BlockState landingBlock = player.getWorld().getBlockState(landingPos);
+        Optional<RegistryKey<Block>> op = landingBlock.getRegistryEntry().getKey();
+        if(op.isPresent()) {
+            Identifier id = op.get().getValue();
+            if(id.getPath().endsWith("_gunk") && !player.bypassesLandingEffects()) {
+                boolean ownTeam = gunkMatchesTeam(id.toString(), player.getScoreboardTeam());
+                if(((ServerPlayerEntityExtended) player).isJumpPressed()) {
+                    Vec3d posDelta = ((ServerPlayerEntityExtended) player).getPosDelta();
+                    tickables.add(new PlayerScheduleInstance(player, 1, p -> applyGunkJumpEffects(p, ownTeam, posDelta.y * -1.3)));
+                } else {
+                    if(ownTeam) {
+                        Vec3d posDelta = ((ServerPlayerEntityExtended) player).getPosDelta();
+                        player.setVelocity(posDelta.x * 4.0, posDelta.y * -1.3, posDelta.z * 4.0);
+                    } else player.setVelocity(0.0, 0.1, 0.0);
+                    player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(player));
+                }
+            }
+        }
+
         return false;
     }
 
     @Override
     public void onPlayerJump(ServerPlayerEntity player, EventPlayerData data, BlockPos jumpingPos) {
+        BlockState jumpingBlock = player.getWorld().getBlockState(jumpingPos);
+        Optional<RegistryKey<Block>> op = jumpingBlock.getRegistryEntry().getKey();
+        if(op.isPresent()) {
+            Identifier id = op.get().getValue();
+            if(id.getPath().endsWith("_gunk") && !player.bypassesLandingEffects()) {
+                applyGunkJumpEffects(player, gunkMatchesTeam(id.toString(), player.getScoreboardTeam()), 0.0);
+            }
+        }
     }
 
     @Override

@@ -64,11 +64,33 @@ public class PrimaticaInfo {
             BRIDGE = StringNbtReader.parse("{id:'feather',Count:1b,tag:{CustomModelData:2,display:{Name:'{\"translate\":\"event.suso.bridge\"}'}}}");
             GRAVITY = StringNbtReader.parse("{id:'feather',Count:1b,tag:{CustomModelData:3,display:{Name:'{\"translate\":\"event.suso.gravity\"}'}}}");
             EMP = StringNbtReader.parse("{id:'feather',Count:1b,tag:{CustomModelData:4,display:{Name:'{\"translate\":\"event.suso.emp\"}'},CanPlaceOn:['#minecraft:all'],HideFlags:16}}");
+            GUNK = StringNbtReader.parse("{id:'feather',Count:1b,tag:{CustomModelData:5,display:{Name:'{\"translate\":\"event.suso.gunk\"}'}}}");
         } catch (CommandSyntaxException e) {
             e.printStackTrace();
             System.exit(0xDEADBEEF);
         }
     }
+
+
+    private static final Map<Integer, String> gunkCorrespondence = new HashMap<>();
+    static {
+        gunkCorrespondence.put(7, "suso:gray_gunk");
+        gunkCorrespondence.put(15, "suso:white_gunk");
+        gunkCorrespondence.put(13, "suso:pink_gunk");
+        gunkCorrespondence.put(5, "suso:purple_gunk");
+        gunkCorrespondence.put(9, "suso:blue_gunk");
+        gunkCorrespondence.put(3, "suso:cyan_gunk");
+        gunkCorrespondence.put(11, "suso:light_blue_gunk");
+        gunkCorrespondence.put(2, "suso:green_gunk");
+        gunkCorrespondence.put(10, "suso:lime_gunk");
+        gunkCorrespondence.put(14, "suso:yellow_gunk");
+        gunkCorrespondence.put(6, "suso:orange_gunk");
+        gunkCorrespondence.put(4, "suso:red_gunk");
+    }
+    public static String getCorrespondingGunk(int colorIndex) {
+        return gunkCorrespondence.get(colorIndex);
+    }
+
     private static final Map<Integer, String> blockCorrespondence = new HashMap<>();
     static {
         blockCorrespondence.put(7, "suso:gray_holoblock");
