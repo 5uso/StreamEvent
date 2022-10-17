@@ -10,16 +10,18 @@ import suso.event_manage.EventManager;
 import suso.event_manage.data.EventPlayerData;
 
 public interface StateHandler {
-    void tick(EventManager manager, MinecraftServer server);
-    void tickPlayer(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data);
-    void onPlayerJoin(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data);
-    void onPlayerRespawn(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data);
-    boolean onPlayerDeath(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data, DamageSource damageSource, float damageAmount);
-    void onPlayerItemUsedOnBlock(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data, BlockPos pos, ItemStack stack, Hand hand);
-    boolean onPlayerRightClick(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data, ItemStack stack, Hand hand);
-    boolean onPlayerLand(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data);
-    void cleanup(EventManager manager, MinecraftServer server);
-    boolean canDropItems(EventManager manager, ServerPlayerEntity player, EventPlayerData data);
+    void tick();
+    void tickPlayer(ServerPlayerEntity player, EventPlayerData data);
+    void onPlayerJoin(ServerPlayerEntity player, EventPlayerData data);
+    void onPlayerRespawn(ServerPlayerEntity player, EventPlayerData data);
+    boolean onPlayerDeath(ServerPlayerEntity player, EventPlayerData data, DamageSource damageSource, float damageAmount);
+    void onPlayerItemUsedOnBlock(ServerPlayerEntity player, EventPlayerData data, BlockPos pos, ItemStack stack, Hand hand);
+    boolean onPlayerRightClick(ServerPlayerEntity player, EventPlayerData data, ItemStack stack, Hand hand);
+    boolean onPlayerLand(ServerPlayerEntity player, EventPlayerData data, double heightDifference, BlockPos landingPos);
+    void onPlayerJump(ServerPlayerEntity player, EventPlayerData data, BlockPos jumpingPos);
+    boolean onPlayerShoot(ServerPlayerEntity player, EventPlayerData data, ItemStack bow, int useTicks);
+    void cleanup();
+    boolean canDropItems(ServerPlayerEntity player, EventPlayerData data);
     StateCommands getStateCommands();
     EventManager.ServerState getState();
 }

@@ -71,7 +71,9 @@ public class PrimaticaIngameHandler implements StateHandler {
         prepare();
     }
 
-    private void killEntities(MinecraftServer server) {
+    private void killEntities() {
+        MinecraftServer server = EventManager.getInstance().getServer();
+
         List<? extends Entity> snowballList = server.getOverworld().getEntitiesByType(EntityType.SNOWBALL, e -> true);
         snowballList.forEach(Entity::kill);
 
@@ -80,13 +82,12 @@ public class PrimaticaIngameHandler implements StateHandler {
     }
 
     private void prepare() {
-        EventManager manager = EventManager.getInstance();
-        MinecraftServer server = manager.getServer();
+        MinecraftServer server = EventManager.getInstance().getServer();
 
-        killEntities(server);
+        killEntities();
 
         EventData edata = EventData.getInstance();
-        server.getPlayerManager().getPlayerList().forEach(player -> onPlayerJoin(EventManager.getInstance(), server, player, Objects.requireNonNull(edata.getPlayerData(player))));
+        server.getPlayerManager().getPlayerList().forEach(player -> onPlayerJoin(player, Objects.requireNonNull(edata.getPlayerData(player))));
     }
 
     private void trySummonOrb(EventManager manager, World world) {
@@ -189,7 +190,10 @@ public class PrimaticaIngameHandler implements StateHandler {
     }
 
     @Override
-    public void tick(EventManager manager, MinecraftServer server) {
+    public void tick() {
+        EventManager manager = EventManager.getInstance();
+        MinecraftServer server = manager.getServer();
+
         World w = server.getOverworld();
         long currTime = System.currentTimeMillis();
 
@@ -204,7 +208,8 @@ public class PrimaticaIngameHandler implements StateHandler {
     }
 
     @Override
-    public void tickPlayer(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data) {
+    public void tickPlayer(ServerPlayerEntity player, EventPlayerData data) {
+        EventManager manager = EventManager.getInstance();
         PrimaticaPlayerInfo info = playerInfo.get(player.getUuid());
 
         ShaderUtil.setShaderUniform(player, "MinigameTimer", Math.max((int) leftMillis, 0));
@@ -227,7 +232,7 @@ public class PrimaticaIngameHandler implements StateHandler {
     }
 
     @Override
-    public void onPlayerJoin(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data) {
+    public void onPlayerJoin(ServerPlayerEntity player, EventPlayerData data) {
         if(playerInfo.get(player.getUuid()) == null) playerInfo.put(player.getUuid(), new PrimaticaPlayerInfo(player));
 
         SoundUtil.playFadeSound(player, new Identifier("eniah:music.1a_main"), 1.0f, 1.0f, true, SoundCategory.RECORDS, false);
@@ -241,12 +246,15 @@ public class PrimaticaIngameHandler implements StateHandler {
     }
 
     @Override
-    public void onPlayerRespawn(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data) {
+    public void onPlayerRespawn(ServerPlayerEntity player, EventPlayerData data) {
         playerInfo.get(player.getUuid()).changePitch(1.0f, 0);
+        initPlayer(player, data);
     }
 
     @Override
-    public boolean onPlayerDeath(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data, DamageSource damageSource, float damageAmount) {
+    public boolean onPlayerDeath(ServerPlayerEntity player, EventPlayerData data, DamageSource damageSource, float damageAmount) {
+        MinecraftServer server = EventManager.getInstance().getServer();;
+
         player.setSpawnPoint(server.getOverworld().getRegistryKey(), new BlockPos(216.0, 80.00, -14.0), 30.0f, true, false);
 
         PrimaticaPlayerInfo info = playerInfo.get(player.getUuid());
@@ -255,14 +263,14 @@ public class PrimaticaIngameHandler implements StateHandler {
     }
 
     @Override
-    public void onPlayerItemUsedOnBlock(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data, BlockPos pos, ItemStack stack, Hand hand) {
+    public void onPlayerItemUsedOnBlock(ServerPlayerEntity player, EventPlayerData data, BlockPos pos, ItemStack stack, Hand hand) {
         /*if(stack.itemMatches(i -> i.matchesId(new Identifier("minecraft:light_blue_concrete")))) {
             InventoryUtil.replaceSlot(player, hand == Hand.MAIN_HAND ? player.getInventory().selectedSlot : 99, ItemStack.fromNbt(PrimaticaInfo.BLOCK));
         }*/
     }
 
     @Override
-    public boolean onPlayerRightClick(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data, ItemStack stack, Hand hand) {
+    public boolean onPlayerRightClick(ServerPlayerEntity player, EventPlayerData data, ItemStack stack, Hand hand) {
         if(stack.itemMatches(r -> r.matchesId(new Identifier("minecraft:feather"))) && stack.getNbt() != null) {
             int powerupId = stack.getNbt().getInt("CustomModelData");
             switch (powerupId) {
@@ -278,15 +286,18 @@ public class PrimaticaIngameHandler implements StateHandler {
     }
 
     @Override
-    public boolean onPlayerLand(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data) {
         player.addVelocity(0.0, player.fallDistance / 5.0, 0.0);
         player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(player));
+    public boolean onPlayerLand(ServerPlayerEntity player, EventPlayerData data, double heightDifference, BlockPos landingPos) {
         return false;
     }
 
     @Override
-    public void cleanup(EventManager manager, MinecraftServer server) {
-        killEntities(server);
+    @Override
+    public void cleanup() {
+        MinecraftServer server = EventManager.getInstance().getServer();
+
+        killEntities();
 
         for(ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
             InventoryUtil.clearPLayer(player);
@@ -295,7 +306,7 @@ public class PrimaticaIngameHandler implements StateHandler {
     }
 
     @Override
-    public boolean canDropItems(EventManager manager, ServerPlayerEntity player, EventPlayerData data) {
+    public boolean canDropItems(ServerPlayerEntity player, EventPlayerData data) {
         return false;
     }
 

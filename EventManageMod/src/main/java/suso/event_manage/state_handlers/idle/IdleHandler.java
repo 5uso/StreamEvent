@@ -15,17 +15,19 @@ import suso.event_manage.util.InventoryUtil;
 
 public class IdleHandler implements StateHandler {
     @Override
-    public void tick(EventManager manager, MinecraftServer server) {
+    public void tick() {
 
     }
 
     @Override
-    public void tickPlayer(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data) {
+    public void tickPlayer(ServerPlayerEntity player, EventPlayerData data) {
         player.getHungerManager().add(20, 0.0f);
     }
 
     @Override
-    public void onPlayerJoin(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data) {
+    public void onPlayerJoin(ServerPlayerEntity player, EventPlayerData data) {
+        MinecraftServer server = EventManager.getInstance().getServer();
+
         InventoryUtil.clearPLayer(player);
         player.clearStatusEffects();
 
@@ -37,38 +39,48 @@ public class IdleHandler implements StateHandler {
     }
 
     @Override
-    public void onPlayerRespawn(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data) {
+    public void onPlayerRespawn(ServerPlayerEntity player, EventPlayerData data) {
 
     }
 
     @Override
-    public boolean onPlayerDeath(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data, DamageSource damageSource, float damageAmount) {
+    public boolean onPlayerDeath(ServerPlayerEntity player, EventPlayerData data, DamageSource damageSource, float damageAmount) {
         player.setHealth(20.0f);
         return false;
     }
 
     @Override
-    public void onPlayerItemUsedOnBlock(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data, BlockPos pos, ItemStack stack, Hand hand) {
+    public void onPlayerItemUsedOnBlock(ServerPlayerEntity player, EventPlayerData data, BlockPos pos, ItemStack stack, Hand hand) {
 
     }
 
     @Override
-    public boolean onPlayerRightClick(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data, ItemStack stack, Hand hand) {
+    public boolean onPlayerRightClick(ServerPlayerEntity player, EventPlayerData data, ItemStack stack, Hand hand) {
         return false;
     }
 
     @Override
-    public boolean onPlayerLand(EventManager manager, MinecraftServer server, ServerPlayerEntity player, EventPlayerData data) {
+    public boolean onPlayerLand(ServerPlayerEntity player, EventPlayerData data, double heightDifference, BlockPos landingPos) {
         return false;
     }
 
     @Override
-    public void cleanup(EventManager manager, MinecraftServer server) {
+    public void onPlayerJump(ServerPlayerEntity player, EventPlayerData data, BlockPos jumpingPos) {
 
     }
 
     @Override
-    public boolean canDropItems(EventManager manager, ServerPlayerEntity player, EventPlayerData data) {
+    public boolean onPlayerShoot(ServerPlayerEntity player, EventPlayerData data, ItemStack bow, int useTicks) {
+        return false;
+    }
+
+    @Override
+    public void cleanup() {
+
+    }
+
+    @Override
+    public boolean canDropItems(ServerPlayerEntity player, EventPlayerData data) {
         return true; //TODO: Please change this
     }
 

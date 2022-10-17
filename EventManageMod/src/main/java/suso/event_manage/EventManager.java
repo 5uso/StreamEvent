@@ -19,6 +19,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import org.slf4j.Logger;
+import suso.event_manage.custom.blocks.CustomBlocks;
+import suso.event_manage.custom.items.CustomItems;
 import suso.event_manage.data.EventData;
 import suso.event_manage.data.EventPlayerData;
 import suso.event_manage.mixin.MinecraftServerAccess;
@@ -64,8 +66,8 @@ public class EventManager implements ModInitializer {
         PlayerManager pm = server.getPlayerManager();
         List<ServerPlayerEntity> players = pm.getPlayerList();
 
-        handler.tick(this, server);
-        for(ServerPlayerEntity player : players) handler.tickPlayer(this, server, player, data.getPlayerData(player));
+        handler.tick();
+        for(ServerPlayerEntity player : players) handler.tickPlayer(player, data.getPlayerData(player));
     }
 
     public void onPlayerJoin(ServerPlayerEntity player) {
@@ -73,27 +75,28 @@ public class EventManager implements ModInitializer {
             data.registerPlayer(player);
         }
 
-        handler.onPlayerJoin(this, server, player, data.getPlayerData(player));
+        handler.onPlayerJoin(player, data.getPlayerData(player));
     }
 
     public void onPlayerRespawn(ServerPlayerEntity old, ServerPlayerEntity player, boolean alive) {
-        handler.onPlayerRespawn(this, server, player, data.getPlayerData(player));
+        handler.onPlayerRespawn(player, data.getPlayerData(player));
     }
 
     public boolean onPlayerDeath(ServerPlayerEntity player, DamageSource damageSource, float damageAmount) {
-        return handler.onPlayerDeath(this, server, player, data.getPlayerData(player), damageSource, damageAmount);
+        return handler.onPlayerDeath(player, data.getPlayerData(player), damageSource, damageAmount);
     }
 
     public void onPlayerItemUsedOnBlock(ServerPlayerEntity player, BlockPos pos, ItemStack stack, Hand hand) {
-        handler.onPlayerItemUsedOnBlock(this, server, player, data.getPlayerData(player), pos, stack, hand);
+        handler.onPlayerItemUsedOnBlock(player, data.getPlayerData(player), pos, stack, hand);
     }
 
     public boolean onPlayerRightClick(ServerPlayerEntity player, ItemStack stack, Hand hand) {
-        return handler.onPlayerRightClick(this, server, player, data.getPlayerData(player), stack, hand);
+        return handler.onPlayerRightClick(player, data.getPlayerData(player), stack, hand);
     }
 
-    public boolean onPlayerLand(ServerPlayerEntity player) {
-        return handler.onPlayerLand(this, server, player, data.getPlayerData(player));
+    public boolean onPlayerLand(ServerPlayerEntity player, double heightDifference, BlockPos landingPos) {
+        return handler.onPlayerLand(player, data.getPlayerData(player), heightDifference, landingPos);
+    }
     }
 
     public void onSave() {
@@ -112,14 +115,14 @@ public class EventManager implements ModInitializer {
     }
 
     public void cleanup(MinecraftServer server) {
-        handler.cleanup(this, server);
+        handler.cleanup();
     }
 
     public void setStateHandler(StateHandler handler) {
         Logger LOGGER = MinecraftServerAccess.getLOGGER();
         LOGGER.info("Changing state to " + handler.getState());
         if(this.handler != null) {
-            this.handler.cleanup(this, server);
+            this.handler.cleanup();
             this.handler.getStateCommands().unregister(server);
         }
         this.handler = handler;
@@ -173,7 +176,7 @@ public class EventManager implements ModInitializer {
     }
 
     public boolean canDropItems(ServerPlayerEntity player) {
-        return handler.canDropItems(this, player, data.getPlayerData(player));
+        return handler.canDropItems(player, data.getPlayerData(player));
     }
 
     public MinecraftServer getServer() {

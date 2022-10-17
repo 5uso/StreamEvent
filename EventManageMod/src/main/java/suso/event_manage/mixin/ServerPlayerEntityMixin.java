@@ -33,13 +33,17 @@ public class ServerPlayerEntityMixin implements ServerPlayerEntityExtended {
     }
 
     @Inject(
-            method = "onLanding",
+            method = "handleFall",
             at = @At("HEAD"),
             cancellable = true
     )
-    private void handleLand(CallbackInfo ci) {
-        if(((Entity)(Object) this).fallDistance < 1.5 || ((PlayerEntity)(Object) this).getAbilities().flying) return;
-        if(EventManager.getInstance().onPlayerLand((ServerPlayerEntity)(Object) this)) ci.cancel();
+    private void handleLand(double heightDifference, boolean onGround, CallbackInfo ci) {
+        if(((Entity)(Object) this).isRegionUnloaded() || !onGround || ((Entity)(Object) this).fallDistance <= 0.0) return;
+
+        BlockPos blockPos = ((ServerPlayerEntity)(Object) this).getLandingPos();
+        if(EventManager.getInstance().onPlayerLand((ServerPlayerEntity)(Object) this, heightDifference, blockPos)) ci.cancel();
+    }
+
     @Inject(
             method = "tick",
             at = @At("RETURN")
