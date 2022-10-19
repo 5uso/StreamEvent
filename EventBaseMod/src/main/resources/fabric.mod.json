@@ -20,6 +20,7 @@
   "mixins": [
     "event_base.mixins.json"
   ],
+  "accessWidener" : "event_base.accesswidener",
   "depends": {
     "fabricloader": ">=0.14.9",
     "fabric": "*",
