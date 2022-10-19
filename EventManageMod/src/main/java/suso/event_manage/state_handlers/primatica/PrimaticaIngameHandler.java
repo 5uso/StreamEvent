@@ -34,7 +34,6 @@ import org.jetbrains.annotations.Nullable;
 import suso.event_manage.EventManager;
 import suso.event_manage.data.EventData;
 import suso.event_manage.data.EventPlayerData;
-import suso.event_manage.injected_interfaces.ServerPlayerEntityExtended;
 import suso.event_manage.state_handlers.PlayerScheduleInstance;
 import suso.event_manage.state_handlers.StateCommands;
 import suso.event_manage.state_handlers.StateHandler;
@@ -184,7 +183,7 @@ public class PrimaticaIngameHandler implements StateHandler {
 
     private void applyGunkJumpEffects(ServerPlayerEntity player, boolean ownTeam, double bounceHeight) {
         if(ownTeam) {
-            Vec3d posDelta = ((ServerPlayerEntityExtended) player).getPosDelta();
+            Vec3d posDelta = player.getPosDelta();
             player.setVelocity(posDelta.x * 4.0, Math.max(1.5, bounceHeight), posDelta.z * 4.0);
         } else player.setVelocity(0.0, 0.1, 0.0);
 
@@ -346,12 +345,12 @@ public class PrimaticaIngameHandler implements StateHandler {
             Identifier id = op.get().getValue();
             if(id.getPath().endsWith("_gunk") && !player.bypassesLandingEffects()) {
                 boolean ownTeam = gunkMatchesTeam(id.toString(), player.getScoreboardTeam());
-                if(((ServerPlayerEntityExtended) player).isJumpPressed()) {
-                    Vec3d posDelta = ((ServerPlayerEntityExtended) player).getPosDelta();
+                if(player.isJumpPressed()) {
+                    Vec3d posDelta = player.getPosDelta();
                     tickables.add(new PlayerScheduleInstance(player, 1, p -> applyGunkJumpEffects(p, ownTeam, posDelta.y * -1.3)));
                 } else {
                     if(ownTeam) {
-                        Vec3d posDelta = ((ServerPlayerEntityExtended) player).getPosDelta();
+                        Vec3d posDelta = player.getPosDelta();
                         player.setVelocity(posDelta.x * 4.0, posDelta.y * -1.3, posDelta.z * 4.0);
                     } else player.setVelocity(0.0, 0.1, 0.0);
                     player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(player));
