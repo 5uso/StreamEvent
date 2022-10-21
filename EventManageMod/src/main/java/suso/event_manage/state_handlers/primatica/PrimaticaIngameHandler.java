@@ -311,6 +311,8 @@ public class PrimaticaIngameHandler implements StateHandler {
 
         PrimaticaPlayerInfo info = playerInfo.get(player.getUuid());
         info.changePitch(0.5f, 40);
+
+        SoundUtil.playSound(player, new Identifier("eniah:sfx.crash"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
         return true;
     }
 
