@@ -5,6 +5,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import suso.event_base.client.shader.ShaderNetworking;
 import suso.event_base.client.sound.SoundNetworking;
+import suso.event_base.custom.render.CustomRender;
 
 @Environment(EnvType.CLIENT)
 public class Event_baseClient implements ClientModInitializer {
@@ -13,5 +14,7 @@ public class Event_baseClient implements ClientModInitializer {
         SoundNetworking.registerPacketListeners();
         ShaderNetworking.registerPacketListeners();
         ModCheck.registerPacketListeners();
+
+        CustomRender.setupRenderLayers();
     }
 }
