@@ -5,6 +5,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -12,6 +13,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import suso.event_manage.state_handlers.TickableInstance;
 import suso.event_manage.util.InventoryUtil;
+import suso.event_manage.util.SoundUtil;
 
 import java.util.List;
 import java.util.Queue;
@@ -90,7 +92,11 @@ public class PrimaticaPowerupInstance implements TickableInstance {
                 case GUNK -> InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.GUNK));
             }
             handler.setHasPowerup(id, true);
+            SoundUtil.playSound(player, new Identifier("eniah:sfx.collect"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
+            return;
         }
+
+        SoundUtil.playSound(player, new Identifier("eniah:sfx.collect_fail"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
     }
 
     private BlockPos findSuitablePos(Vec3d original) {
