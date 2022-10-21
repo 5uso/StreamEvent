@@ -8,14 +8,19 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import suso.event_base.EvtBaseConstants;
 import suso.event_base.mixin.client.GameRendererAccess;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Environment(EnvType.CLIENT)
 public class ShaderNetworking {
     public static void registerPacketListeners() {
         ClientPlayNetworking.registerGlobalReceiver(EvtBaseConstants.SET_SHADER_UNIFORM, ShaderNetworking::setShaderUniformHandler);
         ClientPlayNetworking.registerGlobalReceiver(EvtBaseConstants.SET_POST_SHADER, ShaderNetworking::setPostShaderHandler);
+        ClientPlayNetworking.registerGlobalReceiver(EvtBaseConstants.SET_BLOCK_COLOR, ShaderNetworking::setBlockColorHandler);
     }
 
     private static void setShaderUniformHandler(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
@@ -44,5 +49,19 @@ public class ShaderNetworking {
         }
 
         client.execute(() -> client.gameRenderer.onCameraEntitySet(client.getCameraEntity()));
+    }
+
+    public static final Map<BlockPos, Integer> colors = new HashMap<>();
+    private static void setBlockColorHandler(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+        BlockPos pos = buf.readBlockPos();
+        boolean set = buf.readBoolean();
+
+        if(set) {
+            int value = buf.readInt();
+            colors.put(pos, value);
+            return;
+        }
+
+        colors.remove(pos);
     }
 }

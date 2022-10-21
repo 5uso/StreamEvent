@@ -43,4 +43,7 @@ public class CustomRender {
         rl.putBlock(CustomBlocks.RED_EMP, RenderLayer.getTranslucent());
     }
 
+    public static void setupCustomColors(BlockColors bc) {
+        bc.registerColorProvider((state, world, pos, tintIndex) -> ShaderNetworking.colors.getOrDefault(pos, 0), CustomBlocks.GRAY_EMP, CustomBlocks.WHITE_EMP, CustomBlocks.PINK_EMP, CustomBlocks.PURPLE_EMP, CustomBlocks.BLUE_EMP, CustomBlocks.CYAN_EMP, CustomBlocks.LIGHT_BLUE_EMP, CustomBlocks.GREEN_EMP, CustomBlocks.LIME_EMP, CustomBlocks.YELLOW_EMP, CustomBlocks.ORANGE_EMP, CustomBlocks.RED_EMP);
+    }
 }

@@ -8,6 +8,7 @@
     "client.PlayerEntityMixin"
   ],
   "client": [
+    "client.BlockColorsMixin",
     "client.CoreMixin",
     "client.GameRendererAccess",
     "client.GameRendererMixin",
@@ -18,7 +19,9 @@
     "client.SoundManagerAccess",
     "client.SoundManagerMixin",
     "client.SoundSystemMixin",
-    "client.SoundSystemUtilImpl"
+    "client.SoundSystemUtilImpl",
+    "client.fabric.AbstractQuadRendererMixin",
+    "client.fabric.BlockRenderInfoMixin"
   ],
   "injectors": {
     "defaultRequire": 1
