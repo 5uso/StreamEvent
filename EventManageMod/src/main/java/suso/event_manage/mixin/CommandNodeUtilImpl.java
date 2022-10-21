@@ -13,10 +13,8 @@ import java.util.Map;
 @Mixin(CommandNode.class)
 public class CommandNodeUtilImpl<S> implements ICommandNodeUtil {
     @Shadow(remap = false) @Final private Map<String, CommandNode<S>> children;
-
-    @Shadow @Final private Map<String, LiteralCommandNode<S>> literals;
-
-    @Shadow @Final private Map<String, ArgumentCommandNode<S, ?>> arguments;
+    @Shadow(remap = false) @Final private Map<String, LiteralCommandNode<S>> literals;
+    @Shadow(remap = false) @Final private Map<String, ArgumentCommandNode<S, ?>> arguments;
 
     @Override
     public void removeChild(String key) {
