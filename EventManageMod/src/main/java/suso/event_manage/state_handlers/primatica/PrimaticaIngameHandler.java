@@ -278,6 +278,9 @@ public class PrimaticaIngameHandler implements StateHandler {
         float heart = 1.0f - Math.min(player.getHealth(), 14.0f) / 14.0f;
         SoundUtil.updateFadeVolume(player, new Identifier("suso:heartbeat"), heart, 0);
         SoundUtil.updateFadePitch(player, new Identifier("suso:heartbeat"), heart + 0.8f, 0);
+
+        SoundUtil.updateFadeVolume(player, new Identifier("suso:hologram"), info.hologramVolume, 0);
+        info.hologramVolume = 0.0f;
     }
 
     @Override

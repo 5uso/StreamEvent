@@ -18,6 +18,8 @@ public class PrimaticaPlayerInfo {
 
     public boolean hasPowerup = false;
 
+    public float hologramVolume = 0.0f;
+
     private final UUID player;
     private final ServerWorld world;
 
@@ -53,6 +55,10 @@ public class PrimaticaPlayerInfo {
             withinGravityPrev = value;
             if(!value) changePitch(1.0f, 10);
         }
+    }
+
+    public void increaseHologramVolume(float target) {
+        if(target > hologramVolume) hologramVolume = target;
     }
 
     private void transition(int ticks) {
