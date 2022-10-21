@@ -73,41 +73,31 @@ public class PrimaticaInfo {
     }
 
 
-    private static final Map<Integer, String> gunkCorrespondence = new HashMap<>();
+    private static final Map<Integer, String> colorCorrespondence = new HashMap<>();
     static {
-        gunkCorrespondence.put(7, "suso:gray_gunk");
-        gunkCorrespondence.put(15, "suso:white_gunk");
-        gunkCorrespondence.put(13, "suso:pink_gunk");
-        gunkCorrespondence.put(5, "suso:purple_gunk");
-        gunkCorrespondence.put(9, "suso:blue_gunk");
-        gunkCorrespondence.put(3, "suso:cyan_gunk");
-        gunkCorrespondence.put(11, "suso:light_blue_gunk");
-        gunkCorrespondence.put(2, "suso:green_gunk");
-        gunkCorrespondence.put(10, "suso:lime_gunk");
-        gunkCorrespondence.put(14, "suso:yellow_gunk");
-        gunkCorrespondence.put(6, "suso:orange_gunk");
-        gunkCorrespondence.put(4, "suso:red_gunk");
-    }
-    public static String getCorrespondingGunk(int colorIndex) {
-        return gunkCorrespondence.get(colorIndex);
+        colorCorrespondence.put(7, "gray");
+        colorCorrespondence.put(15, "white");
+        colorCorrespondence.put(13, "pink");
+        colorCorrespondence.put(5, "purple");
+        colorCorrespondence.put(9, "blue");
+        colorCorrespondence.put(3, "cyan");
+        colorCorrespondence.put(11, "light_blue");
+        colorCorrespondence.put(2, "green");
+        colorCorrespondence.put(10, "lime");
+        colorCorrespondence.put(14, "yellow");
+        colorCorrespondence.put(6, "orange");
+        colorCorrespondence.put(4, "red");
     }
 
-    private static final Map<Integer, String> blockCorrespondence = new HashMap<>();
-    static {
-        blockCorrespondence.put(7, "suso:gray_holoblock");
-        blockCorrespondence.put(15, "suso:white_holoblock");
-        blockCorrespondence.put(13, "suso:pink_holoblock");
-        blockCorrespondence.put(5, "suso:purple_holoblock");
-        blockCorrespondence.put(9, "suso:blue_holoblock");
-        blockCorrespondence.put(3, "suso:cyan_holoblock");
-        blockCorrespondence.put(11, "suso:light_blue_holoblock");
-        blockCorrespondence.put(2, "suso:green_holoblock");
-        blockCorrespondence.put(10, "suso:lime_holoblock");
-        blockCorrespondence.put(14, "suso:yellow_holoblock");
-        blockCorrespondence.put(6, "suso:orange_holoblock");
-        blockCorrespondence.put(4, "suso:red_holoblock");
+    public static String getCorrespondingGunk(int colorIndex) {
+        return "suso:" + colorCorrespondence.get(colorIndex) + "_gunk";
     }
+
     public static String getCorrespondingBlock(int colorIndex) {
-        return blockCorrespondence.get(colorIndex);
+        return "suso:" + colorCorrespondence.get(colorIndex) + "_holoblock";
+    }
+
+    public static String getCorrespondingEmp(int colorIndex) {
+        return "suso:" + colorCorrespondence.get(colorIndex) + "_emp";
     }
 }
