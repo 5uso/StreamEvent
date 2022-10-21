@@ -2,10 +2,7 @@ package suso.event_manage.custom.blocks;
 
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
-import net.minecraft.block.Block;
-import net.minecraft.block.MapColor;
-import net.minecraft.block.Material;
-import net.minecraft.block.StainedGlassBlock;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.sound.BlockSoundGroup;
@@ -25,6 +22,18 @@ public class CustomBlocks {
     public static Block YELLOW_HOLOBLOCK;
     public static Block ORANGE_HOLOBLOCK;
     public static Block RED_HOLOBLOCK;
+    public static Block GRAY_EMP;
+    public static Block WHITE_EMP;
+    public static Block PINK_EMP;
+    public static Block PURPLE_EMP;
+    public static Block BLUE_EMP;
+    public static Block CYAN_EMP;
+    public static Block LIGHT_BLUE_EMP;
+    public static Block GREEN_EMP;
+    public static Block LIME_EMP;
+    public static Block YELLOW_EMP;
+    public static Block ORANGE_EMP;
+    public static Block RED_EMP;
     public static Block GRAY_GUNK;
     public static Block WHITE_GUNK;
     public static Block PINK_GUNK;
@@ -60,6 +69,19 @@ public class CustomBlocks {
         YELLOW_HOLOBLOCK = register("suso:yellow_holoblock", new StainedGlassBlock(DyeColor.YELLOW, FabricBlockSettings.of(Material.AMETHYST, MapColor.YELLOW).sounds(BlockSoundGroup.AMETHYST_BLOCK).nonOpaque()));
         ORANGE_HOLOBLOCK = register("suso:orange_holoblock", new StainedGlassBlock(DyeColor.ORANGE, FabricBlockSettings.of(Material.AMETHYST, MapColor.ORANGE).sounds(BlockSoundGroup.AMETHYST_BLOCK).nonOpaque()));
         RED_HOLOBLOCK = register("suso:red_holoblock", new StainedGlassBlock(DyeColor.RED, FabricBlockSettings.of(Material.AMETHYST, MapColor.RED).sounds(BlockSoundGroup.AMETHYST_BLOCK).nonOpaque()));
+
+        GRAY_EMP = register("suso:gray_emp", new EMPBlock(AbstractBlock.Settings.of(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        WHITE_EMP = register("suso:white_emp", new EMPBlock(AbstractBlock.Settings.of(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        PINK_EMP = register("suso:pink_emp", new EMPBlock(AbstractBlock.Settings.of(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        PURPLE_EMP = register("suso:purple_emp", new EMPBlock(AbstractBlock.Settings.of(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        BLUE_EMP = register("suso:blue_emp", new EMPBlock(AbstractBlock.Settings.of(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        CYAN_EMP = register("suso:cyan_emp", new EMPBlock(AbstractBlock.Settings.of(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        LIGHT_BLUE_EMP = register("suso:light_blue_emp", new EMPBlock(AbstractBlock.Settings.of(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        GREEN_EMP = register("suso:green_emp", new EMPBlock(AbstractBlock.Settings.of(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        LIME_EMP = register("suso:lime_emp", new EMPBlock(AbstractBlock.Settings.of(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        YELLOW_EMP = register("suso:yellow_emp", new EMPBlock(AbstractBlock.Settings.of(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        ORANGE_EMP = register("suso:orange_emp", new EMPBlock(AbstractBlock.Settings.of(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        RED_EMP = register("suso:red_emp", new EMPBlock(AbstractBlock.Settings.of(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
 
         GRAY_GUNK = register("suso:gray_gunk", new GunkBlock(FabricBlockSettings.of(Material.ORGANIC_PRODUCT, MapColor.GRAY).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)));
         WHITE_GUNK = register("suso:white_gunk", new GunkBlock(FabricBlockSettings.of(Material.ORGANIC_PRODUCT, MapColor.WHITE).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)));
