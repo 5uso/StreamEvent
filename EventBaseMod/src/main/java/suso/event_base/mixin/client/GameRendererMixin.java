@@ -2,12 +2,10 @@ package suso.event_base.mixin.client;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,8 +15,6 @@ import suso.event_base.client.shader.CustomUniformStore;
 
 @Mixin(GameRenderer.class) @Environment(EnvType.CLIENT)
 public abstract class GameRendererMixin {
-    @Shadow @Nullable private ShaderEffect shader;
-
     @Shadow protected abstract void loadShader(Identifier id);
 
     @Inject(
