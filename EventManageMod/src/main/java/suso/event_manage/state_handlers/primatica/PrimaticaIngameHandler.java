@@ -281,6 +281,9 @@ public class PrimaticaIngameHandler implements StateHandler {
 
         SoundUtil.updateFadeVolume(player, new Identifier("suso:hologram"), info.hologramVolume, 0);
         info.hologramVolume = 0.0f;
+
+        SoundUtil.updateFadeVolume(player, new Identifier("suso:gravity"), info.gravityVolume, 0);
+        info.gravityVolume = 0.0f;
     }
 
     @Override
