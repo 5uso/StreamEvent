@@ -1,5 +1,6 @@
 package suso.event_manage.state_handlers.idle;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
@@ -72,6 +73,11 @@ public class IdleHandler implements StateHandler {
     @Override
     public boolean onPlayerShoot(ServerPlayerEntity player, EventPlayerData data, ItemStack bow, int useTicks) {
         return false;
+    }
+
+    @Override
+    public void onPlayerKill(ServerPlayerEntity player, Entity victim, DamageSource source) {
+
     }
 
     @Override

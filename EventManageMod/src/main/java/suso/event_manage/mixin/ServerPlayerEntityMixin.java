@@ -2,6 +2,7 @@ package suso.event_manage.mixin;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -16,7 +17,7 @@ import suso.event_manage.EventManager;
 import suso.event_manage.injected_interfaces.ServerPlayerEntityExtended;
 
 @Mixin(ServerPlayerEntity.class)
-public class ServerPlayerEntityMixin implements ServerPlayerEntityExtended {
+public abstract class ServerPlayerEntityMixin implements ServerPlayerEntityExtended {
     @Inject(
             method = "dropItem",
             at = @At("HEAD"),
@@ -42,6 +43,14 @@ public class ServerPlayerEntityMixin implements ServerPlayerEntityExtended {
 
         BlockPos blockPos = ((ServerPlayerEntity)(Object) this).getLandingPos();
         if(EventManager.getInstance().onPlayerLand((ServerPlayerEntity)(Object) this, heightDifference, blockPos)) ci.cancel();
+    }
+
+    @Inject(
+            method = "updateKilledAdvancementCriterion",
+            at = @At("TAIL")
+    )
+    private void onKill(Entity entityKilled, int score, DamageSource damageSource, CallbackInfo ci) {
+        EventManager.getInstance().onPlayerKill((ServerPlayerEntity)(Object) this, entityKilled, damageSource);
     }
 
     @Inject(

@@ -1,5 +1,6 @@
 package suso.event_manage.state_handlers;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
@@ -20,6 +21,7 @@ public interface StateHandler {
     boolean onPlayerLand(ServerPlayerEntity player, EventPlayerData data, double heightDifference, BlockPos landingPos);
     void onPlayerJump(ServerPlayerEntity player, EventPlayerData data, BlockPos jumpingPos);
     boolean onPlayerShoot(ServerPlayerEntity player, EventPlayerData data, ItemStack bow, int useTicks);
+    void onPlayerKill(ServerPlayerEntity player, Entity victim, DamageSource source);
     void cleanup();
     boolean canDropItems(ServerPlayerEntity player, EventPlayerData data);
     StateCommands getStateCommands();

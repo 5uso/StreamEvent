@@ -410,6 +410,13 @@ public class PrimaticaIngameHandler implements StateHandler {
     }
 
     @Override
+    public void onPlayerKill(ServerPlayerEntity player, Entity victim, DamageSource source) {
+        if(victim instanceof ServerPlayerEntity) {
+            SoundUtil.playSound(player, new Identifier("eniah:sfx.fall"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
+        }
+    }
+
+    @Override
     public void cleanup() {
         MinecraftServer server = EventManager.getInstance().getServer();
 

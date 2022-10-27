@@ -106,6 +106,10 @@ public class EventManager implements ModInitializer {
         return handler.onPlayerShoot(player, data.getPlayerData(player), bow, useTicks);
     }
 
+    public void onPlayerKill(ServerPlayerEntity player, Entity victim, DamageSource source) {
+        handler.onPlayerKill(player, victim, source);
+    }
+
     public void onSave() {
         Logger LOGGER = MinecraftServerAccess.getLOGGER();
         LOGGER.info("Saving event data...");
