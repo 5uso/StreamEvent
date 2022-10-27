@@ -18,6 +18,11 @@ public class MiscUtil {
     }
 
     public static void handleJumpInput(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-        ((ServerPlayerEntityExtended) player).setJumpPressed(buf.readBoolean());
+        player.setJumpPressed(buf.readBoolean());
+    }
+
+    public static double vec3Angle(Vec3d a, Vec3d b) {
+        return Math.acos(a.normalize().dotProduct(b.normalize()));
+    }
     }
 }
