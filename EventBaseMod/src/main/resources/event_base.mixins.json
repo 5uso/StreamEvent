@@ -13,6 +13,7 @@
     "client.GameRendererAccess",
     "client.GameRendererMixin",
     "client.GlUniformUtilImpl",
+    "client.HeldItemRendererMixin",
     "client.IdentifierMixin",
     "client.KeyboardInputMixin",
     "client.PostProcessMixin",
