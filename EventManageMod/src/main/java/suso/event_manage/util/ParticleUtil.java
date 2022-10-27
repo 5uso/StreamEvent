@@ -1,13 +1,19 @@
 package suso.event_manage.util;
 
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.s2c.play.ParticleS2CPacket;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3f;
 import suso.event_manage.EventManager;
+import suso.event_manage.EvtBaseConstants;
 
 import java.awt.*;
+import java.util.List;
 
 public class ParticleUtil {
     public static Vec3f teamColor(AbstractTeam team) {
@@ -25,5 +31,17 @@ public class ParticleUtil {
     public static <T extends ParticleEffect> void forceParticle(T particle, double x, double y, double z, int count, double deltaX, double deltaY, double deltaZ, double speed) {
         ParticleS2CPacket p = new ParticleS2CPacket(particle, true, x, y, z, (float)deltaX, (float)deltaY, (float)deltaZ, (float)speed, count);
         for(ServerPlayerEntity player : EventManager.getInstance().getServer().getOverworld().getPlayers()) player.networkHandler.sendPacket(p);
+    }
+
+    public static void fireworkParticle(List<ServerPlayerEntity> players, double x, double y, double z, double vx, double vy, double vz, NbtCompound firework) {
+        PacketByteBuf p = PacketByteBufs.create();
+        p.writeDouble(x);
+        p.writeDouble(y);
+        p.writeDouble(z);
+        p.writeDouble(vx);
+        p.writeDouble(vy);
+        p.writeDouble(vz);
+        p.writeNbt(firework);
+        players.forEach(player -> ServerPlayNetworking.send(player, EvtBaseConstants.FIREWORK_PARTICLE, p));
     }
 }

@@ -13,6 +13,7 @@ public class Event_baseClient implements ClientModInitializer {
     public void onInitializeClient() {
         SoundNetworking.registerPacketListeners();
         ShaderNetworking.registerPacketListeners();
+        MiscNetworking.registerPacketListeners();
         ModCheck.registerPacketListeners();
 
         CustomRender.setupRenderLayers();
