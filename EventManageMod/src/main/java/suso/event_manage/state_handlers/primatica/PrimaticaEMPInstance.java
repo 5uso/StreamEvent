@@ -1,5 +1,6 @@
 package suso.event_manage.state_handlers.primatica;
 
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleTypes;
@@ -16,6 +17,8 @@ import suso.event_manage.util.MiscUtil;
 import suso.event_manage.util.ParticleUtil;
 import suso.event_manage.util.ShaderUtil;
 import suso.event_manage.util.SoundUtil;
+
+import java.util.List;
 
 public class PrimaticaEMPInstance implements TickableInstance {
     private static final int DURATION = 200;
@@ -37,13 +40,15 @@ public class PrimaticaEMPInstance implements TickableInstance {
 
         this.ticksLeft = DURATION;
 
+        List<ServerPlayerEntity> players = world.getPlayers();
+
         Identifier blockId = new Identifier(PrimaticaInfo.getCorrespondingEmp(team == null ? 7 :team.getColor().getColorIndex()));
         world.setBlockState(pos, Registry.BLOCK.get(blockId).getDefaultState());
-        world.getPlayers().forEach(p -> ShaderUtil.setBlockColor(p, pos, (int)(player.world.getTime() % 24000)));
+        players.forEach(p -> ShaderUtil.setBlockColor(p, pos, (int)(player.world.getTime() % 24000)));
 
-        SoundUtil.playSound(world.getPlayers(), new Identifier("minecraft:entity.bee.sting"), SoundCategory.BLOCKS, position, 2.0f, 0.5f);
-        SoundUtil.playSound(world.getPlayers(), new Identifier("minecraft:block.beacon.activate"), SoundCategory.BLOCKS, position, 2.0f, 2.0f);
-        SoundUtil.playSound(world.getPlayers(), new Identifier("minecraft:block.bell.resonate"), SoundCategory.BLOCKS, position, 2.0f, 2.0f);
+        SoundUtil.playSound(players, new Identifier("minecraft:entity.bee.sting"), SoundCategory.BLOCKS, position, 2.0f, 0.5f);
+        SoundUtil.playSound(players, new Identifier("minecraft:block.beacon.activate"), SoundCategory.BLOCKS, position, 2.0f, 2.0f);
+        SoundUtil.playSound(players, new Identifier("minecraft:block.bell.resonate"), SoundCategory.BLOCKS, position, 2.0f, 2.0f);
         world.spawnParticles(ParticleTypes.FLASH, position.x, position.y, position.z, 1, 0.0, 0.0, 0.0, 0.0);
         Vec3d v = player.getEyePos();
         Vec3d d = position.subtract(v).normalize().multiply(0.2);
@@ -52,6 +57,12 @@ public class PrimaticaEMPInstance implements TickableInstance {
             world.spawnParticles(new DustParticleEffect(ParticleUtil.teamColor(team), 1.0f), v.x, v.y, v.z, 1, 0.0, 0.0, 0.0, 0.05);
             if(v.distanceTo(position) < 0.3) break;
         }
+
+        players.forEach(p -> {
+            if(p.isTeamPlayer(team)) return;
+            double distance = MiscUtil.distance(p.getBoundingBox(), position) / 3.0;
+            if(distance < 1.0) p.damage(DamageSource.sonicBoom(player), (float) (1.0 - distance) * 6.0f + 10.0f);
+        });
     }
 
     @Override
