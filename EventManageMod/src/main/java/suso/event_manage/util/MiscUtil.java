@@ -1,13 +1,16 @@
 package suso.event_manage.util;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LightningEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-import suso.event_manage.injected_interfaces.ServerPlayerEntityExtended;
+import suso.event_manage.EventManager;
 
 public class MiscUtil {
     public static double distance(Box rect, Vec3d p) {
@@ -24,5 +27,14 @@ public class MiscUtil {
     public static double vec3Angle(Vec3d a, Vec3d b) {
         return Math.acos(a.normalize().dotProduct(b.normalize()));
     }
+
+    public static void flashSky(double x, double z) {
+        ServerWorld world = EventManager.getInstance().getServer().getOverworld();
+        LightningEntity entity = new LightningEntity(EntityType.LIGHTNING_BOLT, world);
+        entity.setPos(x, 3000.0, z);
+        entity.setCosmetic(true);
+        entity.setSilent(true);
+
+        world.spawnEntity(entity);
     }
 }
