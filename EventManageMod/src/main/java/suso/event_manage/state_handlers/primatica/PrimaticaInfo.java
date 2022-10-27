@@ -52,7 +52,7 @@ public class PrimaticaInfo {
     public static NbtCompound BOW, PICKAXE, BLOCK, HELMET, CHESTPLATE, LEGGINGS, BOOTS, AGILITY, BRIDGE, GRAVITY, EMP, ARROW_BOW, GUNK, GRAVITY_DISPLAY;
     static {
         try {
-            BOW = StringNbtReader.parse("{id:'bow',Count:1b,tag:{Enchantments:[{id:'minecraft:punch',lvl:1s},{id:'minecraft:infinity',lvl:1s},{id:'minecraft:knockback',lvl:1s}],Unbreakable:1b}}");
+            BOW = StringNbtReader.parse("{id:'bow',Count:1b,tag:{CustomModelData:7,Enchantments:[{id:'minecraft:punch',lvl:1s},{id:'minecraft:infinity',lvl:1s},{id:'minecraft:knockback',lvl:1s}],Unbreakable:1b}}");
             PICKAXE = StringNbtReader.parse("{id:'iron_pickaxe',Count:1b,tag:{CanDestroy:['#suso:primatica_breakable'],HideFlags:8,Unbreakable:1b,Enchantments:[{id:'minecraft:efficiency',lvl:10s}]}}");
             BLOCK =  StringNbtReader.parse("{id:'gray_holoblock',Count:1b,tag:{infinite:1b,CanPlaceOn:['#minecraft:all'],HideFlags:16}}");
             HELMET = StringNbtReader.parse("{id:'leather_helmet',Count:1b,tag:{display:{color:0},Unbreakable:1b,HideFlags:64}}");

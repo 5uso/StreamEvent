@@ -198,6 +198,7 @@ public class PrimaticaIngameHandler implements StateHandler {
         if(data.isPlayer) {
             player.changeGameMode(GameMode.ADVENTURE);
 
+            NbtCompound bowNbt = PrimaticaInfo.BOW.copy();
             NbtCompound blockNbt = PrimaticaInfo.BLOCK.copy();
             NbtCompound helmetNbt = PrimaticaInfo.HELMET.copy();
             NbtCompound chestplateNbt = PrimaticaInfo.CHESTPLATE.copy();
@@ -205,6 +206,7 @@ public class PrimaticaIngameHandler implements StateHandler {
             NbtCompound bootsNbt = PrimaticaInfo.BOOTS.copy();
             AbstractTeam team = player.getScoreboardTeam();
             if(team != null && team.getColor().getColorValue() != null) {
+                bowNbt.getCompound("tag").put("CustomModelData", NbtInt.of(team.getColor().getColorIndex()));
                 blockNbt.put("id", NbtString.of(PrimaticaInfo.getCorrespondingBlock(team.getColor().getColorIndex())));
 
                 NbtCompound armorDisplay = new NbtCompound();
@@ -215,7 +217,7 @@ public class PrimaticaIngameHandler implements StateHandler {
                 bootsNbt.getCompound("tag").put("display", armorDisplay);
             }
 
-            InventoryUtil.replaceSlot(player, 0, ItemStack.fromNbt(PrimaticaInfo.BOW));
+            InventoryUtil.replaceSlot(player, 0, ItemStack.fromNbt(bowNbt));
             InventoryUtil.replaceSlot(player, 1, ItemStack.fromNbt(PrimaticaInfo.PICKAXE));
 
             InventoryUtil.replaceSlot(player, 2, ItemStack.fromNbt(blockNbt));
@@ -421,7 +423,12 @@ public class PrimaticaIngameHandler implements StateHandler {
             }
 
             if(!hasMoreBows) {
-                bow = ItemStack.fromNbt(PrimaticaInfo.BOW);
+                NbtCompound bowNbt = PrimaticaInfo.BOW.copy();
+                AbstractTeam team = player.getScoreboardTeam();
+                if(team != null && team.getColor().getColorValue() != null) {
+                    bowNbt.getCompound("tag").put("CustomModelData", NbtInt.of(team.getColor().getColorIndex()));
+                }
+                bow = ItemStack.fromNbt(bowNbt);
                 setHasPowerup(player.getUuid(), false);
             }
         }
