@@ -18,6 +18,8 @@ public class PrimaticaPlayerInfo {
 
     public boolean hasPowerup = false;
 
+    public boolean isChargingBow = false;
+
     public float hologramVolume = 0.0f;
     public float gravityVolume = 0.0f;
 

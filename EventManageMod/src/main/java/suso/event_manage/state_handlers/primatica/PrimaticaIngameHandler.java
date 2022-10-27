@@ -11,6 +11,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtInt;
 import net.minecraft.nbt.NbtString;
@@ -284,6 +285,12 @@ public class PrimaticaIngameHandler implements StateHandler {
 
         SoundUtil.updateFadeVolume(player, new Identifier("suso:gravity"), info.gravityVolume, 0);
         info.gravityVolume = 0.0f;
+
+        if(info.isChargingBow && !player.isUsingItem()) {
+            SoundUtil.stopSound(player, new Identifier("suso:bow.charge"), null);
+            SoundUtil.stopSound(player, new Identifier("suso:bow.loop"), null);
+            info.isChargingBow = false;
+        }
     }
 
     @Override
@@ -340,6 +347,13 @@ public class PrimaticaIngameHandler implements StateHandler {
             InventoryUtil.replaceSlot(player, hand == Hand.MAIN_HAND ? player.getInventory().selectedSlot : 99, ItemStack.EMPTY);
             return true;
         }
+
+        if(stack.isOf(Items.BOW) && stack.getNbt() != null && stack.getNbt().getInt("CustomModelData") == 1) {
+            PrimaticaPlayerInfo info = playerInfo.get(player.getUuid());
+            SoundUtil.playSound(player, new Identifier("suso:bow.charge"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
+            SoundUtil.playFadeSound(player, new Identifier("suso:bow.loop"), 0.4f, 1.0f, true, SoundCategory.PLAYERS, true);
+            info.isChargingBow = true;
+        }
         return false;
     }
 
@@ -384,6 +398,12 @@ public class PrimaticaIngameHandler implements StateHandler {
     @Override
     public boolean onPlayerShoot(ServerPlayerEntity player, EventPlayerData data, ItemStack bow, int useTicks) {
         if(bow.getNbt() == null || bow.getNbt().getInt("CustomModelData") != 1) return false;
+
+        PrimaticaPlayerInfo info = playerInfo.get(player.getUuid());
+        SoundUtil.stopSound(player, new Identifier("suso:bow.charge"), null);
+        SoundUtil.stopSound(player, new Identifier("suso:bow.loop"), null);
+        info.isChargingBow = false;
+
         if(useTicks < 20) return true;
 
         bow.decrement(1);
