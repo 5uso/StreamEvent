@@ -8,6 +8,7 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import suso.event_manage.EventManager;
 
@@ -23,5 +24,17 @@ public class BowItemMixin {
             int useTicks = stack.getMaxUseTime() - remainingUseTicks;
             if(EventManager.getInstance().onPlayerShoot(player, stack, useTicks)) ci.cancel();
         }
+    }
+
+    @ModifyArg(
+            method = "onStoppedUsing",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/entity/projectile/PersistentProjectileEntity;setVelocity(Lnet/minecraft/entity/Entity;FFFFF)V"
+            ),
+            index = 5
+    )
+    private float removeBowDivergence(float divergence) {
+        return 0.0f;
     }
 }

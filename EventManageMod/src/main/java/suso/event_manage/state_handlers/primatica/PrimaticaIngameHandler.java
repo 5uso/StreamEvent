@@ -289,6 +289,7 @@ public class PrimaticaIngameHandler implements StateHandler {
         info.gravityVolume = 0.0f;
 
         if(info.isChargingBow && !player.isUsingItem()) {
+            SoundUtil.stopSound(player, new Identifier("minecraft:item.crossbow.loading_middle"), null);
             SoundUtil.stopSound(player, new Identifier("suso:bow.charge"), null);
             SoundUtil.stopSound(player, new Identifier("suso:bow.loop"), null);
             info.isChargingBow = false;
@@ -354,11 +355,16 @@ public class PrimaticaIngameHandler implements StateHandler {
             return true;
         }
 
-        if(stack.isOf(Items.BOW) && stack.getNbt() != null && stack.getNbt().getInt("CustomModelData") == 1) {
+        if(stack.isOf(Items.BOW)) {
             PrimaticaPlayerInfo info = playerInfo.get(player.getUuid());
-            SoundUtil.playSound(player, new Identifier("suso:bow.charge"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
-            SoundUtil.playFadeSound(player, new Identifier("suso:bow.loop"), 0.4f, 1.0f, true, SoundCategory.PLAYERS, true);
             info.isChargingBow = true;
+
+            if(stack.getNbt() != null && stack.getNbt().getInt("CustomModelData") == 1) {
+                SoundUtil.playSound(player, new Identifier("suso:bow.charge"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
+                SoundUtil.playFadeSound(player, new Identifier("suso:bow.loop"), 0.4f, 1.0f, true, SoundCategory.PLAYERS, true);
+            } else {
+                SoundUtil.playSound(player, new Identifier("minecraft:item.crossbow.loading_middle"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
+            }
         }
         return false;
     }
@@ -403,6 +409,8 @@ public class PrimaticaIngameHandler implements StateHandler {
 
     @Override
     public boolean onPlayerShoot(ServerPlayerEntity player, EventPlayerData data, ItemStack bow, int useTicks) {
+        SoundUtil.stopSound(player, new Identifier("minecraft:item.crossbow.loading_middle"), null);
+
         if(bow.getNbt() == null || bow.getNbt().getInt("CustomModelData") != 1) return false;
 
         PrimaticaPlayerInfo info = playerInfo.get(player.getUuid());
