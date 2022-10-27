@@ -116,7 +116,7 @@ public class PrimaticaIngameHandler implements StateHandler {
         RndSet<Vec3d> possiblePowerupSpots = PrimaticaInfo.getPowerupLocations();
 
         Vec3d pos = possiblePowerupSpots.getRandom();
-        List<ArmorStandEntity> other = world.getEntitiesByClass(ArmorStandEntity.class, Box.of(pos, 0.1, 0.1, 0.1), e -> e.getScoreboardTags().contains("primatica_powerup"));
+        List<ArmorStandEntity> other = world.getEntitiesByClass(ArmorStandEntity.class, Box.of(pos, 3.0, 3.0, 3.0), e -> e.getScoreboardTags().contains("primatica_powerup"));
         if(other.isEmpty()) {
             int possible = PrimaticaInfo.Powerups.values().length;
             PrimaticaInfo.Powerups type = PrimaticaInfo.Powerups.values()[r.nextInt(possible)];
@@ -299,12 +299,16 @@ public class PrimaticaIngameHandler implements StateHandler {
     public void onPlayerJoin(ServerPlayerEntity player, EventPlayerData data) {
         if(playerInfo.get(player.getUuid()) == null) playerInfo.put(player.getUuid(), new PrimaticaPlayerInfo(player));
 
-        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1a_main"), 1.0f, 1.0f, true, SoundCategory.RECORDS, false);
-        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1a_loweq"), 0.0f, 1.0f, true, SoundCategory.RECORDS, false);
-        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1a_underground"), 0.0f, 1.0f, true, SoundCategory.RECORDS, false);
-        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1a_undergroundloweq"), 0.0f, 1.0f, true, SoundCategory.RECORDS, false);
-        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1a_skyline"), 0.0f, 1.0f, true, SoundCategory.RECORDS, false);
-        SoundUtil.playFadeSound(player, new Identifier("suso:falling"), 0.0f, 1.0f, true, SoundCategory.PLAYERS, true);
+        SoundUtil.stopSound(player, null, null);
+        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1b_main"), 1.0f, 1.0f, true, SoundCategory.RECORDS, false);
+        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1b_loweq"), 0.0f, 1.0f, true, SoundCategory.RECORDS, false);
+        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1b_underground"), 0.0f, 1.0f, true, SoundCategory.RECORDS, false);
+        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1b_undergroundloweq"), 0.0f, 1.0f, true, SoundCategory.RECORDS, false);
+        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1b_skyline"), 0.0f, 1.0f, true, SoundCategory.RECORDS, false);
+        SoundUtil.playFadeSound(player, new Identifier("suso:falling"), 0.0f, 1.0f, true, SoundCategory.PLAYERS, false);
+        SoundUtil.playFadeSound(player, new Identifier("suso:heartbeat"), 0.0f, 1.0f, true, SoundCategory.PLAYERS, false);
+        SoundUtil.playFadeSound(player, new Identifier("suso:hologram"), 0.0f, 1.0f, true, SoundCategory.BLOCKS, false);
+        SoundUtil.playFadeSound(player, new Identifier("suso:gravity"), 0.0f, 1.0f, true, SoundCategory.PLAYERS, true);
 
         initPlayer(player, data);
     }
@@ -317,7 +321,7 @@ public class PrimaticaIngameHandler implements StateHandler {
 
     @Override
     public boolean onPlayerDeath(ServerPlayerEntity player, EventPlayerData data, DamageSource damageSource, float damageAmount) {
-        MinecraftServer server = EventManager.getInstance().getServer();;
+        MinecraftServer server = EventManager.getInstance().getServer();
 
         player.setSpawnPoint(server.getOverworld().getRegistryKey(), new BlockPos(216.0, 80.00, -14.0), 30.0f, true, false);
 
@@ -337,7 +341,7 @@ public class PrimaticaIngameHandler implements StateHandler {
 
     @Override
     public boolean onPlayerRightClick(ServerPlayerEntity player, EventPlayerData data, ItemStack stack, Hand hand) {
-        if(stack.itemMatches(r -> r.matchesId(new Identifier("minecraft:feather"))) && stack.getNbt() != null) {
+        if(stack.isOf(Items.FEATHER) && stack.getNbt() != null) {
             int powerupId = stack.getNbt().getInt("CustomModelData");
             switch (powerupId) {
                 case 1 -> useAgility(player);
@@ -416,7 +420,7 @@ public class PrimaticaIngameHandler implements StateHandler {
             int size = playerInventory.size();
             boolean hasMoreBows = false;
             for(int i = 0; i < size; i++) {
-                if(playerInventory.getStack(i).itemMatches(item -> item.matchesId(new Identifier("minecraft:bow")))) {
+                if(playerInventory.getStack(i).isOf(Items.BOW)) {
                     hasMoreBows = true;
                     break;
                 }
