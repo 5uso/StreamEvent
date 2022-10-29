@@ -1,4 +1,4 @@
-package suso.event_base.mixin.client;
+package suso.event_base.mixin;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
