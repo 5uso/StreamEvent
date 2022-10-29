@@ -77,7 +77,7 @@ public class PrimaticaGravityInstance implements TickableInstance {
                 if(player.getUuid().equals(owner.getUuid())) ownerPhysics(player, playerPos, pos, distance, info);
                 else otherPhysics(player, playerPos, pos, distance, info);
             }
-            if(time == 91) SoundUtil.playSound(players, new Identifier("eniah:sfx.riser"), SoundCategory.PLAYERS, entity.getPos(), 3.0f, 2.0f);
+            if(time == 91) SoundUtil.playSound(players, new Identifier("eniah:sfx.riser_low"), SoundCategory.PLAYERS, entity.getPos(), 3.0f, 2.0f);
         } else if(time == 110) {
             List<ServerPlayerEntity> players = world.getPlayers();
             SoundUtil.playSound(players, new Identifier("minecraft:entity.firework_rocket.large_blast"), SoundCategory.PLAYERS, entity.getPos(), 4.0f, 2.0f);
