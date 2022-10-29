@@ -1,15 +1,14 @@
 package suso.event_manage.state_handlers.primatica;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtByte;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtString;
 import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.util.math.Vec3d;
 import suso.event_manage.util.RndSet;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PrimaticaInfo {
     public enum Powerups {

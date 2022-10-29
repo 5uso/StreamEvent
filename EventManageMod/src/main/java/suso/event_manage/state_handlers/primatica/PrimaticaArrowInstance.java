@@ -98,7 +98,7 @@ public class PrimaticaArrowInstance implements TickableInstance {
         try {
             NbtCompound firework = StringNbtReader.parse("{Explosions:[{Type:4,Trail:1b,Colors:[I;" + team.getColor().getColorValue() + "],FadeColors:[I;16777215]}]}");
             ParticleUtil.fireworkParticle(world.getPlayers(), pos.x, pos.y, pos.z, -direction.x, -direction.y, -direction.z, firework);
-        } catch (CommandSyntaxException e) {
+        } catch (CommandSyntaxException | NullPointerException e) {
             e.printStackTrace();
         }
     }
