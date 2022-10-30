@@ -40,8 +40,19 @@ public class PrimaticaBridgeInstance implements TickableInstance {
     public boolean tick() {
         if(--ticksLeft < 0) return true;
 
+        BlockPos prevPos = new BlockPos(position);
         position = position.add(direction);
         BlockPos pos = new BlockPos(position);
+
+        if(prevPos.equals(pos)) return false;
+
+        BlockPos change = pos.subtract(prevPos);
+        if(change.getX() != 0 && change.getZ() != 0) {
+            change = Math.abs(direction.x) > Math.abs(direction.z) ? new BlockPos(change.getX(), 0, 0) : new BlockPos(0, 0, change.getZ());
+            BlockPos mid = prevPos.add(change);
+            if(world.getBlockState(mid).isAir()) world.setBlockState(mid, block);
+        }
+
         if(world.getBlockState(pos).isAir()) {
             world.setBlockState(pos, block);
             SoundUtil.playSound(((ServerWorld) world).getPlayers(), new Identifier("minecraft:block.scaffolding.place"), SoundCategory.MASTER, position, 1.0f, 1.0f);
