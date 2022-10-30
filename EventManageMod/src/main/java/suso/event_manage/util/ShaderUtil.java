@@ -24,7 +24,7 @@ public class ShaderUtil {
         PacketByteBuf p = PacketByteBufs.create();
 
         p.writeString(name);
-        p.writeBoolean(true);
+        p.writeBoolean(false);
         p.writeInt(values.length);
         for(int i : values) p.writeInt(i);
 
