@@ -30,12 +30,14 @@ import java.util.Arrays;
 import java.util.Collection;
 
 public class CommandUtil {
+    public static void sendCommandUpdate(MinecraftServer server) {
+        PlayerManager pm = server.getPlayerManager();
+        pm.getPlayerList().forEach(pm::sendCommandTree);
+    }
+
     public static void disableCommand(MinecraftServer server, String cmd) {
         CommandDispatcher<ServerCommandSource> dispatcher = server.getCommandManager().getDispatcher();
         ((ICommandNodeUtil) dispatcher.getRoot()).removeChild(cmd);
-
-        PlayerManager pm = server.getPlayerManager();
-        pm.getPlayerList().forEach(pm::sendCommandTree);
     }
 
     public static void disableCommand(CommandDispatcher<ServerCommandSource> dispatcher, String cmd) {

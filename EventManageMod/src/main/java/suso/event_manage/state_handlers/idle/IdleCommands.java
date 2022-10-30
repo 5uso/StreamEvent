@@ -17,11 +17,15 @@ public class IdleCommands implements StateCommands {
         CommandDispatcher<ServerCommandSource> dispatcher = server.getCommandManager().getDispatcher();
 
         dispatcher.register(PRIMATICA_CMD);
+
+        CommandUtil.sendCommandUpdate(server);
     }
 
     @Override
     public void unregister(MinecraftServer server) {
         CommandUtil.disableCommand(server, "primatica");
+
+        CommandUtil.sendCommandUpdate(server);
     }
 
     // /primatica
