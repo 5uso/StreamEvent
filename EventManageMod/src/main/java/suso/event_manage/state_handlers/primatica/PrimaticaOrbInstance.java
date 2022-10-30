@@ -58,6 +58,7 @@ public class PrimaticaOrbInstance implements TickableInstance {
         PlayerEntity player = world.getClosestPlayer(entity, 20.0);
         MinecraftServer server = world.getServer();
         if(player instanceof ServerPlayerEntity sPlayer) {
+            if(player.getScoreboardTeam() == null) return false;
             server.getScoreboard().addPlayerToTeam(entity.getUuidAsString(), (Team) player.getScoreboardTeam());
 
             if(player.getBoundingBox().intersects(entity.getBoundingBox().expand(0.1))) {
