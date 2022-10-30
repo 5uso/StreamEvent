@@ -140,6 +140,10 @@ public class EventManager implements ModInitializer {
         this.handler.getStateCommands().register(server);
     }
 
+    public StateHandler getStateHandler() {
+        return this.handler;
+    }
+
     private static void setGameRules(MinecraftServer server) {
         GameRules rules = server.getGameRules();
         rules.get(GameRules.DO_FIRE_TICK).set(false, server);
