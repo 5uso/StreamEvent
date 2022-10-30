@@ -156,9 +156,30 @@ public class PrimaticaIngameHandler implements StateHandler {
         player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 200, 0, false, false, true));
         player.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, 200, 4, false, false, true));
 
+        PrimaticaPlayerInfo info = playerInfo.get(player.getUuid());
+        info.setAgilityActive(true);
+
+        tickables.add(new PlayerScheduleInstance(player, 200, this::endAgility));
+
+        AbstractTeam team = player.getScoreboardTeam();
+        Vec3f color = team == null ? Vec3f.ZERO : ParticleUtil.teamColor(team);
+        player.getWorld().spawnParticles(ParticleTypes.ENTITY_EFFECT, player.getX(), player.getY(), player.getZ(), 50, color.getX(), color.getY(), color.getZ(), 0.0);
+
+        SoundUtil.playFadeSound(player, new Identifier("minecraft:entity.elder_guardian.curse"), 0.5f, 0.5f, false, SoundCategory.PLAYERS, false);
+        SoundUtil.playFadeSound(player, new Identifier("minecraft:item.trident.thunder"), 1.0f, 2.0f, false, SoundCategory.PLAYERS, true);
         setHasPowerup(player.getUuid(), false);
         return true;
     }
+
+    protected void endAgility(ServerPlayerEntity player) {
+        StatusEffectInstance status = player.getStatusEffect(StatusEffects.JUMP_BOOST);
+        if(status != null && status.getDuration() > 2) return;
+
+        PrimaticaPlayerInfo info = playerInfo.get(player.getUuid());
+        info.setAgilityActive(false);
+
+        SoundUtil.playFadeSound(player, new Identifier("minecraft:entity.splash_potion.break"), 1.0f, 0.5f, false, SoundCategory.PLAYERS, false);
+        SoundUtil.playFadeSound(player, new Identifier("minecraft:block.beacon.deactivate"), 1.0f, 2.0f, false, SoundCategory.PLAYERS, true);
     }
 
     protected boolean useBridge(ServerPlayerEntity player) {
@@ -305,6 +326,10 @@ public class PrimaticaIngameHandler implements StateHandler {
             SoundUtil.stopSound(player, new Identifier("suso:bow.charge"), null);
             SoundUtil.stopSound(player, new Identifier("suso:bow.loop"), null);
             info.isChargingBow = false;
+        }
+
+        if(info.agilityActive) {
+            player.getWorld().spawnParticles(ParticleTypes.GLOW, player.getX(), player.getY() + 1.0, player.getZ(), 1, 0.3, 0.5, 0.3, 0.0);
         }
     }
 

@@ -3,6 +3,7 @@ package suso.event_manage.state_handlers.primatica;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
+import suso.event_manage.util.ShaderUtil;
 import suso.event_manage.util.SoundUtil;
 
 import java.util.UUID;
@@ -17,8 +18,8 @@ public class PrimaticaPlayerInfo {
     public boolean withinGravityNow = false;
 
     public boolean hasPowerup = false;
-
     public boolean isChargingBow = false;
+    public boolean agilityActive = false;
 
     public float hologramVolume = 0.0f;
     public float gravityVolume = 0.0f;
@@ -31,33 +32,40 @@ public class PrimaticaPlayerInfo {
         this.world = player.getWorld();
     }
 
+    public void sendStatusUniform() {
+        int status = 0;
+        if(agilityActive) status += 1;
+        ShaderUtil.setShaderUniform((ServerPlayerEntity) world.getPlayerByUuid(this.player), "PrimaticaState", status);
+    }
+
+    public void setAgilityActive(boolean value) {
+        if(value == agilityActive) return;
+        agilityActive = value;
+        sendStatusUniform();
+    }
 
     public void setUnderground(boolean value) {
-        if(value != isUnderground) {
-            isUnderground = value;
-            transition(80);
-        }
+        if(value == isUnderground) return;
+        isUnderground = value;
+        transition(80);
     }
 
     public void setSkyline(boolean value) {
-        if(value != isSkyline) {
-            isSkyline = value;
-            transition(80);
-        }
+        if(value == isSkyline) return;
+        isSkyline = value;
+        transition(80);
     }
 
     public void setWithinEMP(boolean value) {
-        if(value != withinEMPPrev) {
-            withinEMPPrev = value;
-            transition(3);
-        }
+        if(value == withinEMPPrev) return;
+        withinEMPPrev = value;
+        transition(3);
     }
 
     public void setWithinGravity(boolean value) {
-        if(value != withinGravityPrev) {
-            withinGravityPrev = value;
-            if(!value) changePitch(1.0f, 10);
-        }
+        if(value == withinGravityPrev) return;
+        withinGravityPrev = value;
+        if(!value) changePitch(1.0f, 10);
     }
 
     public void increaseHologramVolume(float target) {
