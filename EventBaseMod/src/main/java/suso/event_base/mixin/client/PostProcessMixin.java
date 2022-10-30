@@ -44,5 +44,6 @@ public class PostProcessMixin {
         }
 
         this.program.getUniformByNameOrDummy("GameTime").set(RenderSystem.getShaderGameTime());
+        this.program.getUniformByNameOrDummy("SysTime").set((int)System.currentTimeMillis() % 0x80000000);
     }
 }
