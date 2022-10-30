@@ -133,8 +133,15 @@ public class PrimaticaIngameHandler implements StateHandler {
         if(team != null) scores.put(team, score);
     }
 
+    public void updateClientTimer(ServerPlayerEntity player) {
+        ShaderUtil.setShaderUniform(player, "MinigameEnd", (int)(startMillis + durationMillis) % 0x80000000);
+    }
+
     public void increaseDuration(long millis) {
+        if(leftMillis < 0) durationMillis -= leftMillis;
         durationMillis += millis;
+
+        EventManager.getInstance().getServer().getPlayerManager().getPlayerList().forEach(this::updateClientTimer);
     }
 
     public void setHasPowerup(UUID id, boolean value) {
@@ -267,8 +274,6 @@ public class PrimaticaIngameHandler implements StateHandler {
         EventManager manager = EventManager.getInstance();
         PrimaticaPlayerInfo info = playerInfo.get(player.getUuid());
 
-        ShaderUtil.setShaderUniform(player, "MinigameTimer", Math.max((int) leftMillis, 0));
-
         if(!manager.isEventPlayer(player) || player.isDead()) return;
 
         player.getHungerManager().add(20, 0.0f);
@@ -317,6 +322,9 @@ public class PrimaticaIngameHandler implements StateHandler {
         SoundUtil.playFadeSound(player, new Identifier("suso:heartbeat"), 0.0f, 1.0f, true, SoundCategory.PLAYERS, false);
         SoundUtil.playFadeSound(player, new Identifier("suso:hologram"), 0.0f, 1.0f, true, SoundCategory.BLOCKS, false);
         SoundUtil.playFadeSound(player, new Identifier("suso:gravity"), 0.0f, 1.0f, true, SoundCategory.PLAYERS, true);
+
+        ShaderUtil.setPostShader(player, new Identifier("suso:shaders/post/primatica.json"));
+        updateClientTimer(player);
 
         initPlayer(player, data);
     }
