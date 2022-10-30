@@ -360,6 +360,7 @@ public class PrimaticaIngameHandler implements StateHandler {
                 default -> false;
             }) {
                 InventoryUtil.replaceSlot(player, hand == Hand.MAIN_HAND ? player.getInventory().selectedSlot : 99, ItemStack.EMPTY);
+                player.swingHand(hand, true);
             }
             return true;
         }
