@@ -31,6 +31,7 @@ public class PrimaticaBridgeInstance implements TickableInstance {
 
         this.direction = Vec3d.fromPolar(0.0f, owner.getYaw()).multiply(0.6);
         this.position = owner.getPos().add(0.0, Math.min(0.0, owner.getVelocity().y + 0.05) * 5.0 - 0.8, 0.0);
+        this.position = new Vec3d(position.x, Math.floor(position.y) + 0.5, position.z);
 
         this.ticksLeft = 20;
     }
@@ -52,5 +53,20 @@ public class PrimaticaBridgeInstance implements TickableInstance {
     @Override
     public void remove() {
         ticksLeft = 0;
+    }
+
+    public static boolean shouldSpawn(ServerPlayerEntity owner) {
+        ServerWorld world = owner.getWorld();
+        int count = 0;
+        Vec3d direction = Vec3d.fromPolar(0.0f, owner.getYaw()).multiply(0.6);
+        Vec3d position = owner.getPos().add(0.0, Math.min(0.0, owner.getVelocity().y + 0.05) * 5.0 - 0.8, 0.0);
+        for(int i = 0; i < 7; i++) {
+            if(world.getBlockState(new BlockPos(position)).isAir()) {
+                if(++count > 1) return true;
+            }
+            position = position.add(direction);
+        }
+
+        return false;
     }
 }

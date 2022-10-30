@@ -16,6 +16,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtInt;
 import net.minecraft.nbt.NbtString;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -27,6 +28,7 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.GameMode;
@@ -39,10 +41,7 @@ import suso.event_manage.state_handlers.PlayerScheduleInstance;
 import suso.event_manage.state_handlers.StateCommands;
 import suso.event_manage.state_handlers.StateHandler;
 import suso.event_manage.state_handlers.TickableInstance;
-import suso.event_manage.util.InventoryUtil;
-import suso.event_manage.util.RndSet;
-import suso.event_manage.util.ShaderUtil;
-import suso.event_manage.util.SoundUtil;
+import suso.event_manage.util.*;
 
 import java.util.*;
 
@@ -146,35 +145,43 @@ public class PrimaticaIngameHandler implements StateHandler {
         return playerInfo.get(id);
     }
 
-    protected void useAgility(ServerPlayerEntity player) {
+    protected boolean useAgility(ServerPlayerEntity player) {
         player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 200, 0, false, false, true));
         player.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, 200, 4, false, false, true));
 
         setHasPowerup(player.getUuid(), false);
+        return true;
+    }
     }
 
-    protected void useBridge(ServerPlayerEntity player) {
+    protected boolean useBridge(ServerPlayerEntity player) {
+        if(!PrimaticaBridgeInstance.shouldSpawn(player)) return false;
+
         tickables.add(new PrimaticaBridgeInstance(player));
         setHasPowerup(player.getUuid(), false);
+        return true;
     }
 
-    protected void useGravity(ServerPlayerEntity player) {
+    protected boolean useGravity(ServerPlayerEntity player) {
         tickables.add(new PrimaticaGravityInstance(player, this));
         setHasPowerup(player.getUuid(), false);
+        return true;
     }
 
-    protected void useEMP(ServerPlayerEntity player) {
+    protected boolean useEMP(ServerPlayerEntity player) {
         HitResult hit = player.raycast(4.0, player.server.getTickTime(), true);
         if(hit instanceof BlockHitResult bhit) {
             BlockPos pos = bhit.getBlockPos().add(bhit.getSide().getVector());
             tickables.add(new PrimaticaEMPInstance(player, pos, this));
             setHasPowerup(player.getUuid(), false);
         }
+        return true;
     }
 
-    protected void useGunk(ServerPlayerEntity player) {
+    protected boolean useGunk(ServerPlayerEntity player) {
         tickables.add(new PrimaticaGunkInstance(player));
         setHasPowerup(player.getUuid(), false);
+        return true;
     }
 
     private boolean gunkMatchesTeam(String gunk, @Nullable AbstractTeam team) {
@@ -344,14 +351,16 @@ public class PrimaticaIngameHandler implements StateHandler {
     public boolean onPlayerRightClick(ServerPlayerEntity player, EventPlayerData data, ItemStack stack, Hand hand) {
         if(stack.isOf(Items.FEATHER) && stack.getNbt() != null) {
             int powerupId = stack.getNbt().getInt("CustomModelData");
-            switch (powerupId) {
+            if(switch (powerupId) {
                 case 1 -> useAgility(player);
                 case 2 -> useBridge(player);
                 case 3 -> useGravity(player);
                 case 4 -> useEMP(player);
                 case 5 -> useGunk(player);
+                default -> false;
+            }) {
+                InventoryUtil.replaceSlot(player, hand == Hand.MAIN_HAND ? player.getInventory().selectedSlot : 99, ItemStack.EMPTY);
             }
-            InventoryUtil.replaceSlot(player, hand == Hand.MAIN_HAND ? player.getInventory().selectedSlot : 99, ItemStack.EMPTY);
             return true;
         }
 
