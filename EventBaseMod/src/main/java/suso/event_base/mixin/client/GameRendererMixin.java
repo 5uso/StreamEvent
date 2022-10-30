@@ -2,10 +2,17 @@ package suso.event_base.mixin.client;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.Framebuffer;
+import net.minecraft.client.gl.ShaderEffect;
+import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,6 +23,9 @@ import suso.event_base.client.shader.CustomUniformStore;
 @Mixin(GameRenderer.class) @Environment(EnvType.CLIENT)
 public abstract class GameRendererMixin {
     @Shadow protected abstract void loadShader(Identifier id);
+    @Shadow @Nullable private ShaderEffect shader;
+
+    @Shadow @Final private MinecraftClient client;
 
     @Inject(
             method = "onCameraEntitySet",
@@ -32,5 +42,20 @@ public abstract class GameRendererMixin {
     )
     private void setCustomShader(ResourceManager manager, CallbackInfo ci) {
         if(CustomUniformStore.overridingPost) this.loadShader(new Identifier(CustomUniformStore.getPostOverride()));
+    }
+
+    @Inject(
+            method = "render",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gl/ShaderEffect;render(F)V"
+            )
+    )
+    private void setDepth(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
+        if(shader == null) return;
+
+        Framebuffer handBuffer = shader.getSecondaryTarget("hand");
+        if(handBuffer != null) handBuffer.copyDepthFrom(client.getFramebuffer());
+        shader.mainTarget.copyDepthFrom(CustomUniformStore.aux);
     }
 }

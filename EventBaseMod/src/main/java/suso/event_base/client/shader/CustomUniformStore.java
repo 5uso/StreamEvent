@@ -2,6 +2,9 @@ package suso.event_base.client.shader;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.Framebuffer;
+import net.minecraft.client.gl.SimpleFramebuffer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +17,9 @@ public class CustomUniformStore {
 
     public static boolean overridingPost = false;
     private static String postOverride = "";
+
+    public static final Framebuffer aux = new SimpleFramebuffer(MinecraftClient.getInstance().getWindow().getFramebufferWidth(), MinecraftClient.getInstance().getWindow().getFramebufferHeight(), true, false);
+    public static int readID = 0, drawID = 0, globID = 0;
 
     public static void setUniform(String name, float[] value) {
         floatUniforms.put(name, value);

@@ -9,6 +9,7 @@
     "PlayerEntityMixin"
   ],
   "client": [
+    "TestMixin",
     "client.BlockColorsMixin",
     "client.CoreMixin",
     "client.GameRendererAccess",
@@ -22,6 +23,7 @@
     "client.SoundManagerMixin",
     "client.SoundSystemMixin",
     "client.SoundSystemUtilImpl",
+    "client.WorldRendererMixin",
     "client.fabric.AbstractQuadRendererMixin",
     "client.fabric.BlockRenderInfoMixin"
   ],

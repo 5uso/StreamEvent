@@ -1,3 +1,5 @@
 accessWidener v1 named
 
 accessible method net/minecraft/client/color/block/BlockColors registerColorProperty (Lnet/minecraft/state/property/Property;[Lnet/minecraft/block/Block;)V
+accessible field net/minecraft/client/gl/ShaderEffect mainTarget Lnet/minecraft/client/gl/Framebuffer;
+accessible field net/minecraft/client/render/GameRenderer shadersEnabled Z
