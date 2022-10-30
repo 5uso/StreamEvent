@@ -267,6 +267,9 @@ public class PrimaticaIngameHandler implements StateHandler {
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.INSTANT_HEALTH, 1, 100, false, false, false));
 
             setHasPowerup(player.getUuid(), false);
+
+            PrimaticaPlayerInfo info = getPlayerInfo(player.getUuid());
+            info.setAgilityActive(false);
         } else {
             player.changeGameMode(GameMode.SPECTATOR);
         }
