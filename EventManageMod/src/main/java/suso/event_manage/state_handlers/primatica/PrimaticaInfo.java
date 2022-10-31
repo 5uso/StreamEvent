@@ -1,14 +1,21 @@
 package suso.event_manage.state_handlers.primatica;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraft.block.Block;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.StringNbtReader;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.tag.TagKey;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.registry.Registry;
 import suso.event_manage.util.RndSet;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class PrimaticaInfo {
     public enum Powerups {
@@ -135,19 +142,31 @@ public class PrimaticaInfo {
     }
 
 
-    private static final Vec3d[] powerupLocations = {
-            new Vec3d(200.91, 88.00, 27.98),
-            new Vec3d(206.29, 80.00, -1.91),
-            new Vec3d(174.5, 100.5, 37.00),
-            new Vec3d(245.5, 92, -5.5),
-            new Vec3d(239.50, 111, -36.5),
-            new Vec3d(209.5, 95, -34.5),
-    };
+    private static Random random = new Random();
+    public static BlockPos getPowerupPosition(ServerWorld w) {
+        for(int i = 0; i < 10; i++) {
+            int x = random.nextInt(-75, 76);
+            int z = random.nextInt(-75, 76);
 
-    private static final RndSet<Vec3d> powerupLocationset = new RndSet<>(Arrays.asList(powerupLocations));
+            int sqr_dist = x*x + z*z;
+            if(sqr_dist > 75*75) continue;
 
-    public static RndSet<Vec3d> getPowerupLocations() {
-        return powerupLocationset;
+            int y = random.nextInt(66, 153);
+
+            BlockPos r = new BlockPos(x, y, z);
+            TagKey<Block> floor_tag = TagKey.of(Registry.BLOCK_KEY, new Identifier("suso:primatica_floor"));
+            for(int j = 0; j < 10; j++) {
+                if(!w.getBlockState(r).isAir()) break;
+                if(w.getBlockState(r.down()).isIn(floor_tag)) {
+                    List<ArmorStandEntity> other = w.getEntitiesByType(EntityType.ARMOR_STAND, Box.of(new Vec3d(r.getX() + 0.5, r.getY(), r.getZ() + 0.5), 3.0, 3.0, 3.0), e -> e.getScoreboardTags().contains("primatica_powerup"));
+                    if(other.isEmpty()) return r;
+                    else break;
+                }
+                r = r.down();
+            }
+        }
+
+        return null;
     }
 
 

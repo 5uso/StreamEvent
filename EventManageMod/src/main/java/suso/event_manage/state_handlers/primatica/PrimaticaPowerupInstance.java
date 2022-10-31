@@ -9,14 +9,11 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import suso.event_manage.state_handlers.TickableInstance;
 import suso.event_manage.util.InventoryUtil;
 import suso.event_manage.util.SoundUtil;
 
-import java.util.List;
-import java.util.Queue;
 import java.util.UUID;
 
 public class PrimaticaPowerupInstance implements TickableInstance {
@@ -25,20 +22,14 @@ public class PrimaticaPowerupInstance implements TickableInstance {
     private final World world;
     private final PrimaticaIngameHandler handler;
 
-    public PrimaticaPowerupInstance(World world, Vec3d pos, float rotation, PrimaticaInfo.Powerups type, PrimaticaIngameHandler handler) {
+    public PrimaticaPowerupInstance(World world, BlockPos pos, float rotation, PrimaticaInfo.Powerups type, PrimaticaIngameHandler handler) {
         this.type = type;
         this.world = world;
         this.handler = handler;
 
-        BlockPos finalPos = findSuitablePos(pos);
-        if(finalPos == null) {
-            entity = null;
-            return;
-        }
+        Vec3d vpos = new Vec3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 
-        pos = new Vec3d(finalPos.getX() + 0.5, finalPos.getY(), finalPos.getZ() + 0.5);
-
-        entity = new ArmorStandEntity(world, pos.x, pos.y, pos.z);
+        entity = new ArmorStandEntity(world, vpos.x, vpos.y, vpos.z);
         entity.setNoGravity(true);
         entity.setYaw(rotation);
         entity.addScoreboardTag("primatica_powerup");
@@ -97,27 +88,5 @@ public class PrimaticaPowerupInstance implements TickableInstance {
         }
 
         SoundUtil.playSound(player, new Identifier("eniah:sfx.collect_fail"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
-    }
-
-    private BlockPos findSuitablePos(Vec3d original) {
-        BlockPos pos = new BlockPos(original);
-        for(int i = 0; i < 3; i++) {
-            if(isPosSuitable(pos)) return pos;
-
-            Vec3d vecPos = new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-            for(float a = 0.0f; a < 359.0f; a += 30.0f) {
-                BlockPos apos = new BlockPos(vecPos.add(Vec3d.fromPolar(0.0f, a).multiply(2.0)));
-                if(isPosSuitable(apos)) return apos;
-            }
-
-            pos = pos.up();
-        }
-
-        return null;
-    }
-
-    private boolean isPosSuitable(BlockPos pos) {
-        BlockPos below = pos.down();
-        return !world.getBlockState(pos).isSolidBlock(world, pos) && world.getBlockState(below).isSolidBlock(world, below);
     }
 }

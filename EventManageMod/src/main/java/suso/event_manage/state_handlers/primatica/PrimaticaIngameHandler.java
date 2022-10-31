@@ -5,7 +5,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,13 +20,13 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.registry.Registry;
@@ -52,7 +51,7 @@ public class PrimaticaIngameHandler implements StateHandler {
     private long leftMillis;
 
     protected int powerupAmount;
-    private static final int powerupTarget = 15;
+    private static final int powerupTarget = 30;
     private long nextPowerupMillis;
 
     protected final Set<Vec3d> orbLocations;
@@ -112,18 +111,15 @@ public class PrimaticaIngameHandler implements StateHandler {
         if(!orbLocations.contains(pos)) tickables.add(new PrimaticaOrbInstance(world, pos, this));
     }
 
-    private void trySummonPowerup(World world) {
-        RndSet<Vec3d> possiblePowerupSpots = PrimaticaInfo.getPowerupLocations();
+    private void trySummonPowerup(ServerWorld world) {
+        BlockPos pos = PrimaticaInfo.getPowerupPosition(world);
+        if(pos == null) return;
 
-        Vec3d pos = possiblePowerupSpots.getRandom();
-        List<ArmorStandEntity> other = world.getEntitiesByClass(ArmorStandEntity.class, Box.of(pos, 3.0, 3.0, 3.0), e -> e.getScoreboardTags().contains("primatica_powerup"));
-        if(other.isEmpty()) {
-            int possible = PrimaticaInfo.Powerups.values().length;
-            PrimaticaInfo.Powerups type = PrimaticaInfo.Powerups.values()[r.nextInt(possible)];
-            tickables.add(new PrimaticaPowerupInstance(world, pos, r.nextFloat(0.0f, 360.0f), type, this));
-        }
-
-        nextPowerupMillis = System.currentTimeMillis() + r.nextLong(5000, 15000);
+        int possible = PrimaticaInfo.Powerups.values().length;
+        PrimaticaInfo.Powerups type = PrimaticaInfo.Powerups.values()[r.nextInt(possible)];
+        tickables.add(new PrimaticaPowerupInstance(world, pos, r.nextFloat(0.0f, 360.0f), type, this));
+        double delayFactor = (double) powerupAmount / powerupTarget;
+        nextPowerupMillis = System.currentTimeMillis() + r.nextLong(5, 6 + (long)(20000 * delayFactor*delayFactor*delayFactor));
     }
 
     public int getTeamScore(AbstractTeam team) {
@@ -284,7 +280,7 @@ public class PrimaticaIngameHandler implements StateHandler {
         EventManager manager = EventManager.getInstance();
         MinecraftServer server = manager.getServer();
 
-        World w = server.getOverworld();
+        ServerWorld w = server.getOverworld();
         long currTime = System.currentTimeMillis();
 
         leftMillis = (startMillis + durationMillis) - currTime;
