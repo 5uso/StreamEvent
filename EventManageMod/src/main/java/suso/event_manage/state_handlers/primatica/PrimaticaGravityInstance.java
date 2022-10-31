@@ -124,6 +124,8 @@ public class PrimaticaGravityInstance implements TickableInstance {
             player.setVelocity(motion);
 
             player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(player));
+
+            world.spawnParticles(ParticleTypes.SCULK_SOUL, player.getX(), player.getY() + 1.0, player.getZ(), 1, 0.3, 0.5, 0.3, 0.0);
         }
     }
 
@@ -143,6 +145,8 @@ public class PrimaticaGravityInstance implements TickableInstance {
             player.setVelocity(motion);
 
             player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(player));
+
+            world.spawnParticles(ParticleTypes.SCULK_SOUL, player.getX(), player.getY() + 1.0, player.getZ(), 1, 0.3, 0.5, 0.3, 0.0);
         }
     }
 
