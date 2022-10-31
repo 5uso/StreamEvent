@@ -108,7 +108,7 @@ public class PrimaticaIngameHandler implements StateHandler {
             }
         }
 
-        Vec3d pos = possibleOrbSpots.getRandom();
+        Vec3d pos = possibleOrbSpots.getRandom().add(new Vec3d(0.5, 0.125, 0.5));
         if(!orbLocations.contains(pos)) tickables.add(new PrimaticaOrbInstance(world, pos, this));
     }
 
