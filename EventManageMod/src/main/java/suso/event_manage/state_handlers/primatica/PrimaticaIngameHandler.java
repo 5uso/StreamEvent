@@ -16,6 +16,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtInt;
 import net.minecraft.nbt.NbtString;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
+import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.MinecraftServer;
@@ -221,6 +222,8 @@ public class PrimaticaIngameHandler implements StateHandler {
         if(ownTeam) {
             Vec3d posDelta = player.getPosDelta();
             player.setVelocity(posDelta.x * 4.0, Math.max(1.5, bounceHeight), posDelta.z * 4.0);
+            getPlayerInfo(player.getUuid()).gunkBounce = true;
+            SoundUtil.playFadeSound(player, new Identifier("minecraft:entity.slime.jump"), 1.0f, 1.0f, false, SoundCategory.BLOCKS, true);
         } else player.setVelocity(0.0, 0.1, 0.0);
 
         player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(player));
@@ -335,6 +338,12 @@ public class PrimaticaIngameHandler implements StateHandler {
         if(info.agilityActive) {
             player.getWorld().spawnParticles(ParticleTypes.GLOW, player.getX(), player.getY() + 1.0, player.getZ(), 1, 0.3, 0.5, 0.3, 0.0);
         }
+
+        if(player.isOnGround()) info.gunkBounce = false;
+        if(info.gunkBounce) {
+            AbstractTeam team = player.getScoreboardTeam();
+            player.getWorld().spawnParticles(new DustParticleEffect(ParticleUtil.teamColor(team), 2), player.getX(), player.getY(), player.getZ(), Math.round(1.0f + speed), 0.3, 0.3, 0.3, 0.0);
+        }
     }
 
     @Override
@@ -433,6 +442,8 @@ public class PrimaticaIngameHandler implements StateHandler {
                     if(ownTeam) {
                         Vec3d posDelta = player.getPosDelta();
                         player.setVelocity(posDelta.x * 4.0, posDelta.y * -1.3, posDelta.z * 4.0);
+                        getPlayerInfo(player.getUuid()).gunkBounce = true;
+                        SoundUtil.playFadeSound(player, new Identifier("minecraft:entity.slime.jump"), 1.0f, 1.0f, false, SoundCategory.BLOCKS, true);
                     } else player.setVelocity(0.0, 0.1, 0.0);
                     player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(player));
                 }

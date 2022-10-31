@@ -48,7 +48,7 @@ public class PrimaticaInfo {
     }
 
 
-    public static NbtCompound BOW, PICKAXE, BLOCK, HELMET, CHESTPLATE, LEGGINGS, BOOTS, AGILITY, BRIDGE, GRAVITY, EMP, ARROW_BOW, GUNK, GRAVITY_DISPLAY;
+    public static NbtCompound BOW, PICKAXE, BLOCK, HELMET, CHESTPLATE, LEGGINGS, BOOTS, AGILITY, BRIDGE, GRAVITY, EMP, ARROW_BOW, GUNK, GRAVITY_DISPLAY, GUNK_DISPLAY;
     static {
         try {
             BOW = StringNbtReader.parse("{id:'bow',Count:1b,tag:{CustomModelData:7,Enchantments:[{id:'minecraft:punch',lvl:1s},{id:'minecraft:infinity',lvl:1s},{id:'minecraft:knockback',lvl:1s}],Unbreakable:1b}}");
@@ -67,6 +67,7 @@ public class PrimaticaInfo {
             GUNK = StringNbtReader.parse("{id:'feather',Count:1b,tag:{CustomModelData:5,display:{Name:'{\"translate\":\"event.suso.gunk\"}'}}}");
 
             GRAVITY_DISPLAY = StringNbtReader.parse("{id:'leather_chestplate',Count:1b,tag:{CustomModelData:1,display:{color:0}}}");
+            GUNK_DISPLAY = StringNbtReader.parse("{id:'leather_helmet',Count:1b,tag:{CustomModelData:1,display:{color:0}}}");
         } catch (CommandSyntaxException e) {
             e.printStackTrace();
             System.exit(0xDEADBEEF);
