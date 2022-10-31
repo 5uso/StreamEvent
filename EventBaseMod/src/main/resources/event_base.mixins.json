@@ -18,6 +18,7 @@
     "client.HeldItemRendererMixin",
     "client.IdentifierMixin",
     "client.KeyboardInputMixin",
+    "client.KeyboardMixin",
     "client.PostProcessMixin",
     "client.SoundManagerAccess",
     "client.SoundManagerMixin",
