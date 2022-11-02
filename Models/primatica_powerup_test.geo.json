@@ -1,0 +1,75 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.primatica_powerup",
+				"texture_width": 64,
+				"texture_height": 64,
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 3.5,
+				"visible_bounds_offset": [0, 1.25, 0]
+			},
+			"bones": [
+				{
+					"name": "base",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-8, 0, -8], "size": [16, 2, 16], "uv": [0, 0]},
+						{"origin": [-4, 2, -4], "size": [8, 2, 8], "uv": [20, 24]}
+					]
+				},
+				{
+					"name": "fins",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "N",
+					"parent": "fins",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [0, 1, -10], "size": [0, 8, 8], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "S",
+					"parent": "fins",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [0, 1, 2], "size": [0, 8, 8], "uv": [20, 26]}
+					]
+				},
+				{
+					"name": "E",
+					"parent": "fins",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-10, 1, 0], "size": [8, 8, 0], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "W",
+					"parent": "fins",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [2, 1, 0], "size": [8, 8, 0], "uv": [36, 34]}
+					]
+				},
+				{
+					"name": "ray",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-5, 4, 0], "size": [10, 12, 0], "uv": [0, 32]}
+					]
+				},
+				{
+					"name": "power",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-6, 16, -1], "size": [12, 12, 2], "uv": [0, 18]}
+					]
+				}
+			]
+		}
+	]
+}

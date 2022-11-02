@@ -1,0 +1,48 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.primatica_powerup.idle": {
+			"loop": true,
+			"animation_length": 4,
+			"bones": {
+				"ray": {
+					"rotation": {
+						"vector": [0, "query.face_camera", 0]
+					},
+					"position": {
+						"vector": [0, "-math.sin(query.anim_time * 45)", 0]
+					}
+				},
+				"power": {
+					"rotation": {
+						"vector": [0, "query.anim_time * 90", 0]
+					},
+					"position": {
+						"vector": [0, "math.sin(query.anim_time * 90) + 1", 0]
+					}
+				},
+				"W": {
+					"rotation": {
+						"vector": [0, 0, "math.sin(query.anim_time * 45)"]
+					}
+				},
+				"N": {
+					"rotation": {
+						"vector": ["math.sin(query.anim_time * 45)", 0, 0]
+					}
+				},
+				"S": {
+					"rotation": {
+						"vector": ["-math.sin(query.anim_time * 45)", 0, 0]
+					}
+				},
+				"E": {
+					"rotation": {
+						"vector": [0, 0, "-math.sin(query.anim_time * 45)"]
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}
