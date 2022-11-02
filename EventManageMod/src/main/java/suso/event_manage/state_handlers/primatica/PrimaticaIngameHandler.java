@@ -12,9 +12,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtInt;
-import net.minecraft.nbt.NbtString;
+import net.minecraft.nbt.*;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleTypes;
@@ -244,6 +242,7 @@ public class PrimaticaIngameHandler implements StateHandler {
             if(team != null && team.getColor().getColorValue() != null) {
                 bowNbt.getCompound("tag").put("CustomModelData", NbtInt.of(team.getColor().getColorIndex()));
                 blockNbt.put("id", NbtString.of(PrimaticaInfo.getCorrespondingBlock(team.getColor().getColorIndex())));
+                blockNbt.getCompound("tag").getList("CanPlaceOn", NbtList.STRING_TYPE).add(NbtString.of(PrimaticaInfo.getCorrespondingGunk(team.getColor().getColorIndex())));
 
                 NbtCompound armorDisplay = new NbtCompound();
                 armorDisplay.put("color", NbtInt.of(team.getColor().getColorValue()));
