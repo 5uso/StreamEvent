@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import suso.event_manage.EventManager;
 
 @Mixin(BlockItem.class)
 public class BlockItemMixin {
@@ -28,6 +29,11 @@ public class BlockItemMixin {
             FluidState f = context.getWorld().getBlockState(context.getBlockPos()).getFluidState();
 
             if(mode == GameMode.ADVENTURE && !f.isEmpty() && !f.isStill()) {
+                cir.setReturnValue(ActionResult.FAIL);
+                cir.cancel();
+            }
+
+            if(EventManager.getInstance().onPlayerPlacedBlock(player, context)) {
                 cir.setReturnValue(ActionResult.FAIL);
                 cir.cancel();
             }

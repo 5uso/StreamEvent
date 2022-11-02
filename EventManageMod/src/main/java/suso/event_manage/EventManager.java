@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.*;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -92,6 +93,10 @@ public class EventManager implements ModInitializer {
 
     public boolean onPlayerRightClick(ServerPlayerEntity player, ItemStack stack, Hand hand) {
         return handler.onPlayerRightClick(player, data.getPlayerData(player), stack, hand);
+    }
+
+    public boolean onPlayerPlacedBlock(ServerPlayerEntity player, ItemPlacementContext context) {
+        return handler.onPlayerPlacedBlock(player, data.getPlayerData(player), context);
     }
 
     public boolean onPlayerLand(ServerPlayerEntity player, double heightDifference, BlockPos landingPos) {

@@ -9,6 +9,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
@@ -27,6 +28,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.registry.Registry;
@@ -418,6 +420,12 @@ public class PrimaticaIngameHandler implements StateHandler {
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean onPlayerPlacedBlock(ServerPlayerEntity player, EventPlayerData data, ItemPlacementContext context) {
+        final Box cube = new Box(context.getBlockPos());
+        return PrimaticaEMPInstance.positions.entrySet().stream().anyMatch(p -> !player.isTeamPlayer(p.getValue()) && MiscUtil.distance(cube, p.getKey()) < 3.0);
     }
 
     @Override

@@ -20,10 +20,13 @@ import suso.event_manage.util.ParticleUtil;
 import suso.event_manage.util.ShaderUtil;
 import suso.event_manage.util.SoundUtil;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PrimaticaEMPInstance implements TickableInstance {
     private static final int DURATION = 200;
+    public static final Map<Vec3d, AbstractTeam> positions = new HashMap<>();
 
     private final ServerWorld world;
     private final AbstractTeam team;
@@ -65,6 +68,8 @@ public class PrimaticaEMPInstance implements TickableInstance {
             double distance = MiscUtil.distance(p.getBoundingBox(), position) / 3.0;
             if(distance < 1.0) p.damage(DamageSource.sonicBoom(player), (float) (1.0 - distance) * 6.0f + 10.0f);
         });
+
+        positions.put(position, team);
     }
 
     @Override
@@ -128,5 +133,6 @@ public class PrimaticaEMPInstance implements TickableInstance {
         ticksLeft = 0;
         world.setBlockState(pos, Blocks.AIR.getDefaultState());
         world.getPlayers().forEach(p -> ShaderUtil.unsetBlockColor(p, pos));
+        positions.remove(position);
     }
 }
