@@ -21,6 +21,7 @@ import suso.event_manage.util.SoundUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class PrimaticaArrowInstance implements TickableInstance {
     private static final double STEP_SIZE = 0.1;
@@ -118,11 +119,13 @@ public class PrimaticaArrowInstance implements TickableInstance {
 
     private double empDistance() {
         double r = 500.0;
-        for (Vec3d p : PrimaticaEMPInstance.positions.keySet()) {
-            double d = p.distanceTo(position);
+        for (Map.Entry<Vec3d, AbstractTeam> p : PrimaticaEMPInstance.positions.entrySet()) {
+            if(p.getValue().equals(team)) continue;
+            
+            double d = p.getKey().distanceTo(position);
             if(d < r) {
                 r = d;
-                closestEMP = p;
+                closestEMP = p.getKey();
             }
         }
         return r;
