@@ -197,10 +197,12 @@ public class PrimaticaIngameHandler implements StateHandler {
         HitResult hit = player.raycast(4.0, player.server.getTickTime(), true);
         if(hit instanceof BlockHitResult bhit) {
             BlockPos pos = bhit.getBlockPos().add(bhit.getSide().getVector());
+            if(!player.world.getBlockState(pos).isAir()) return false;
             tickables.add(new PrimaticaEMPInstance(player, pos, this));
             setHasPowerup(player.getUuid(), false);
+            return true;
         }
-        return true;
+        return false;
     }
 
     protected boolean useGunk(ServerPlayerEntity player) {
