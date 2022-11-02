@@ -18,7 +18,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
-import suso.event_manage.custom.blocks.GunkBlockEntity;
+import suso.event_manage.custom.blocks.entity.GunkBlockEntity;
 import suso.event_manage.state_handlers.TickableInstance;
 import suso.event_manage.util.ParticleUtil;
 import suso.event_manage.util.SoundUtil;

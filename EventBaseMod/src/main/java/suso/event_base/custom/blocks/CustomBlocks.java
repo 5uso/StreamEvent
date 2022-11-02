@@ -1,6 +1,8 @@
 package suso.event_base.custom.blocks;
 
+import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -8,6 +10,8 @@ import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.registry.Registry;
 import suso.event_base.custom.blocks.entity.GunkBlockEntity;
+import suso.event_base.custom.blocks.entity.PrimaticaPowerupBlockEntity;
+import suso.event_base.custom.blocks.entity.PrimaticaPowerupRenderer;
 
 public class CustomBlocks {
     public static Block GRAY_HOLOBLOCK;
@@ -47,6 +51,9 @@ public class CustomBlocks {
     public static Block ORANGE_GUNK;
     public static Block RED_GUNK;
     public static BlockEntityType<GunkBlockEntity> GUNK_ENTITY;
+
+    public static Block PRIMATICA_POWERUP;
+    public static BlockEntityType<PrimaticaPowerupBlockEntity> PRIMATICA_POWERUP_ENTITY;
 
     private static Block register(String id, Block block) {
         return Registry.register(Registry.BLOCK, id, block);
@@ -97,5 +104,9 @@ public class CustomBlocks {
         RED_GUNK = register("suso:red_gunk", new Block(FabricBlockSettings.of(Material.ORGANIC_PRODUCT, MapColor.RED).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)));
 
         GUNK_ENTITY = register("suso:gunk_entity", FabricBlockEntityTypeBuilder.create(GunkBlockEntity::new, GRAY_GUNK, WHITE_GUNK, PINK_GUNK, PURPLE_GUNK, BLUE_GUNK, CYAN_GUNK, LIGHT_BLUE_GUNK, GREEN_GUNK, LIME_GUNK, YELLOW_GUNK, ORANGE_GUNK, RED_GUNK).build());
+
+        PRIMATICA_POWERUP = register("suso:primatica_powerup", new PrimaticaPowerupBlock(FabricBlockSettings.of(Material.METAL).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        PRIMATICA_POWERUP_ENTITY = register("suso:primatica_powerup_entity", FabricBlockEntityTypeBuilder.create(PrimaticaPowerupBlockEntity::new, PRIMATICA_POWERUP).build());
+        BlockEntityRendererRegistry.register(PRIMATICA_POWERUP_ENTITY, ctx -> new PrimaticaPowerupRenderer());
     }
 }
