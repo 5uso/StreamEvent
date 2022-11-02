@@ -380,7 +380,7 @@ public class PrimaticaIngameHandler implements StateHandler {
     public boolean onPlayerDeath(ServerPlayerEntity player, EventPlayerData data, DamageSource damageSource, float damageAmount) {
         MinecraftServer server = EventManager.getInstance().getServer();
 
-        player.setSpawnPoint(server.getOverworld().getRegistryKey(), new BlockPos(216.0, 80.00, -14.0), 30.0f, true, false);
+        player.setSpawnPoint(server.getOverworld().getRegistryKey(), new BlockPos(0.5, 134.00, 87.5), -180.0f, true, false);
 
         PrimaticaPlayerInfo info = playerInfo.get(player.getUuid());
         info.changePitch(0.5f, 40);
