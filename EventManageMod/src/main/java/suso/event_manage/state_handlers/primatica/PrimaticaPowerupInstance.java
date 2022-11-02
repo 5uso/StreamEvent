@@ -1,53 +1,73 @@
 package suso.event_manage.state_handlers.primatica;
 
-import net.minecraft.entity.decoration.ArmorStandEntity;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.util.registry.Registry;
+import suso.event_manage.custom.blocks.CustomBlocks;
+import suso.event_manage.custom.blocks.entity.PrimaticaPowerupBlockEntity;
 import suso.event_manage.state_handlers.TickableInstance;
 import suso.event_manage.util.InventoryUtil;
+import suso.event_manage.util.MiscUtil;
 import suso.event_manage.util.SoundUtil;
 
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 
 public class PrimaticaPowerupInstance implements TickableInstance {
-    private final PrimaticaInfo.Powerups type;
-    private final ArmorStandEntity entity;
-    private final World world;
-    private final PrimaticaIngameHandler handler;
+    public static final Set<Vec3d> positions = new HashSet<>();
 
-    public PrimaticaPowerupInstance(World world, BlockPos pos, float rotation, PrimaticaInfo.Powerups type, PrimaticaIngameHandler handler) {
+    private final PrimaticaInfo.Powerups type;
+    private final Vec3d position;
+    private final BlockPos blockPos;
+    private final ServerWorld world;
+    private final PrimaticaIngameHandler handler;
+    private int ticksLeft = -1;
+
+    public PrimaticaPowerupInstance(ServerWorld world, BlockPos pos, PrimaticaInfo.Powerups type, PrimaticaIngameHandler handler) {
         this.type = type;
         this.world = world;
         this.handler = handler;
+        this.blockPos = pos.up();
+        this.position = Vec3d.ofCenter(pos.up());
 
-        Vec3d vpos = new Vec3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+        world.setBlockState(blockPos, CustomBlocks.PRIMATICA_POWERUP.getDefaultState());
 
-        entity = new ArmorStandEntity(world, vpos.x, vpos.y, vpos.z);
-        entity.setNoGravity(true);
-        entity.setYaw(rotation);
-        entity.addScoreboardTag("primatica_powerup");
-        entity.addScoreboardTag("volatile");
-        world.spawnEntity(entity);
-
-        handler.powerupAmount++;
+        positions.add(position);
     }
 
     @Override
     public boolean tick() {
-        if(entity == null || entity.isRemoved()) return true;
+        if(!(world.getBlockEntity(blockPos) instanceof PrimaticaPowerupBlockEntity)) return true;
+        if(ticksLeft > 0) return --ticksLeft == 0;
 
-        PlayerEntity player = world.getClosestPlayer(entity, 20.0);
+        PlayerEntity player = world.getClosestPlayer(position.x, position.y, position.z, 20.0, false);
         if(player instanceof ServerPlayerEntity sPlayer) {
-            if(player.getBoundingBox().intersects(entity.getBoundingBox())) {
+            if(MiscUtil.distance(player.getBoundingBox(), position) < 0.6) {
                 collectPowerup(sPlayer);
-                return true;
+
+                BlockEntity be = world.getBlockEntity(blockPos);
+                if(be instanceof PrimaticaPowerupBlockEntity) {
+                    NbtCompound collected = new NbtCompound();
+                    collected.putBoolean("collected", true);
+                    MiscUtil.setBlockEntityNBT(be, collected);
+                }
+
+                ticksLeft = 25;
             }
         }
 
@@ -56,10 +76,8 @@ public class PrimaticaPowerupInstance implements TickableInstance {
 
     @Override
     public void remove() {
-        if(entity != null) {
-            entity.kill();
-            handler.powerupAmount--;
-        }
+        world.setBlockState(blockPos, Blocks.AIR.getDefaultState());
+        positions.remove(position);
     }
 
     private void collectPowerup(ServerPlayerEntity player) {
@@ -88,5 +106,39 @@ public class PrimaticaPowerupInstance implements TickableInstance {
         }
 
         SoundUtil.playSound(player, new Identifier("eniah:sfx.collect_fail"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
+    }
+
+    private static final Random random = new Random();
+    public static BlockPos getPowerupPosition(ServerWorld w) {
+        for(int i = 0; i < 10; i++) {
+            int x = random.nextInt(-75, 76);
+            int z = random.nextInt(-75, 76);
+
+            int sqr_dist = x*x + z*z;
+            if(sqr_dist > 75*75) continue;
+
+            int y = random.nextInt(66, 153);
+
+            BlockPos r = new BlockPos(x, y, z);
+            TagKey<Block> floor_tag = TagKey.of(Registry.BLOCK_KEY, new Identifier("suso:primatica_floor"));
+            for(int j = 0; j < 10; j++) {
+                if(!w.getBlockState(r).isAir()) break;
+                if(w.getBlockState(r.down()).isIn(floor_tag)) {
+                    Vec3d vpos = Vec3d.ofCenter(r);
+                    boolean occupied = positions.stream().anyMatch(pos -> {
+                        Vec3d diff = pos.subtract(vpos);
+                        return Math.abs(diff.y) < 3.0 && diff.horizontalLength() < 10.0;
+                    });
+                    if(!occupied) {
+                        if(w.getBlockState(r.up()).isAir()) return r;
+                        else continue;
+                    }
+                    else break;
+                }
+                r = r.down();
+            }
+        }
+
+        return null;
     }
 }

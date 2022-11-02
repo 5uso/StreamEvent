@@ -50,7 +50,6 @@ public class PrimaticaIngameHandler implements StateHandler {
     private final long startMillis;
     private long leftMillis;
 
-    protected int powerupAmount;
     private static final int powerupTarget = 30;
     private long nextPowerupMillis;
 
@@ -67,7 +66,6 @@ public class PrimaticaIngameHandler implements StateHandler {
     public PrimaticaIngameHandler(long durationMillis) {
         this.durationMillis = durationMillis;
         this.startMillis = System.currentTimeMillis();
-        this.powerupAmount = 0;
 
         this.orbLocations = new HashSet<>();
         this.orbTarget = 10;
@@ -111,13 +109,13 @@ public class PrimaticaIngameHandler implements StateHandler {
         if(!orbLocations.contains(pos)) tickables.add(new PrimaticaOrbInstance(world, pos, this));
     }
 
-    private void trySummonPowerup(ServerWorld world) {
-        BlockPos pos = PrimaticaInfo.getPowerupPosition(world);
+    private void trySummonPowerup(ServerWorld world, int powerupAmount) {
+        BlockPos pos = PrimaticaPowerupInstance.getPowerupPosition(world);
         if(pos == null) return;
 
         int possible = PrimaticaInfo.Powerups.values().length;
         PrimaticaInfo.Powerups type = PrimaticaInfo.Powerups.values()[r.nextInt(possible)];
-        tickables.add(new PrimaticaPowerupInstance(world, pos, r.nextFloat(0.0f, 360.0f), type, this));
+        tickables.add(new PrimaticaPowerupInstance(world, pos, type, this));
         double delayFactor = (double) powerupAmount / powerupTarget;
         nextPowerupMillis = System.currentTimeMillis() + r.nextLong(5, 6 + (long)(20000 * delayFactor*delayFactor*delayFactor));
     }
@@ -290,7 +288,8 @@ public class PrimaticaIngameHandler implements StateHandler {
         orbTarget =  2 + (int) Math.round(Math.max(0, leftMillis - 30000) / (double)Math.max(0, durationMillis - 30000) * 8);
         if(orbLocations.size() < orbTarget) trySummonOrb(manager, w);
 
-        if(currTime >= nextPowerupMillis && powerupAmount < powerupTarget) trySummonPowerup(w);
+        int powerupAmount = PrimaticaPowerupInstance.positions.size();
+        if(currTime >= nextPowerupMillis && powerupAmount < powerupTarget) trySummonPowerup(w, powerupAmount);
     }
 
     @Override

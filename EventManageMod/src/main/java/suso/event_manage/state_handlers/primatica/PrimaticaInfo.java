@@ -1,21 +1,14 @@
 package suso.event_manage.state_handlers.primatica;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.StringNbtReader;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.tag.TagKey;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
 import suso.event_manage.util.RndSet;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PrimaticaInfo {
     public enum Powerups {
@@ -139,34 +132,6 @@ public class PrimaticaInfo {
 
     public static RndSet<Vec3d> getOrbLocations() {
         return new RndSet<>(orbLocationset);
-    }
-
-
-    private static final Random random = new Random();
-    public static BlockPos getPowerupPosition(ServerWorld w) {
-        for(int i = 0; i < 10; i++) {
-            int x = random.nextInt(-75, 76);
-            int z = random.nextInt(-75, 76);
-
-            int sqr_dist = x*x + z*z;
-            if(sqr_dist > 75*75) continue;
-
-            int y = random.nextInt(66, 153);
-
-            BlockPos r = new BlockPos(x, y, z);
-            TagKey<Block> floor_tag = TagKey.of(Registry.BLOCK_KEY, new Identifier("suso:primatica_floor"));
-            for(int j = 0; j < 10; j++) {
-                if(!w.getBlockState(r).isAir()) break;
-                if(w.getBlockState(r.down()).isIn(floor_tag)) {
-                    List<ArmorStandEntity> other = w.getEntitiesByType(EntityType.ARMOR_STAND, Box.of(new Vec3d(r.getX() + 0.5, r.getY(), r.getZ() + 0.5), 3.0, 3.0, 3.0), e -> e.getScoreboardTags().contains("primatica_powerup"));
-                    if(other.isEmpty()) return r;
-                    else break;
-                }
-                r = r.down();
-            }
-        }
-
-        return null;
     }
 
 

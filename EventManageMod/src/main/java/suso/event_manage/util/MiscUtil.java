@@ -1,8 +1,11 @@
 package suso.event_manage.util;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LightningEntity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
@@ -10,6 +13,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import suso.event_manage.EventManager;
 
 public class MiscUtil {
@@ -36,5 +40,15 @@ public class MiscUtil {
         entity.setSilent(true);
 
         world.spawnEntity(entity);
+    }
+
+    public static void setBlockEntityNBT(BlockEntity be, NbtCompound nbt) {
+        World w = be.getWorld();
+        if(w == null) return;
+
+        BlockState blockState = w.getBlockState(be.getPos());
+        be.readNbt(nbt);
+        be.markDirty();
+        w.updateListeners(be.getPos(), blockState, blockState, 3);
     }
 }
