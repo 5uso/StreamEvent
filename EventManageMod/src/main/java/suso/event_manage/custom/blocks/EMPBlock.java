@@ -12,9 +12,4 @@ public class EMPBlock extends Block {
     public EMPBlock(Settings settings) {
         super(settings);
     }
-
-    @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return VoxelShapes.empty();
-    }
 }

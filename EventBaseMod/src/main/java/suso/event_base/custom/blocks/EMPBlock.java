@@ -15,7 +15,7 @@ public class EMPBlock extends Block {
         super(settings);
     }
 
-    @Override
+    @SuppressWarnings("deprecation") @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return VoxelShapes.empty();
     }
