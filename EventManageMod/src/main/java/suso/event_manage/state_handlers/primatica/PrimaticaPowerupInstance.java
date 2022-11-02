@@ -7,7 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.StringNbtReader;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -23,10 +23,7 @@ import suso.event_manage.util.InventoryUtil;
 import suso.event_manage.util.MiscUtil;
 import suso.event_manage.util.SoundUtil;
 
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class PrimaticaPowerupInstance implements TickableInstance {
     public static final Set<Vec3d> positions = new HashSet<>();
@@ -46,8 +43,15 @@ public class PrimaticaPowerupInstance implements TickableInstance {
         this.position = Vec3d.ofCenter(pos.up());
 
         world.setBlockState(blockPos, CustomBlocks.PRIMATICA_POWERUP.getDefaultState());
-
+        BlockEntity be = world.getBlockEntity(blockPos);
+        if(be != null) {
+            NbtCompound type_nbt = new NbtCompound();
+            type_nbt.putByte("type", (byte) type.ordinal());
+            MiscUtil.setBlockEntityNBT(be, type_nbt);
+        }
         positions.add(position);
+
+        SoundUtil.playSound(world.getPlayers(), new Identifier("minecraft:entity.firework_rocket.twinkle"), SoundCategory.PLAYERS, position, 1.0f, 0.5f);
     }
 
     @Override
@@ -61,10 +65,11 @@ public class PrimaticaPowerupInstance implements TickableInstance {
                 collectPowerup(sPlayer);
 
                 BlockEntity be = world.getBlockEntity(blockPos);
-                if(be instanceof PrimaticaPowerupBlockEntity) {
+                if(be instanceof PrimaticaPowerupBlockEntity ppbe) {
                     NbtCompound collected = new NbtCompound();
+                    ppbe.writeNbt(collected);
                     collected.putBoolean("collected", true);
-                    MiscUtil.setBlockEntityNBT(be, collected);
+                    MiscUtil.setBlockEntityNBT(ppbe, collected);
                 }
 
                 ticksLeft = 25;
@@ -101,11 +106,12 @@ public class PrimaticaPowerupInstance implements TickableInstance {
                 case GUNK -> InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.GUNK));
             }
             handler.setHasPowerup(id, true);
-            SoundUtil.playSound(player, new Identifier("eniah:sfx.collect"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
-            return;
+            SoundUtil.playSound(player, new Identifier("eniah:sfx.collect"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.8f);
         }
 
-        SoundUtil.playSound(player, new Identifier("eniah:sfx.collect_fail"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
+        List<ServerPlayerEntity> players = world.getPlayers();
+        world.spawnParticles(ParticleTypes.ENCHANTED_HIT, position.x, position.y, position.z, 10, 0.1, 0.1, 0.1, 0.5);
+        SoundUtil.playSound(players, new Identifier("eniah:sfx.collect_fail"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
     }
 
     private static final Random random = new Random();

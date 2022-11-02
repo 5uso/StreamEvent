@@ -20,10 +20,15 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 import suso.event_base.custom.blocks.CustomBlocks;
 
 public class PrimaticaPowerupBlockEntity extends BlockEntity implements IAnimatable {
+    public enum Powerups {
+        AGILITY, BRIDGE, GRAVITY, EMP, ARROW, GUNK
+    }
+
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     private boolean spawned = false;
     private boolean collected = false;
+    public Powerups type = Powerups.AGILITY;
 
     public PrimaticaPowerupBlockEntity(BlockPos pos, BlockState state) {
         super(CustomBlocks.PRIMATICA_POWERUP_ENTITY, pos, state);
@@ -63,6 +68,7 @@ public class PrimaticaPowerupBlockEntity extends BlockEntity implements IAnimata
     @Override
     public void writeNbt(NbtCompound nbt) {
         nbt.putBoolean("collected", collected);
+        nbt.putByte("type", (byte) type.ordinal());
         super.writeNbt(nbt);
     }
 
@@ -70,6 +76,7 @@ public class PrimaticaPowerupBlockEntity extends BlockEntity implements IAnimata
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
         collected = nbt.getBoolean("collected");
+        type = Powerups.values()[nbt.getByte("type")];
     }
 
     @Nullable @Override

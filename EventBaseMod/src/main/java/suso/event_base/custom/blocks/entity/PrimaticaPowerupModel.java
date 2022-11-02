@@ -18,7 +18,16 @@ public class PrimaticaPowerupModel extends AnimatedGeoModel<PrimaticaPowerupBloc
 
     @Override
     public Identifier getTextureResource(PrimaticaPowerupBlockEntity object) {
-        return new Identifier("suso:textures/block/primatica_powerup.png");
+        String id = switch (object.type) {
+            case AGILITY -> "suso:textures/block/primatica_powerup/agility.png";
+            case EMP -> "suso:textures/block/primatica_powerup/emp.png";
+            case GUNK -> "suso:textures/block/primatica_powerup/gunk.png";
+            case ARROW -> "suso:textures/block/primatica_powerup/arrow.png";
+            case BRIDGE -> "suso:textures/block/primatica_powerup/bridge.png";
+            case GRAVITY -> "suso:textures/block/primatica_powerup/gravity.png";
+        };
+
+        return new Identifier(id);
     }
 
     @Override
