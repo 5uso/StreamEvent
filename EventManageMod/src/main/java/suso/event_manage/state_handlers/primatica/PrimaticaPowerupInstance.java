@@ -130,7 +130,7 @@ public class PrimaticaPowerupInstance implements TickableInstance {
             for(int j = 0; j < 10; j++) {
                 if(!w.getBlockState(r).isAir()) break;
                 if(w.getBlockState(r.down()).isIn(floor_tag)) {
-                    Vec3d vpos = Vec3d.ofCenter(r);
+                    final Vec3d vpos = Vec3d.ofCenter(r);
                     boolean occupied = positions.stream().anyMatch(pos -> {
                         Vec3d diff = pos.subtract(vpos);
                         return Math.abs(diff.y) < 3.0 && diff.horizontalLength() < 10.0;

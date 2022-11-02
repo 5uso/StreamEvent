@@ -1,6 +1,7 @@
 package suso.event_manage.state_handlers.primatica;
 
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.particle.DustParticleEffect;
@@ -70,7 +71,8 @@ public class PrimaticaEMPInstance implements TickableInstance {
     public boolean tick() {
         if(--ticksLeft < 0) return true;
 
-        for(ServerPlayerEntity player : world.getPlayers()) {
+        List<ServerPlayerEntity> players = world.getPlayers();
+        for(ServerPlayerEntity player : players) {
             if(player.isSpectator()) continue;
 
             if(!player.isTeamPlayer(team)) {
@@ -96,6 +98,15 @@ public class PrimaticaEMPInstance implements TickableInstance {
             volume *= Math.min(1.0f, (float)ticksLeft / 20.0f);
             info.increaseHologramVolume(volume);
         }
+
+        world.getEntitiesByType(EntityType.ARROW, e -> e.getPos().distanceTo(position) < 4.5 && (e.getOwner() == null || !e.getOwner().isTeamPlayer(team))).forEach(e -> {
+            Vec3d motion = e.getVelocity();
+            Vec3d target = e.getPos().subtract(position).normalize();
+            if(MiscUtil.vec3Angle(motion, target) > 30.0) {
+                e.setVelocity(e.getPos().subtract(position).normalize());
+                SoundUtil.playSound(players, new Identifier("minecraft:block.end_portal_frame.fill"), SoundCategory.BLOCKS, position, 1.0f, 0.5f);
+            }
+        });
 
         /*
         //Particle sphere
