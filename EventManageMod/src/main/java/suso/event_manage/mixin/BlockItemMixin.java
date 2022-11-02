@@ -30,12 +30,10 @@ public class BlockItemMixin {
 
             if(mode == GameMode.ADVENTURE && !f.isEmpty() && !f.isStill()) {
                 cir.setReturnValue(ActionResult.FAIL);
-                cir.cancel();
             }
 
             if(EventManager.getInstance().onPlayerPlacedBlock(player, context)) {
                 cir.setReturnValue(ActionResult.FAIL);
-                cir.cancel();
             }
         }
     }
