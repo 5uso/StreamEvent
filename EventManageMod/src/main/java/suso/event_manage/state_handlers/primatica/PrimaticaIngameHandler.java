@@ -428,7 +428,7 @@ public class PrimaticaIngameHandler implements StateHandler {
     @Override
     public boolean onPlayerPlacedBlock(ServerPlayerEntity player, EventPlayerData data, ItemPlacementContext context) {
         final Box cube = new Box(context.getBlockPos());
-        return PrimaticaEMPInstance.positions.entrySet().stream().anyMatch(p -> !player.isTeamPlayer(p.getValue()) && MiscUtil.distance(cube, p.getKey()) < 3.0);
+        return PrimaticaEMPInstance.positions.entrySet().stream().anyMatch(p -> !player.isTeamPlayer(p.getValue().getScoreboardTeam()) && MiscUtil.distance(cube, p.getKey()) < 3.0);
     }
 
     @Override
