@@ -1,0 +1,31 @@
+{
+    "values": [
+        "#c:glass_panes",
+        "#minecraft:wool_carpets",
+        "#minecraft:buttons",
+        "#minecraft:fences",
+        "#minecraft:fence_gates",
+        "#minecraft:trapdoors",
+        "#minecraft:tall_flowers",
+        "#minecraft:coral_plants",
+        "#minecraft:wall_corals",
+        "#minecraft:slabs",
+        "#minecraft:flowers",
+        "#minecraft:flower_pots",
+        "#minecraft:signs",
+        "#minecraft:walls",
+        "minecraft:water",
+        "minecraft:lily_pad",
+        "minecraft:rail",
+        "minecraft:barrier",
+        "minecraft:end_rod",
+        "minecraft:lever",
+        "minecraft:iron_door",
+        "minecraft:ladder",
+        "minecraft:dead_fire_coral",
+        "minecraft:dead_horn_coral",
+        "minecraft:dead_horn_coral_fan",
+        "minecraft:sea_pickle",
+        "minecraft:light"
+    ]
+}

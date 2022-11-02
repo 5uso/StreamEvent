@@ -1,6 +1,7 @@
 package suso.event_manage.state_handlers.primatica;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.projectile.thrown.SnowballEntity;
 import net.minecraft.item.ItemStack;
@@ -14,6 +15,7 @@ import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -75,6 +77,7 @@ public class PrimaticaGunkInstance implements TickableInstance {
         }
 
         BlockPos impactPos = entity.getBlockPos();
+        TagKey<Block> safeTag = TagKey.of(Registry.BLOCK_KEY, new Identifier("suso:gunk_safe"));
 
         Vec3d center = new Vec3d(impactPos.getX(), impactPos.getY(), impactPos.getZ()).add(0.5, 0.5, 0.5);
         for(double a = 0.0; a < 2.0 * Math.PI; a += 0.025 * Math.PI) {
@@ -85,7 +88,7 @@ public class PrimaticaGunkInstance implements TickableInstance {
             for(double dist = 0.0; dist < shape; dist += 0.1) {
                 temp = temp.add(direction);
                 BlockPos gaming = searchY(new BlockPos(temp));
-                if(gaming != null) placeGunk(gaming, 250 - (int)(dist * 10.0));
+                if(gaming != null) placeGunk(gaming, 250 - (int)(dist * 10.0), safeTag);
             }
         }
 
@@ -110,11 +113,11 @@ public class PrimaticaGunkInstance implements TickableInstance {
         entity.kill();
     }
 
-    private void placeGunk(BlockPos pos, int length) {
+    private void placeGunk(BlockPos pos, int length, TagKey<Block> cantReplace) {
         sendTicksLeft = length;
         previous = world.getBlockState(pos);
 
-        if(previous.hasBlockEntity()) {
+        if(previous.hasBlockEntity() || previous.isIn(cantReplace)) {
             if(world.getBlockEntity(pos) instanceof GunkBlockEntity be) {
                 previous = be.getPrevious();
             } else return;
