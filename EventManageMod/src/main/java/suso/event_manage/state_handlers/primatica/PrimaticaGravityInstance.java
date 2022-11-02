@@ -8,6 +8,7 @@ import net.minecraft.nbt.NbtInt;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -18,6 +19,7 @@ import suso.event_manage.util.MiscUtil;
 import suso.event_manage.util.SoundUtil;
 
 import java.util.List;
+import java.util.Map;
 
 public class PrimaticaGravityInstance implements TickableInstance {
     private SnowballEntity entity;
@@ -53,6 +55,17 @@ public class PrimaticaGravityInstance implements TickableInstance {
     public boolean tick() {
         if(++time > 115) return true;
         if(entity.isRemoved() && respawnEntity()) return true;
+
+        if(empDistance() < 3.1) {
+            List<ServerPlayerEntity> players = world.getPlayers();
+            SoundUtil.playSound(players, new Identifier("minecraft:block.end_portal_frame.fill"), SoundCategory.PLAYERS, entity.getPos(), 2.0f, 2.0f);
+            SoundUtil.playSound(players, new Identifier("minecraft:block.end_portal_frame.fill"), SoundCategory.PLAYERS, entity.getPos(), 1.3f, 0.5f);
+            entity.setItem(getItem(0, true));
+            entity.setVelocity(entity.getVelocity().multiply(-0.1));
+            entity.setNoGravity(false);
+            entity = null;
+            return true;
+        }
 
         if(time < 6) {
             world.spawnParticles(ParticleTypes.ASH, entity.getX(), entity.getY(), entity.getZ(), 3, 0.01, 0.01, 0.01, 0.1);
@@ -105,7 +118,7 @@ public class PrimaticaGravityInstance implements TickableInstance {
 
     @Override
     public void remove() {
-        entity.kill();
+        if(entity != null) entity.kill();
     }
 
     private void ownerPhysics(ServerPlayerEntity player, Vec3d playerPos, Vec3d pos, double distance, PrimaticaPlayerInfo info) {
@@ -182,5 +195,18 @@ public class PrimaticaGravityInstance implements TickableInstance {
         if(inactive) color |= 0x800000;
         nbt.getCompound("tag").getCompound("display").put("color", NbtInt.of(color));
         return ItemStack.fromNbt(nbt);
+    }
+
+    private double empDistance() {
+        double r = 500.0;
+        AbstractTeam team = owner.getScoreboardTeam();
+        Vec3d position = entity.getPos();
+        for (Map.Entry<Vec3d, AbstractTeam> p : PrimaticaEMPInstance.positions.entrySet()) {
+            if(p.getValue().equals(team)) continue;
+
+            double d = p.getKey().distanceTo(position);
+            if(d < r) r = d;
+        }
+        return r;
     }
 }

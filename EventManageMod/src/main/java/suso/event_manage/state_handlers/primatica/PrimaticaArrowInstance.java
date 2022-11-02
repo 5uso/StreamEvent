@@ -121,7 +121,7 @@ public class PrimaticaArrowInstance implements TickableInstance {
         double r = 500.0;
         for (Map.Entry<Vec3d, AbstractTeam> p : PrimaticaEMPInstance.positions.entrySet()) {
             if(p.getValue().equals(team)) continue;
-            
+
             double d = p.getKey().distanceTo(position);
             if(d < r) {
                 r = d;
