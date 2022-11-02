@@ -142,7 +142,7 @@ public class PrimaticaInfo {
     }
 
 
-    private static Random random = new Random();
+    private static final Random random = new Random();
     public static BlockPos getPowerupPosition(ServerWorld w) {
         for(int i = 0; i < 10; i++) {
             int x = random.nextInt(-75, 76);
