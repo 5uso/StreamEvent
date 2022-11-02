@@ -2,9 +2,12 @@ package suso.event_base.custom.blocks;
 
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.registry.Registry;
+import suso.event_base.custom.blocks.entity.GunkBlockEntity;
 
 public class CustomBlocks {
     public static Block GRAY_HOLOBLOCK;
@@ -43,9 +46,14 @@ public class CustomBlocks {
     public static Block YELLOW_GUNK;
     public static Block ORANGE_GUNK;
     public static Block RED_GUNK;
+    public static BlockEntityType<GunkBlockEntity> GUNK_ENTITY;
 
     private static Block register(String id, Block block) {
         return Registry.register(Registry.BLOCK, id, block);
+    }
+
+    private static <T extends BlockEntity> BlockEntityType<T> register(String id, BlockEntityType<T> blockEntity) {
+        return Registry.register(Registry.BLOCK_ENTITY_TYPE, id, blockEntity);
     }
 
     public static void register() {
@@ -87,5 +95,7 @@ public class CustomBlocks {
         YELLOW_GUNK = register("suso:yellow_gunk", new Block(FabricBlockSettings.of(Material.ORGANIC_PRODUCT, MapColor.YELLOW).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)));
         ORANGE_GUNK = register("suso:orange_gunk", new Block(FabricBlockSettings.of(Material.ORGANIC_PRODUCT, MapColor.ORANGE).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)));
         RED_GUNK = register("suso:red_gunk", new Block(FabricBlockSettings.of(Material.ORGANIC_PRODUCT, MapColor.RED).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)));
+
+        GUNK_ENTITY = register("suso:gunk_entity", FabricBlockEntityTypeBuilder.create(GunkBlockEntity::new, GRAY_GUNK, WHITE_GUNK, PINK_GUNK, PURPLE_GUNK, BLUE_GUNK, CYAN_GUNK, LIGHT_BLUE_GUNK, GREEN_GUNK, LIME_GUNK, YELLOW_GUNK, ORANGE_GUNK, RED_GUNK).build());
     }
 }

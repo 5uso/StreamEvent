@@ -46,7 +46,7 @@ public class CustomBlocks {
     public static Block YELLOW_GUNK;
     public static Block ORANGE_GUNK;
     public static Block RED_GUNK;
-    public static BlockEntityType<GunkBlockEntity> GUNK_BLOCK_ENTITY;
+    public static BlockEntityType<GunkBlockEntity> GUNK_ENTITY;
 
     private static Block register(String id, Block block) {
         return Registry.register(Registry.BLOCK, id, block);
@@ -96,6 +96,6 @@ public class CustomBlocks {
         ORANGE_GUNK = register("suso:orange_gunk", new GunkBlock(FabricBlockSettings.of(Material.ORGANIC_PRODUCT, MapColor.ORANGE).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)));
         RED_GUNK = register("suso:red_gunk", new GunkBlock(FabricBlockSettings.of(Material.ORGANIC_PRODUCT, MapColor.RED).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)));
 
-        GUNK_BLOCK_ENTITY = register("suso:gunk_block_entity", FabricBlockEntityTypeBuilder.create(GunkBlockEntity::new, GRAY_GUNK, WHITE_GUNK, PINK_GUNK, PURPLE_GUNK, BLUE_GUNK, CYAN_GUNK, LIGHT_BLUE_GUNK, GREEN_GUNK, LIME_GUNK, YELLOW_GUNK, ORANGE_GUNK, RED_GUNK).build());
+        GUNK_ENTITY = register("suso:gunk_entity", FabricBlockEntityTypeBuilder.create(GunkBlockEntity::new, GRAY_GUNK, WHITE_GUNK, PINK_GUNK, PURPLE_GUNK, BLUE_GUNK, CYAN_GUNK, LIGHT_BLUE_GUNK, GREEN_GUNK, LIME_GUNK, YELLOW_GUNK, ORANGE_GUNK, RED_GUNK).build());
     }
 }

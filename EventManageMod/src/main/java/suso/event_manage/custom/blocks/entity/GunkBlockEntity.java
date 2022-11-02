@@ -1,4 +1,4 @@
-package suso.event_manage.custom.blocks;
+package suso.event_manage.custom.blocks.entity;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -9,6 +9,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+import suso.event_manage.custom.blocks.CustomBlocks;
 import suso.event_manage.state_handlers.primatica.PrimaticaGunkInstance;
 
 public class GunkBlockEntity extends BlockEntity {
@@ -16,7 +17,7 @@ public class GunkBlockEntity extends BlockEntity {
     private int ticksLeft;
 
     public GunkBlockEntity(BlockPos pos, BlockState state) {
-        super(CustomBlocks.GUNK_BLOCK_ENTITY, pos, state);
+        super(CustomBlocks.GUNK_ENTITY, pos, state);
 
         previous = PrimaticaGunkInstance.previous == null ? Registry.BLOCK.get(new Identifier("air")).getDefaultState() : PrimaticaGunkInstance.previous;
         ticksLeft = PrimaticaGunkInstance.sendTicksLeft;
