@@ -1,5 +1,6 @@
 package suso.event_manage.state_handlers.primatica;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.particle.DustParticleEffect;
@@ -114,7 +115,7 @@ public class PrimaticaEMPInstance implements TickableInstance {
     @Override
     public void remove() {
         ticksLeft = 0;
-        world.setBlockState(pos, Registry.BLOCK.get(new Identifier("minecraft:air")).getDefaultState());
+        world.setBlockState(pos, Blocks.AIR.getDefaultState());
         world.getPlayers().forEach(p -> ShaderUtil.unsetBlockColor(p, pos));
     }
 }
