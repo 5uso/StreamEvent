@@ -313,16 +313,20 @@ public class PrimaticaIngameHandler implements StateHandler {
 
         float speed = ((float) player.getVelocity().length() - 0.5f) / 3.0f;
         speed = Math.min(Math.max(0.0f, speed), 2.0f);
-        SoundUtil.updateFadeVolume(player, new Identifier("suso:falling"), speed, 0);
-
         float heart = 1.0f - Math.min(player.getHealth(), 14.0f) / 14.0f;
+
+        if(player.isDead()) {
+            speed = 0.0f;
+            heart = 0.0f;
+        }
+
+        SoundUtil.updateFadeVolume(player, new Identifier("suso:falling"), speed, 0);
         SoundUtil.updateFadeVolume(player, new Identifier("suso:heartbeat"), heart, 0);
         SoundUtil.updateFadePitch(player, new Identifier("suso:heartbeat"), heart + 0.8f, 0);
-
         SoundUtil.updateFadeVolume(player, new Identifier("suso:hologram"), info.hologramVolume, 0);
-        info.hologramVolume = 0.0f;
-
         SoundUtil.updateFadeVolume(player, new Identifier("suso:gravity"), info.gravityVolume, 0);
+
+        info.hologramVolume = 0.0f;
         info.gravityVolume = 0.0f;
 
         if(info.isChargingBow && !player.isUsingItem()) {
