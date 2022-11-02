@@ -26,7 +26,7 @@ import java.util.Map;
 
 public class PrimaticaEMPInstance implements TickableInstance {
     private static final int DURATION = 200;
-    public static final Map<Vec3d, AbstractTeam> positions = new HashMap<>();
+    public static final Map<Vec3d, ServerPlayerEntity> positions = new HashMap<>();
 
     private final ServerWorld world;
     private final AbstractTeam team;
@@ -69,7 +69,7 @@ public class PrimaticaEMPInstance implements TickableInstance {
             if(distance < 1.0) p.damage(DamageSource.sonicBoom(player), (float) (1.0 - distance) * 6.0f + 10.0f);
         });
 
-        positions.put(position, team);
+        positions.put(position, player);
     }
 
     @Override

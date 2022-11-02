@@ -201,8 +201,8 @@ public class PrimaticaGravityInstance implements TickableInstance {
         double r = 500.0;
         AbstractTeam team = owner.getScoreboardTeam();
         Vec3d position = entity.getPos();
-        for (Map.Entry<Vec3d, AbstractTeam> p : PrimaticaEMPInstance.positions.entrySet()) {
-            if(p.getValue().equals(team)) continue;
+        for (Map.Entry<Vec3d, ServerPlayerEntity> p : PrimaticaEMPInstance.positions.entrySet()) {
+            if(p.getValue().getScoreboardTeam() != null && p.getValue().getScoreboardTeam().equals(team)) continue;
 
             double d = p.getKey().distanceTo(position);
             if(d < r) r = d;

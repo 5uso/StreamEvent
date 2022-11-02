@@ -26,13 +26,13 @@ import java.util.Map;
 public class PrimaticaArrowInstance implements TickableInstance {
     private static final double STEP_SIZE = 0.1;
 
-    private final ServerPlayerEntity owner;
     private final ServerWorld world;
-    private final AbstractTeam team;
+    private ServerPlayerEntity owner;
+    private AbstractTeam team;
 
     private Vec3d direction;
     private Vec3d position;
-    private Vec3d closestEMP;
+    private Map.Entry<Vec3d, ServerPlayerEntity> closestEMP;
 
     public PrimaticaArrowInstance(ServerPlayerEntity owner) {
         this.owner = owner;
@@ -67,8 +67,13 @@ public class PrimaticaArrowInstance implements TickableInstance {
             if(empDist < 3.1) {
                 empDist = empDistance();
                 if(empDist < 3.1) {
-                    direction = position.subtract(closestEMP).normalize().multiply(STEP_SIZE);
+                    direction = position.subtract(closestEMP.getKey()).normalize().multiply(STEP_SIZE);
                     SoundUtil.playSound(players, new Identifier("minecraft:block.end_portal_frame.fill"), SoundCategory.BLOCKS, position, 3.0f, 0.7f);
+
+                    if(closestEMP.getValue().getScoreboardTeam() != null) {
+                        team = closestEMP.getValue().getScoreboardTeam();
+                        owner = closestEMP.getValue();
+                    }
                 }
             }
 
@@ -119,13 +124,13 @@ public class PrimaticaArrowInstance implements TickableInstance {
 
     private double empDistance() {
         double r = 500.0;
-        for (Map.Entry<Vec3d, AbstractTeam> p : PrimaticaEMPInstance.positions.entrySet()) {
-            if(p.getValue().equals(team)) continue;
+        for (Map.Entry<Vec3d, ServerPlayerEntity> p : PrimaticaEMPInstance.positions.entrySet()) {
+            if(p.getValue().getScoreboardTeam() != null && p.getValue().getScoreboardTeam().equals(team)) continue;
 
             double d = p.getKey().distanceTo(position);
             if(d < r) {
                 r = d;
-                closestEMP = p.getKey();
+                closestEMP = p;
             }
         }
         return r;
