@@ -50,7 +50,7 @@ public class PrimaticaArrowInstance implements TickableInstance {
         SoundUtil.playSound(players, new Identifier("minecraft:item.trident.throw"), SoundCategory.PLAYERS, position, 1.0f, 2.0f);
         SoundUtil.playSound(players, new Identifier("suso:bow.swoosh"), SoundCategory.PLAYERS, position, 1.0f, 1.0f);
 
-        MiscUtil.flashSky(209, -5);
+        MiscUtil.flashSky(0, 0);
     }
 
     @Override
