@@ -107,8 +107,8 @@ public class PrimaticaEMPInstance implements TickableInstance {
         world.getEntitiesByType(EntityType.ARROW, e -> e.getPos().distanceTo(position) < 4.5 && (e.getOwner() == null || !e.getOwner().isTeamPlayer(team))).forEach(e -> {
             Vec3d motion = e.getVelocity();
             Vec3d target = e.getPos().subtract(position).normalize();
-            if(MiscUtil.vec3Angle(motion, target) > 30.0) {
-                e.setVelocity(e.getPos().subtract(position).normalize());
+            if(MiscUtil.vec3Angle(motion, target) > 0.55) {
+                e.setVelocity(target);
                 SoundUtil.playSound(players, new Identifier("minecraft:block.end_portal_frame.fill"), SoundCategory.BLOCKS, position, 1.0f, 0.5f);
             }
         });
