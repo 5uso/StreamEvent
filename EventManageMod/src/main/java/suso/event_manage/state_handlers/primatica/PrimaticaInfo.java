@@ -1,13 +1,14 @@
 package suso.event_manage.state_handlers.primatica;
 
+import com.google.common.collect.ImmutableMap;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.StringNbtReader;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Vec3d;
 import suso.event_manage.util.RndSet;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
 public class PrimaticaInfo {
@@ -162,21 +163,20 @@ public class PrimaticaInfo {
     }
 
 
-    private static final Map<Integer, String> colorCorrespondence = new HashMap<>();
-    static {
-        colorCorrespondence.put(7, "gray");
-        colorCorrespondence.put(15, "white");
-        colorCorrespondence.put(13, "pink");
-        colorCorrespondence.put(5, "purple");
-        colorCorrespondence.put(9, "blue");
-        colorCorrespondence.put(3, "cyan");
-        colorCorrespondence.put(11, "light_blue");
-        colorCorrespondence.put(2, "green");
-        colorCorrespondence.put(10, "lime");
-        colorCorrespondence.put(14, "yellow");
-        colorCorrespondence.put(6, "orange");
-        colorCorrespondence.put(4, "red");
-    }
+    private static final Map<Integer, String> colorCorrespondence = ImmutableMap.<Integer, String>builder()
+            .put(Formatting.GRAY.getColorIndex(), "gray")
+            .put(Formatting.WHITE.getColorIndex(), "white")
+            .put(Formatting.LIGHT_PURPLE.getColorIndex(), "pink")
+            .put(Formatting.DARK_PURPLE.getColorIndex(), "purple")
+            .put(Formatting.BLUE.getColorIndex(), "blue")
+            .put(Formatting.DARK_AQUA.getColorIndex(), "cyan")
+            .put(Formatting.AQUA.getColorIndex(), "light_blue")
+            .put(Formatting.DARK_GREEN.getColorIndex(), "green")
+            .put(Formatting.GREEN.getColorIndex(), "lime")
+            .put(Formatting.YELLOW.getColorIndex(), "yellow")
+            .put(Formatting.GOLD.getColorIndex(), "orange")
+            .put(Formatting.DARK_RED.getColorIndex(), "red")
+            .build();
 
     public static String getCorrespondingGunk(int colorIndex) {
         return "suso:" + colorCorrespondence.get(colorIndex) + "_gunk";
