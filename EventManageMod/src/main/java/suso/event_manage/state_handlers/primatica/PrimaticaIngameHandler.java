@@ -3,7 +3,6 @@ package suso.event_manage.state_handlers.primatica;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -12,7 +11,10 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtInt;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtString;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleTypes;
@@ -78,20 +80,8 @@ public class PrimaticaIngameHandler implements StateHandler {
         prepare();
     }
 
-    private void killEntities() {
-        MinecraftServer server = EventManager.getInstance().getServer();
-
-        List<? extends Entity> snowballList = server.getOverworld().getEntitiesByType(EntityType.SNOWBALL, e -> true);
-        snowballList.forEach(Entity::kill);
-
-        List<? extends Entity> armorStandList = server.getOverworld().getEntitiesByType(EntityType.ARMOR_STAND, e -> e.getScoreboardTags().contains("primatica_powerup"));
-        armorStandList.forEach(Entity::kill);
-    }
-
     private void prepare() {
         MinecraftServer server = EventManager.getInstance().getServer();
-
-        killEntities();
 
         EventData edata = EventData.getInstance();
         server.getPlayerManager().getPlayerList().forEach(player -> onPlayerJoin(player, Objects.requireNonNull(edata.getPlayerData(player))));
@@ -525,7 +515,10 @@ public class PrimaticaIngameHandler implements StateHandler {
     public void cleanup() {
         MinecraftServer server = EventManager.getInstance().getServer();
 
-        killEntities();
+        tickables.removeIf(t -> {
+            t.remove();
+            return true;
+        });
 
         for(ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
             InventoryUtil.clearPLayer(player);
