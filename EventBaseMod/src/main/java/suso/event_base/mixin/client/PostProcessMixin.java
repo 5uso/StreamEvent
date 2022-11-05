@@ -3,10 +3,13 @@ package suso.event_base.mixin.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.GlUniform;
 import net.minecraft.client.gl.JsonEffectGlShader;
 import net.minecraft.client.gl.PostProcessShader;
 import net.minecraft.client.gl.Uniform;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.client.render.GameRenderer;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -45,5 +48,9 @@ public class PostProcessMixin {
 
         this.program.getUniformByNameOrDummy("GameTime").set(RenderSystem.getShaderGameTime());
         this.program.getUniformByNameOrDummy("SysTime").set((int)System.currentTimeMillis() % 0x80000000);
+
+        MinecraftClient client = MinecraftClient.getInstance();
+        double fov = client.gameRenderer.getFov(client.gameRenderer.getCamera(), client.getTickDelta(), true);
+        this.program.getUniformByNameOrDummy("FOV").set((float) fov);
     }
 }
