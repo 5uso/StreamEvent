@@ -35,6 +35,7 @@ import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.GameMode;
 import org.jetbrains.annotations.Nullable;
 import suso.event_manage.EventManager;
+import suso.event_manage.ModCheck;
 import suso.event_manage.data.EventData;
 import suso.event_manage.data.EventPlayerData;
 import suso.event_manage.state_handlers.PlayerScheduleInstance;
@@ -65,7 +66,7 @@ public class PrimaticaIngameHandler implements StateHandler {
 
     public PrimaticaIngameHandler(long durationMillis) {
         this.durationMillis = durationMillis;
-        this.startMillis = System.currentTimeMillis();
+        this.startMillis = ModCheck.getTime();
 
         this.orbLocations = new HashSet<>();
         this.orbTarget = 10;
@@ -105,7 +106,7 @@ public class PrimaticaIngameHandler implements StateHandler {
         PrimaticaInfo.Powerups type = PrimaticaInfo.Powerups.values()[r.nextInt(possible)];
         tickables.add(new PrimaticaPowerupInstance(world, pos, type, this));
         double delayFactor = (double) powerupAmount / powerupTarget;
-        nextPowerupMillis = System.currentTimeMillis() + r.nextLong(5, 6 + (long)(20000 * delayFactor*delayFactor*delayFactor));
+        nextPowerupMillis = ModCheck.getTime() + r.nextLong(5, 6 + (long)(20000 * delayFactor*delayFactor*delayFactor));
     }
 
     public int getTeamScore(AbstractTeam team) {
@@ -270,7 +271,7 @@ public class PrimaticaIngameHandler implements StateHandler {
         MinecraftServer server = manager.getServer();
 
         ServerWorld w = server.getOverworld();
-        long currTime = System.currentTimeMillis();
+        long currTime = ModCheck.getTime();
 
         leftMillis = (startMillis + durationMillis) - currTime;
 

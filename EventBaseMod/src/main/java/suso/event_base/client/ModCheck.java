@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientLoginNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientLoginNetworkHandler;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.util.Util;
 import suso.event_base.EvtBaseConstants;
 
 import java.util.concurrent.CompletableFuture;
@@ -20,6 +21,14 @@ public class ModCheck {
     }
 
     private static CompletableFuture<PacketByteBuf> handleLoginQuery(MinecraftClient client, ClientLoginNetworkHandler handler, PacketByteBuf buf, Consumer<GenericFutureListener<? extends Future<? super Void>>> listenerAdder) {
+        long serverTime = buf.readLong();
+        offset = serverTime - Util.getMeasuringTimeMs();
+
         return CompletableFuture.completedFuture(buf);
+    }
+
+    private static long offset = 0;
+    public static long getTime() {
+        return Util.getMeasuringTimeMs() + offset;
     }
 }

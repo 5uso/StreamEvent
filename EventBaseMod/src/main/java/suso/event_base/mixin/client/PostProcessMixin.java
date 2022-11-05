@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import suso.event_base.client.ModCheck;
 import suso.event_base.client.shader.CustomUniformStore;
 import suso.event_base.client.shader.IGlUniformUtil;
 
@@ -47,7 +48,7 @@ public class PostProcessMixin {
         }
 
         this.program.getUniformByNameOrDummy("GameTime").set(RenderSystem.getShaderGameTime());
-        this.program.getUniformByNameOrDummy("SysTime").set((int)System.currentTimeMillis() % 0x80000000);
+        this.program.getUniformByNameOrDummy("SysTime").set((int)ModCheck.getTime() % 0x80000000);
 
         MinecraftClient client = MinecraftClient.getInstance();
         double fov = client.gameRenderer.getFov(client.gameRenderer.getCamera(), client.getTickDelta(), true);
