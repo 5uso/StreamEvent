@@ -47,6 +47,7 @@ public class PrimaticaOrbInstance implements TickableInstance {
         world.spawnEntity(entity);
 
         handler.orbLocations.add(pos);
+        clearSphere();
     }
 
     @Override
@@ -112,5 +113,17 @@ public class PrimaticaOrbInstance implements TickableInstance {
                 p.damage(DamageSource.explosion(player), (float)(1.0 - distance) * 4.0f + 4.0f);
             }
         });
+    }
+
+    private void clearSphere() {
+        TagKey<Block> breakable = TagKey.of(Registry.BLOCK_KEY, new Identifier("suso:primatica_breakable"));
+        for(float yaw = 0.0f; yaw < 359.0f; yaw += 10.0f) {
+            for(float pitch = -90.0f; pitch < 91.0f; pitch += 15.0f) {
+                for(float d = 0.4f; d < 6.5f; d += 0.5f) {
+                    BlockPos t = new BlockPos(pos.add(Vec3d.fromPolar(pitch, yaw).multiply(d)));
+                    if(world.getBlockState(t).isIn(breakable)) world.setBlockState(t, Blocks.AIR.getDefaultState());
+                }
+            }
+        }
     }
 }
