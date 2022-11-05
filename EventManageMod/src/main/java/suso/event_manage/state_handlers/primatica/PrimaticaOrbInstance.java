@@ -53,7 +53,7 @@ public class PrimaticaOrbInstance implements TickableInstance {
     public boolean tick() {
         if(entity.isRemoved()) return true;
 
-        world.spawnParticles(new DustParticleEffect(new Vec3f(1.0f, 1.0f, 1.0f), 1.0f), entity.getX(), entity.getY() + 0.3, entity.getZ(), 1, 0.2, 0.2, 0.2, 0.0);
+        world.spawnParticles(new DustParticleEffect(new Vec3f(1.0f, 1.0f, 1.0f), 1.0f), pos.x, pos.y + 0.3, pos.z, 1, 0.2, 0.2, 0.2, 0.0);
 
         PlayerEntity player = world.getClosestPlayer(entity, 20.0);
         MinecraftServer server = world.getServer();

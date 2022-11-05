@@ -51,7 +51,7 @@ public class PrimaticaPowerupInstance implements TickableInstance {
         }
         positions.add(position);
 
-        SoundUtil.playSound(world.getPlayers(), new Identifier("minecraft:entity.firework_rocket.twinkle"), SoundCategory.PLAYERS, position, 1.0f, 0.5f);
+        SoundUtil.playSound(world.getPlayers(), new Identifier("minecraft:block.beehive.exit"), SoundCategory.PLAYERS, position, 1.0f, 2.0f);
     }
 
     @Override
