@@ -4,6 +4,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import suso.event_base.client.debug.DebugCommands;
 import suso.event_base.custom.blocks.CustomBlocks;
+import suso.event_base.custom.entities.CustomEntities;
 import suso.event_base.custom.items.CustomItems;
 
 public class Event_base implements ModInitializer {
@@ -15,5 +16,6 @@ public class Event_base implements ModInitializer {
 
         CustomBlocks.register();
         CustomItems.register();
+        CustomEntities.register();
     }
 }
