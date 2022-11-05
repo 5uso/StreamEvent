@@ -47,12 +47,6 @@ public class PrimaticaOrbInstance implements TickableInstance {
     public boolean tick() {
         if(entity.isRemoved()) return true;
 
-        if(entity.getVelocity().length() > 0.0) {
-            entity.setVelocity(Vec3d.ZERO);
-            entity.setPosition(pos);
-            world.getPlayers().forEach(p -> p.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(entity)));
-        }
-
         world.spawnParticles(new DustParticleEffect(new Vec3f(1.0f, 1.0f, 1.0f), 1.0f), entity.getX(), entity.getY() + 0.3, entity.getZ(), 1, 0.2, 0.2, 0.2, 0.0);
 
         PlayerEntity player = world.getClosestPlayer(entity, 20.0);
