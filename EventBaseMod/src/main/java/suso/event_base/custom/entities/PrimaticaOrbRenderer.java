@@ -17,9 +17,6 @@ public class PrimaticaOrbRenderer extends GeoEntityRenderer<PrimaticaOrbEntity> 
     }
 
     private static final int TRANSITION_DURATION = 300;
-    private Color previousColor = Color.WHITE;
-    private boolean transitioningColor = false;
-    private long transitionStartMs = 0;
 
     @Override
     public RenderLayer getRenderType(PrimaticaOrbEntity animatable, float partialTick, MatrixStack poseStack, @Nullable VertexConsumerProvider bufferSource, @Nullable VertexConsumer buffer, int packedLight, Identifier texture) {
@@ -29,23 +26,23 @@ public class PrimaticaOrbRenderer extends GeoEntityRenderer<PrimaticaOrbEntity> 
     @Override
     public Color getRenderColor(PrimaticaOrbEntity animatable, float partialTick, MatrixStack poseStack, @Nullable VertexConsumerProvider bufferSource, @Nullable VertexConsumer buffer, int packedLight) {
         Color current = Color.ofOpaque(animatable.getTeamColorValue());
-        if(!transitioningColor && !previousColor.equals(current)) {
-            transitionStartMs = Util.getMeasuringTimeMs();
-            transitioningColor = true;
+        if(!animatable.transitioningColor && !animatable.previousColor.equals(current)) {
+            animatable.transitionStartMs = Util.getMeasuringTimeMs();
+            animatable.transitioningColor = true;
         }
 
-        if(transitioningColor) {
-            double progress = (float)(Util.getMeasuringTimeMs() - transitionStartMs) / TRANSITION_DURATION;
+        if(animatable.transitioningColor) {
+            double progress = (float)(Util.getMeasuringTimeMs() - animatable.transitionStartMs) / TRANSITION_DURATION;
             if(progress >= 1.0) {
-                transitioningColor = false;
-                previousColor = current;
+                animatable.transitioningColor = false;
+                animatable.previousColor = current;
                 return current;
             }
 
             double prev = 1.0 - progress;
-            current = Color.ofRGB((int)(current.getRed() * progress + previousColor.getRed() * prev),
-                                  (int)(current.getGreen() * progress + previousColor.getGreen() * prev),
-                                  (int)(current.getBlue() * progress + previousColor.getBlue() * prev));
+            current = Color.ofRGB((int)(current.getRed() * progress + animatable.previousColor.getRed() * prev),
+                                  (int)(current.getGreen() * progress + animatable.previousColor.getGreen() * prev),
+                                  (int)(current.getBlue() * progress + animatable.previousColor.getBlue() * prev));
         }
 
         return current;

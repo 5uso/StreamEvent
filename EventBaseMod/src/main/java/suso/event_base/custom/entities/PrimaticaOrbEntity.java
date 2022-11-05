@@ -17,6 +17,7 @@ import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.core.util.Color;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.ArrayList;
@@ -25,6 +26,10 @@ public class PrimaticaOrbEntity extends LivingEntity implements IAnimatable {
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     private boolean spawned = false;
+
+    protected Color previousColor = Color.WHITE;
+    protected boolean transitioningColor = false;
+    protected long transitionStartMs = 0;
 
     public PrimaticaOrbEntity(EntityType<? extends LivingEntity> type, World world) {
         super(type, world);
