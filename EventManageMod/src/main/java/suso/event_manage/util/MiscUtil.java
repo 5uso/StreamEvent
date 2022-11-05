@@ -1,8 +1,11 @@
 package suso.event_manage.util;
 
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LightningEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -15,6 +18,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import suso.event_manage.EventManager;
+import suso.event_manage.EvtBaseConstants;
 
 public class MiscUtil {
     public static double distance(Box rect, Vec3d p) {
@@ -50,5 +54,14 @@ public class MiscUtil {
         be.readNbt(nbt);
         be.markDirty();
         w.updateListeners(be.getPos(), blockState, blockState, 3);
+    }
+
+    public static void sendCustomEntityUpdate(Entity e, NbtCompound nbt) {
+        PacketByteBuf p = PacketByteBufs.create();
+        p.writeInt(e.getId());
+        p.writeNbt(nbt);
+        if(e.getWorld() instanceof ServerWorld sw) {
+            sw.getPlayers().forEach(player -> ServerPlayNetworking.send(player, EvtBaseConstants.ENTITY_UPDATE, p));
+        }
     }
 }

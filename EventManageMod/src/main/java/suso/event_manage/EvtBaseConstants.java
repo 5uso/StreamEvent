@@ -13,6 +13,8 @@ public class EvtBaseConstants {
 
     public static final Identifier FIREWORK_PARTICLE = new Identifier("suso:firework_particle");
 
+    public static final Identifier ENTITY_UPDATE = new Identifier("suso:entity_update");
+
     public static final Identifier JUMP_INPUT = new Identifier("suso:jump_input");
 
     public static final Identifier LOGIN_CHECK = new Identifier("suso:login_check");
