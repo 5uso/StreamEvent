@@ -1,7 +1,6 @@
 package suso.event_manage.state_handlers.primatica;
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.thrown.SnowballEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.particle.DustParticleEffect;
@@ -18,12 +17,13 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+import suso.event_manage.custom.entities.PrimaticaOrbEntity;
 import suso.event_manage.state_handlers.TickableInstance;
 import suso.event_manage.util.ParticleUtil;
 import suso.event_manage.util.SoundUtil;
 
 public class PrimaticaOrbInstance implements TickableInstance {
-    private final SnowballEntity entity;
+    private final PrimaticaOrbEntity entity;
     private final Vec3d pos;
     private final PrimaticaIngameHandler handler;
     private final ServerWorld world;
@@ -33,7 +33,7 @@ public class PrimaticaOrbInstance implements TickableInstance {
         this.handler = handler;
         this.world = (ServerWorld) world;
 
-        entity = new SnowballEntity(world, pos.x, pos.y, pos.z);
+        entity = new PrimaticaOrbEntity(world, pos);
         entity.setNoGravity(true);
         entity.setGlowing(true);
         entity.addScoreboardTag("primatica_objective");
@@ -78,7 +78,7 @@ public class PrimaticaOrbInstance implements TickableInstance {
         handler.orbLocations.remove(pos);
     }
 
-    private void collectOrb(MinecraftServer server, ServerPlayerEntity player, SnowballEntity orb) {
+    private void collectOrb(MinecraftServer server, ServerPlayerEntity player, PrimaticaOrbEntity orb) {
         server.getOverworld().spawnParticles(new ItemStackParticleEffect(ParticleTypes.ITEM, new ItemStack(Registry.ITEM.get(new Identifier("minecraft:snowball")))), orb.getX(), orb.getY() + 0.3, orb.getZ(), 100, 0.0, 0.0, 0.0, 1.0);
 
         SoundUtil.playSound(player, new Identifier("minecraft:entity.player.levelup"), SoundCategory.MASTER, orb.getPos(), 1.0f, 2.0f);
