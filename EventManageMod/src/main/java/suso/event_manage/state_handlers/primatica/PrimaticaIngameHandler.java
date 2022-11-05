@@ -56,7 +56,7 @@ public class PrimaticaIngameHandler implements StateHandler {
 
     protected final Set<Vec3d> orbLocations;
     private int orbTarget;
-    private final Map<AbstractTeam, Integer> scores;
+    private final PrimaticaScore scores;
 
     private final List<TickableInstance> tickables;
 
@@ -70,7 +70,7 @@ public class PrimaticaIngameHandler implements StateHandler {
 
         this.orbLocations = new HashSet<>();
         this.orbTarget = 10;
-        this.scores = new HashMap<>();
+        this.scores = new PrimaticaScore();
 
         this.tickables = new LinkedList<>();
 
@@ -109,12 +109,15 @@ public class PrimaticaIngameHandler implements StateHandler {
         nextPowerupMillis = ModCheck.getTime() + r.nextLong(5, 6 + (long)(20000 * delayFactor*delayFactor*delayFactor));
     }
 
-    public int getTeamScore(AbstractTeam team) {
-        return scores.getOrDefault(team, 0);
+    public void updateClientScores(ServerPlayerEntity player) {
+        ShaderUtil.setShaderUniform(player, "TeamPositions", scores.getRanks());
     }
 
-    public void setTeamScore(AbstractTeam team, int score) {
-        if(team != null) scores.put(team, score);
+    public void score(AbstractTeam team) {
+        scores.score(team);
+        System.out.println(team.getName() + ": " + scores.getScore(team));
+
+        EventManager.getInstance().getServer().getPlayerManager().getPlayerList().forEach(this::updateClientScores);
     }
 
     public void updateClientTimer(ServerPlayerEntity player) {
@@ -260,6 +263,7 @@ public class PrimaticaIngameHandler implements StateHandler {
             PrimaticaPlayerInfo info = getPlayerInfo(player.getUuid());
             info.setAgilityActive(false);
             info.sendStatusUniform();
+            updateClientScores(player);
         } else {
             player.changeGameMode(GameMode.SPECTATOR);
         }
