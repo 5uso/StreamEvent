@@ -1,8 +1,12 @@
 package suso.event_manage.state_handlers.primatica;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
@@ -21,6 +25,8 @@ import suso.event_manage.custom.entities.PrimaticaOrbEntity;
 import suso.event_manage.state_handlers.TickableInstance;
 import suso.event_manage.util.ParticleUtil;
 import suso.event_manage.util.SoundUtil;
+
+import java.util.List;
 
 public class PrimaticaOrbInstance implements TickableInstance {
     private final PrimaticaOrbEntity entity;
@@ -56,7 +62,7 @@ public class PrimaticaOrbInstance implements TickableInstance {
             server.getScoreboard().addPlayerToTeam(entity.getUuidAsString(), (Team) player.getScoreboardTeam());
 
             if(player.getBoundingBox().intersects(entity.getBoundingBox().expand(0.1))) {
-                collectOrb(server, sPlayer, entity);
+                collectOrb(server, sPlayer);
                 return true;
             }
         } else {
@@ -72,17 +78,39 @@ public class PrimaticaOrbInstance implements TickableInstance {
         handler.orbLocations.remove(pos);
     }
 
-    private void collectOrb(MinecraftServer server, ServerPlayerEntity player, PrimaticaOrbEntity orb) {
-        server.getOverworld().spawnParticles(new ItemStackParticleEffect(ParticleTypes.ITEM, new ItemStack(Registry.ITEM.get(new Identifier("minecraft:snowball")))), orb.getX(), orb.getY() + 0.3, orb.getZ(), 100, 0.0, 0.0, 0.0, 1.0);
-
-        SoundUtil.playSound(player, new Identifier("minecraft:entity.player.levelup"), SoundCategory.MASTER, orb.getPos(), 1.0f, 2.0f);
-        SoundUtil.playSound(server.getPlayerManager().getPlayerList(), new Identifier("minecraft:item.totem.use"), SoundCategory.MASTER, orb.getPos(), 0.5f, 2.0f);
-
+    private void collectOrb(MinecraftServer server, ServerPlayerEntity player) {
         AbstractTeam team = player.getScoreboardTeam();
+        if(team == null) return;
+
         int score = handler.getTeamScore(team) + 1;
         handler.setTeamScore(team, score);
-        System.out.println(team == null ? "None" : team.getName() + ": " + score);
+        System.out.println(team.getName() + ": " + score);
 
-        server.getOverworld().spawnParticles(new DustParticleEffect(ParticleUtil.teamColor(team), 2.0f), player.getX(), player.getY() + 0.3, player.getZ(), 20, 1.0, 1.0, 1.0, 2.0);
+        List<ServerPlayerEntity> players = world.getPlayers();
+
+        server.getOverworld().spawnParticles(new ItemStackParticleEffect(ParticleTypes.ITEM, new ItemStack(Items.GOLD_INGOT)), pos.x, pos.y + 0.3, pos.z, 100, 0.0, 0.0, 0.0, 1.0);
+        server.getOverworld().spawnParticles(ParticleTypes.FLASH, pos.x, pos.y + 0.3, pos.z, 1, 0.0, 0.0, 0.0, 1.0);
+
+        server.getOverworld().spawnParticles(new DustParticleEffect(ParticleUtil.teamColor(team), 2.0f), player.getX(), player.getY() + 0.3, player.getZ(), 15, 0.5, 0.5, 0.5, 2.0);
+        server.getOverworld().spawnParticles(new ItemStackParticleEffect(ParticleTypes.ITEM, new ItemStack(Registry.ITEM.get(new Identifier(PrimaticaInfo.getCorrespondingBlock(team.getColor().getColorIndex()))))), pos.x, pos.y + 0.3, pos.z, 70, 0.0, 0.0, 0.0, 0.6);
+
+        try {
+            NbtCompound firework = StringNbtReader.parse("{Explosions:[{Type:1,Colors:[I;" + team.getColor().getColorValue() + "]}]}");
+            ParticleUtil.fireworkParticle(players, pos.x, pos.y + 0.3, pos.z, 0.0, 0.0, 0.0, firework);
+        } catch (CommandSyntaxException | NullPointerException e) {
+            e.printStackTrace();
+        }
+
+        SoundUtil.playSound(player, new Identifier("minecraft:entity.player.levelup"), SoundCategory.MASTER, pos, 1.0f, 2.0f);
+        SoundUtil.playSound(players, new Identifier("minecraft:item.totem.use"), SoundCategory.MASTER, pos, 0.5f, 2.0f);
+
+        players.forEach(p -> {
+            if(p.isSpectator() || p.isTeammate(player)) return;
+            double distance = p.getPos().distanceTo(pos);
+            if(distance < 10.0 && !handler.getPlayerInfo(player.getUuid()).withinEMPPrev) {
+                distance /= 10.0;
+                player.damage(DamageSource.explosion(player), (float)(1.0 - distance) * 4.0f + 4.0f);
+            }
+        });
     }
 }
