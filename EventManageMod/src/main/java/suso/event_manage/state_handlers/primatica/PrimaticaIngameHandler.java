@@ -6,7 +6,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
@@ -34,7 +33,6 @@ import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.GameMode;
-import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import suso.event_manage.EventManager;
 import suso.event_manage.data.EventData;
@@ -87,10 +85,10 @@ public class PrimaticaIngameHandler implements StateHandler {
         server.getPlayerManager().getPlayerList().forEach(player -> onPlayerJoin(player, Objects.requireNonNull(edata.getPlayerData(player))));
     }
 
-    private void trySummonOrb(EventManager manager, World world) {
+    private void trySummonOrb(EventManager manager, ServerWorld world) {
         RndSet<Vec3d> possibleOrbSpots = PrimaticaInfo.getOrbLocations();
-        for(PlayerEntity player : world.getPlayers()) {
-            if(manager.isEventPlayer((ServerPlayerEntity) player)) {
+        for(ServerPlayerEntity player : world.getPlayers()) {
+            if(manager.isEventPlayer(player)) {
                 possibleOrbSpots.removeIf(pos -> pos.distanceTo(player.getPos()) < 20.0);
             }
         }
