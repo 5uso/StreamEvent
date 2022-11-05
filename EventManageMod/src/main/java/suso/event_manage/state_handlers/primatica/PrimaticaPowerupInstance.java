@@ -110,8 +110,8 @@ public class PrimaticaPowerupInstance implements TickableInstance {
         }
 
         List<ServerPlayerEntity> players = world.getPlayers();
+        players.forEach(p -> SoundUtil.playSound(p, new Identifier("eniah:sfx.collect_fail"), SoundCategory.PLAYERS, position, p.equals(player) ? 1.0f : 0.5f, 1.0f));
         world.spawnParticles(ParticleTypes.ENCHANTED_HIT, position.x, position.y, position.z, 10, 0.1, 0.1, 0.1, 0.5);
-        SoundUtil.playSound(players, new Identifier("eniah:sfx.collect_fail"), SoundCategory.PLAYERS, position, 1.0f, 1.0f);
     }
 
     private static final Random random = new Random();
