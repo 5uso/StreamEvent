@@ -107,9 +107,9 @@ public class PrimaticaOrbInstance implements TickableInstance {
         players.forEach(p -> {
             if(p.isSpectator() || p.isTeammate(player)) return;
             double distance = p.getPos().distanceTo(pos);
-            if(distance < 10.0 && !handler.getPlayerInfo(player.getUuid()).withinEMPPrev) {
+            if(distance < 10.0 && !handler.getPlayerInfo(p.getUuid()).withinEMPPrev) {
                 distance /= 10.0;
-                player.damage(DamageSource.explosion(player), (float)(1.0 - distance) * 4.0f + 4.0f);
+                p.damage(DamageSource.explosion(player), (float)(1.0 - distance) * 4.0f + 4.0f);
             }
         });
     }

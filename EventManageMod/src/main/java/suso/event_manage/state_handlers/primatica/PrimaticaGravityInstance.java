@@ -108,7 +108,7 @@ public class PrimaticaGravityInstance implements TickableInstance {
                     player.addVelocity(motion.x, motion.y, motion.z);
                     player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(player));
 
-                    player.damage(DamageSource.explosion(player), (float)(1.0 - distance) * 4.0f + 4.0f);
+                    player.damage(DamageSource.explosion(owner), (float)(1.0 - distance) * 4.0f + 4.0f);
                 }
             }
         }
