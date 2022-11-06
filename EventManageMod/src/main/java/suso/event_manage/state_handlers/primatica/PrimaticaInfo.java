@@ -129,10 +129,28 @@ public class PrimaticaInfo {
             new Vec3d(0,140,0),
     };
 
-    private static final RndSet<Vec3d> orbLocationset = new RndSet<>(Arrays.asList(orbLocations));
+    private static final Vec3d[] finalOrbLocations = {
+            new Vec3d(0,140,0),
+            new Vec3d(14,140,11),
+            new Vec3d(-14,140,-11),
+            new Vec3d(0,70,0),
+            new Vec3d(29,137,37),
+            new Vec3d(16,130,-52),
+            new Vec3d(-43,129,-19),
+            new Vec3d(-37,137,20),
+            new Vec3d(14,112,11),
+            new Vec3d(-11,112,0),
+    };
+
+    private static final RndSet<Vec3d> orbLocationSet = new RndSet<>(Arrays.asList(orbLocations));
+    private static final RndSet<Vec3d> finalOrbLocationSet = new RndSet<>(Arrays.asList(finalOrbLocations));
 
     public static RndSet<Vec3d> getOrbLocations() {
-        return new RndSet<>(orbLocationset);
+        return new RndSet<>(orbLocationSet);
+    }
+
+    public static RndSet<Vec3d> getFinalOrbLocations() {
+        return new RndSet<>(finalOrbLocationSet);
     }
 
 
