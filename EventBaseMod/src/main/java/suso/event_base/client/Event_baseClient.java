@@ -17,5 +17,6 @@ public class Event_baseClient implements ClientModInitializer {
         ModCheck.registerPacketListeners();
 
         CustomRender.setupRenderLayers();
+        CustomRender.registerHud();
     }
 }

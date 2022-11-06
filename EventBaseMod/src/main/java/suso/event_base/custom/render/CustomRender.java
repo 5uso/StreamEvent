@@ -3,6 +3,7 @@ package suso.event_base.custom.render;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.math.BlockPos;
@@ -45,5 +46,9 @@ public class CustomRender {
 
     public static void setupCustomColors(BlockColors bc) {
         bc.registerColorProvider((state, world, pos, tintIndex) -> ShaderNetworking.colors.getOrDefault(pos, 0), CustomBlocks.GRAY_EMP, CustomBlocks.WHITE_EMP, CustomBlocks.PINK_EMP, CustomBlocks.PURPLE_EMP, CustomBlocks.BLUE_EMP, CustomBlocks.CYAN_EMP, CustomBlocks.LIGHT_BLUE_EMP, CustomBlocks.GREEN_EMP, CustomBlocks.LIME_EMP, CustomBlocks.YELLOW_EMP, CustomBlocks.ORANGE_EMP, CustomBlocks.RED_EMP);
+    }
+
+    public static void registerHud() {
+        HudRenderCallback.EVENT.register(new HudTest());
     }
 }
