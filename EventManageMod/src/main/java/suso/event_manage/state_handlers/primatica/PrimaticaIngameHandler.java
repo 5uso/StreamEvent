@@ -155,7 +155,7 @@ public class PrimaticaIngameHandler implements StateHandler {
             return false;
         });
 
-        RndSet<Vec3d> possibleOrbSpots = PrimaticaInfo.getOrbLocations();
+        RndSet<Vec3d> possibleOrbSpots = PrimaticaInfo.getFinalOrbLocations();
         for(ServerPlayerEntity player : world.getPlayers()) {
             if(EventManager.getInstance().isEventPlayer(player)) {
                 possibleOrbSpots.removeIf(pos -> pos.distanceTo(player.getPos()) < 20.0);
