@@ -34,4 +34,14 @@ public class PrimaticaOrbEntity extends Entity {
     public Packet<?> createSpawnPacket() {
         return new EntitySpawnS2CPacket(this);
     }
+
+    @Override
+    public boolean shouldRender(double cameraX, double cameraY, double cameraZ) {
+        return true;
+    }
+
+    @Override
+    public boolean shouldRender(double distance) {
+        return true;
+    }
 }

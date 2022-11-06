@@ -114,4 +114,14 @@ public class PrimaticaOrbEntity extends LivingEntity implements IAnimatable {
     @Override
     public void handleStatus(byte status) {
     }
+
+    @Override
+    public boolean shouldRender(double distance) {
+        return true;
+    }
+
+    @Override
+    public boolean shouldRender(double cameraX, double cameraY, double cameraZ) {
+        return true;
+    }
 }
