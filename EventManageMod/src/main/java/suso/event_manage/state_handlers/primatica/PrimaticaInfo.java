@@ -135,10 +135,10 @@ public class PrimaticaInfo {
             new Vec3d(-14,140,-11),
             new Vec3d(0,70,0),
             new Vec3d(29,137,37),
-            new Vec3d(16,130,-52),
+            new Vec3d(16,150,-52),
             new Vec3d(-43,129,-19),
-            new Vec3d(-37,137,20),
-            new Vec3d(14,112,11),
+            new Vec3d(-40,137,20),
+            new Vec3d(14,117,11),
             new Vec3d(-11,112,0),
     };
 
