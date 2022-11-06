@@ -1,1 +1,1 @@
-{"parent":"minecraft:block/cube","textures":{"all":"suso:block/holoblock/gray","particle": "minecraft:block/gray_stained_glass","down":"#all","up":"#all","north":"#all","east":"#all","south":"#all","west":"#all"}}
+{"parent":"suso:block/holoblock/base","textures":{"all":"suso:block/holoblock/gray","particle": "minecraft:block/gray_stained_glass"}}
