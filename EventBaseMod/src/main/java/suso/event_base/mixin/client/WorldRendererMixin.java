@@ -34,9 +34,9 @@ public class WorldRendererMixin {
         Framebuffer clientBuffer = client.getFramebuffer();
         if(CustomUniformStore.aux.textureHeight != clientBuffer.textureHeight || CustomUniformStore.aux.textureWidth != clientBuffer.textureWidth) CustomUniformStore.aux.resize(clientBuffer.textureWidth, clientBuffer.textureHeight, false);
 
-        int globID = CustomUniformStore.globID;
-        int readID = CustomUniformStore.readID;
-        int drawID = CustomUniformStore.drawID;
+        int globID = 1; //CustomUniformStore.globID;
+        int readID = 2; //CustomUniformStore.readID;
+        int drawID = 1; //CustomUniformStore.drawID;
 
         GlStateManager._glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, clientBuffer.fbo);
         GlStateManager._glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, CustomUniformStore.aux.fbo);

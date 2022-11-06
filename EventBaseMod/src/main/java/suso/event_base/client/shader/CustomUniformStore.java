@@ -19,7 +19,6 @@ public class CustomUniformStore {
     private static String postOverride = "";
 
     public static final Framebuffer aux = new SimpleFramebuffer(MinecraftClient.getInstance().getWindow().getFramebufferWidth(), MinecraftClient.getInstance().getWindow().getFramebufferHeight(), true, false);
-    public static int readID = 0, drawID = 0, globID = 0;
 
     public static void setUniform(String name, float[] value) {
         floatUniforms.put(name, value);
