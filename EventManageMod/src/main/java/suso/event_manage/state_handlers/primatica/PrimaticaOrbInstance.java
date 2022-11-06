@@ -134,8 +134,8 @@ public class PrimaticaOrbInstance implements TickableInstance {
     }
 
     public void vanish() {
-        SoundUtil.playSound(world.getPlayers(), new Identifier("minecraft:block.fire.extinguish"), SoundCategory.NEUTRAL, pos, 1.0f, 2.0f);
-        world.spawnParticles(ParticleTypes.SMOKE, pos.x, pos.y + 0.3, pos.z, 50, 0.3, 0.3, 0.3, 0.01);
+        SoundUtil.playSound(world.getPlayers(), new Identifier("minecraft:block.fire.extinguish"), SoundCategory.NEUTRAL, pos, 3.0f, 2.0f);
+        ParticleUtil.forceParticle(ParticleTypes.SMOKE, pos.x, pos.y + 0.3, pos.z, 50, 0.3, 0.3, 0.3, 0.01);
         remove();
     }
 }
