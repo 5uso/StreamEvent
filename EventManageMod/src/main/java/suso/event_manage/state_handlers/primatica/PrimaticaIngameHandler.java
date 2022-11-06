@@ -42,6 +42,7 @@ import suso.event_manage.state_handlers.ScheduleInstance;
 import suso.event_manage.state_handlers.StateCommands;
 import suso.event_manage.state_handlers.StateHandler;
 import suso.event_manage.state_handlers.TickableInstance;
+import suso.event_manage.state_handlers.idle.IdleHandler;
 import suso.event_manage.util.*;
 
 import java.util.*;
@@ -50,6 +51,7 @@ public class PrimaticaIngameHandler implements StateHandler {
     private long durationMillis;
     private final long startMillis;
     private long leftMillis;
+    private boolean overtime;
 
     private static final int powerupTarget = 30;
     private long nextPowerupMillis;
@@ -67,6 +69,8 @@ public class PrimaticaIngameHandler implements StateHandler {
     public PrimaticaIngameHandler(long durationMillis) {
         this.durationMillis = durationMillis;
         this.startMillis = ModCheck.getTime();
+        this.leftMillis = durationMillis;
+        this.overtime = false;
 
         this.orbLocations = new HashSet<>();
         this.orbTarget = 10;
@@ -84,6 +88,10 @@ public class PrimaticaIngameHandler implements StateHandler {
 
         EventData edata = EventData.getInstance();
         server.getPlayerManager().getPlayerList().forEach(player -> onPlayerJoin(player, Objects.requireNonNull(edata.getPlayerData(player))));
+    }
+
+    public void end() {
+        EventManager.getInstance().setStateHandler(new IdleHandler());
     }
 
     private void trySummonOrb(EventManager manager, ServerWorld world) {
@@ -116,7 +124,7 @@ public class PrimaticaIngameHandler implements StateHandler {
     }
 
     public void score(AbstractTeam team) {
-        scores.score(team);
+        scores.score(team, overtime ? 5 : 1);
         System.out.println(team.getName() + ": " + scores.getScore(team));
 
         EventManager.getInstance().getServer().getPlayerManager().getPlayerList().forEach(this::updateClientScores);
@@ -127,10 +135,41 @@ public class PrimaticaIngameHandler implements StateHandler {
     }
 
     public void increaseDuration(long millis) {
-        if(leftMillis < 0) durationMillis -= leftMillis;
+        if(leftMillis < 0) {
+            durationMillis -= leftMillis;
+            overtime = millis <= 0;
+        }
         durationMillis += millis;
 
         EventManager.getInstance().getServer().getPlayerManager().getPlayerList().forEach(this::updateClientTimer);
+    }
+
+    private void triggerOvertime(ServerWorld world) {
+        overtime = true;
+        tickables.removeIf(t -> {
+            if(t instanceof PrimaticaOrbInstance orb) {
+                orb.vanish();
+                return true;
+            }
+
+            return false;
+        });
+
+        RndSet<Vec3d> possibleOrbSpots = PrimaticaInfo.getOrbLocations();
+        for(ServerPlayerEntity player : world.getPlayers()) {
+            if(EventManager.getInstance().isEventPlayer(player)) {
+                possibleOrbSpots.removeIf(pos -> pos.distanceTo(player.getPos()) < 20.0);
+            }
+        }
+
+        Vec3d pos = possibleOrbSpots.getRandom();
+        if(pos == null) {
+            do {
+                pos = new Vec3d(r.nextGaussian() * 35, 174.0, r.nextGaussian() * 35);
+            } while(pos.squaredDistanceTo(0.5, 174.0, 0.5) > 70.0);
+        }
+
+        tickables.add(new PrimaticaOrbInstance(world, pos.add(new Vec3d(0.5, 0.125, 0.5)), this));
     }
 
     public void setHasPowerup(UUID id, boolean value) {
@@ -283,11 +322,16 @@ public class PrimaticaIngameHandler implements StateHandler {
 
         tickables.removeIf(TickableInstance::ifTickRemove);
 
-        orbTarget =  2 + (int) Math.round(Math.max(0, leftMillis - 30000) / (double)Math.max(0, durationMillis - 30000) * 8);
-        if(orbLocations.size() < orbTarget) trySummonOrb(manager, w);
-
         int powerupAmount = PrimaticaPowerupInstance.positions.size();
         if(currTime >= nextPowerupMillis && powerupAmount < powerupTarget) trySummonPowerup(w, powerupAmount);
+
+        if(!overtime) {
+            orbTarget =  2 + (int) Math.round(Math.max(0, leftMillis - 30000) / (double)Math.max(0, durationMillis - 30000) * 8);
+            if(orbLocations.size() < orbTarget) trySummonOrb(manager, w);
+            if(leftMillis <= 0) triggerOvertime(w);
+        } else {
+            if(orbLocations.size() == 0) end();
+        }
     }
 
     @Override

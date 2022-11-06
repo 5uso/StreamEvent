@@ -30,9 +30,9 @@ public class PrimaticaScore {
         for(int i = 0; i < 12; i++) ranks[i] = inv_ranks[i] = i;
     }
 
-    public void score(AbstractTeam team) {
+    public void score(AbstractTeam team, int amount) {
         int team_idx = indexes.get(team.getColor().getColorIndex());
-        int our_score = ++scores[team_idx];
+        int our_score = (scores[team_idx] += amount);
 
         for(int curr_rank = ranks[team_idx] - 1; curr_rank >= 0; curr_rank--) {
             int team_to_beat = inv_ranks[curr_rank];
