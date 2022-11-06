@@ -1,5 +1,7 @@
 package suso.event_manage.util;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.*;
 
 public class RndSet<T> extends AbstractSet<T> {
@@ -74,7 +76,9 @@ public class RndSet<T> extends AbstractSet<T> {
         return l.get(i);
     }
 
+    @Nullable
     public T getRandom() {
+        if(l.size() == 0) return null;
         return l.get(r.nextInt(l.size()));
     }
 }
