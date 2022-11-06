@@ -38,7 +38,7 @@ import suso.event_manage.EventManager;
 import suso.event_manage.ModCheck;
 import suso.event_manage.data.EventData;
 import suso.event_manage.data.EventPlayerData;
-import suso.event_manage.state_handlers.PlayerScheduleInstance;
+import suso.event_manage.state_handlers.ScheduleInstance;
 import suso.event_manage.state_handlers.StateCommands;
 import suso.event_manage.state_handlers.StateHandler;
 import suso.event_manage.state_handlers.TickableInstance;
@@ -146,7 +146,7 @@ public class PrimaticaIngameHandler implements StateHandler {
         PrimaticaPlayerInfo info = playerInfo.get(player.getUuid());
         info.setAgilityActive(true);
 
-        tickables.add(new PlayerScheduleInstance(player, 200, this::endAgility));
+        tickables.add(new ScheduleInstance(200, () -> endAgility(player)));
 
         AbstractTeam team = player.getScoreboardTeam();
         Vec3f color = team == null ? Vec3f.ZERO : ParticleUtil.teamColor(team);
@@ -435,7 +435,7 @@ public class PrimaticaIngameHandler implements StateHandler {
                 boolean ownTeam = gunkMatchesTeam(id.toString(), player.getScoreboardTeam());
                 if(player.isJumpPressed()) {
                     Vec3d posDelta = player.getPosDelta();
-                    tickables.add(new PlayerScheduleInstance(player, 1, p -> applyGunkJumpEffects(p, ownTeam, posDelta.y * -1.3)));
+                    tickables.add(new ScheduleInstance(1, () -> applyGunkJumpEffects(player, ownTeam, posDelta.y * -1.3)));
                 } else {
                     if(ownTeam) {
                         Vec3d posDelta = player.getPosDelta();
