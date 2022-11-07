@@ -52,6 +52,8 @@ public class PrimaticaIngameHandler implements StateHandler {
     private final long startMillis;
     private long leftMillis;
     private boolean overtime;
+    private boolean ended;
+    private boolean stop;
 
     private static final int powerupTarget = 30;
     private long nextPowerupMillis;
@@ -71,6 +73,8 @@ public class PrimaticaIngameHandler implements StateHandler {
         this.startMillis = ModCheck.getTime();
         this.leftMillis = durationMillis;
         this.overtime = false;
+        this.ended = false;
+        this.stop = false;
 
         this.orbLocations = new HashSet<>();
         this.orbTarget = 10;
@@ -90,8 +94,11 @@ public class PrimaticaIngameHandler implements StateHandler {
         server.getPlayerManager().getPlayerList().forEach(player -> onPlayerJoin(player, Objects.requireNonNull(edata.getPlayerData(player))));
     }
 
-    public void end() {
-        EventManager.getInstance().setStateHandler(new IdleHandler());
+    public void triggerEnd(MinecraftServer server) {
+        ended = true;
+        tickables.add(new ScheduleInstance(200, () -> stop = true));
+
+        server.getPlayerManager().getPlayerList().forEach(p -> p.changeGameMode(GameMode.SPECTATOR));
     }
 
     private void trySummonOrb(EventManager manager, ServerWorld world) {
@@ -330,8 +337,10 @@ public class PrimaticaIngameHandler implements StateHandler {
             if(orbLocations.size() < orbTarget) trySummonOrb(manager, w);
             if(leftMillis <= 0) triggerOvertime(w);
         } else {
-            if(orbLocations.size() == 0) end();
+            if(!ended && orbLocations.size() == 0) triggerEnd(server);
         }
+
+        if(stop) EventManager.getInstance().setStateHandler(new IdleHandler());
     }
 
     @Override
@@ -572,6 +581,9 @@ public class PrimaticaIngameHandler implements StateHandler {
         for(ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
             InventoryUtil.clearPLayer(player);
             player.clearStatusEffects();
+
+            ShaderUtil.setPostShader(player, new Identifier("none"));
+            SoundUtil.stopSound(player, null, null);
         }
     }
 
