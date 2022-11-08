@@ -9,9 +9,9 @@
     "PlayerEntityMixin"
   ],
   "client": [
-    "TestMixin",
     "client.BlockColorsMixin",
     "client.CoreMixin",
+    "client.DrawableHelperMixin",
     "client.GameRendererAccess",
     "client.GameRendererMixin",
     "client.GlUniformUtilImpl",

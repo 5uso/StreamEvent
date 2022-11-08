@@ -19,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import suso.event_base.client.shader.CustomUniformStore;
+import suso.event_base.custom.render.CustomRender;
 
 @Mixin(GameRenderer.class) @Environment(EnvType.CLIENT)
 public abstract class GameRendererMixin {
@@ -57,5 +58,13 @@ public abstract class GameRendererMixin {
         Framebuffer handBuffer = shader.getSecondaryTarget("hand");
         if(handBuffer != null) handBuffer.copyDepthFrom(client.getFramebuffer());
         shader.mainTarget.copyDepthFrom(CustomUniformStore.aux);
+    }
+
+    @Inject(
+            method = "loadShaders",
+            at = @At("TAIL")
+    )
+    private void loadCustomShaders(ResourceManager manager, CallbackInfo ci) {
+        CustomRender.setupShaders(manager);
     }
 }
