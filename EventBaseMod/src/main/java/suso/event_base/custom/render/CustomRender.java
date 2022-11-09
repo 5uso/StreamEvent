@@ -20,6 +20,7 @@ public class CustomRender {
     public static final CustomHud CUSTOM_HUD = new CustomHud();
 
     private static Shader FEED_SHADER;
+    private static Shader TIMER_SHADER;
 
     private static Shader currentDrawShader;
 
@@ -60,6 +61,7 @@ public class CustomRender {
         System.out.println("Loading custom shaders...");
         try {
             FEED_SHADER = new Shader(manager, "suso_feed", VertexFormats.POSITION_TEXTURE);
+            TIMER_SHADER = new Shader(manager, "suso_timer", VertexFormats.POSITION_TEXTURE);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -79,5 +81,9 @@ public class CustomRender {
 
     public static Shader getFeedShader() {
         return FEED_SHADER;
+    }
+
+    public static Shader getTimerShader() {
+        return TIMER_SHADER;
     }
 }
