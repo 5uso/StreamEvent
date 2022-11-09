@@ -33,6 +33,7 @@ import suso.event_manage.mixin.PlayerManagerAccess;
 import suso.event_manage.state_handlers.StateHandler;
 import suso.event_manage.state_handlers.idle.IdleHandler;
 import suso.event_manage.util.CommandUtil;
+import suso.event_manage.util.HudUtil;
 import suso.event_manage.util.MiscUtil;
 
 import java.util.List;
@@ -143,6 +144,7 @@ public class EventManager implements ModInitializer {
         }
         this.handler = handler;
         this.handler.getStateCommands().register(server);
+        server.getPlayerManager().getPlayerList().forEach(p -> HudUtil.setState(p, handler.getState()));
     }
 
     public StateHandler getStateHandler() {
