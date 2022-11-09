@@ -3,7 +3,7 @@ package suso.event_manage.state_handlers.primatica;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
-import suso.event_manage.util.ShaderUtil;
+import suso.event_manage.util.HudUtil;
 import suso.event_manage.util.SoundUtil;
 
 import java.util.UUID;
@@ -33,16 +33,10 @@ public class PrimaticaPlayerInfo {
         this.world = player.getWorld();
     }
 
-    public void sendStatusUniform() {
-        int status = 0;
-        if(agilityActive) status += 1;
-        ShaderUtil.setShaderUniform((ServerPlayerEntity) world.getPlayerByUuid(this.player), "PrimaticaState", status);
-    }
-
     public void setAgilityActive(boolean value) {
         if(value == agilityActive) return;
         agilityActive = value;
-        sendStatusUniform();
+        HudUtil.setAgility((ServerPlayerEntity) world.getPlayerByUuid(this.player), value);
     }
 
     public void setUnderground(boolean value) {

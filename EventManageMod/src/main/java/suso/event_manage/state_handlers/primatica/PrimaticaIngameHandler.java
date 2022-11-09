@@ -302,7 +302,6 @@ public class PrimaticaIngameHandler implements StateHandler {
 
             PrimaticaPlayerInfo info = getPlayerInfo(player.getUuid());
             info.setAgilityActive(false);
-            info.sendStatusUniform();
             updateClientScores(player);
         } else {
             player.changeGameMode(GameMode.SPECTATOR);

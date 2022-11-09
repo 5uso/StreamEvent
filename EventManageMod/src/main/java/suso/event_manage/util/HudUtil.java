@@ -8,7 +8,7 @@ import suso.event_manage.EvtBaseConstants;
 
 public class HudUtil {
     public enum DataTypes {
-        STATE, TIMER, FEED
+        STATE, TIMER, FEED, AGILITY
     }
 
     public static void setState(ServerPlayerEntity player, EvtBaseConstants.States state) {
@@ -23,6 +23,14 @@ public class HudUtil {
         PacketByteBuf p = PacketByteBufs.create();
         p.writeInt(DataTypes.TIMER.ordinal());
         p.writeLong(time);
+
+        ServerPlayNetworking.send(player, EvtBaseConstants.HUD_DATA, p);
+    }
+
+    public static void setAgility(ServerPlayerEntity player, boolean active) {
+        PacketByteBuf p = PacketByteBufs.create();
+        p.writeInt(DataTypes.AGILITY.ordinal());
+        p.writeBoolean(active);
 
         ServerPlayNetworking.send(player, EvtBaseConstants.HUD_DATA, p);
     }
