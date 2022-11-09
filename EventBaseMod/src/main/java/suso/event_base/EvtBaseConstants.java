@@ -15,6 +15,8 @@ public class EvtBaseConstants {
 
     public static final Identifier ENTITY_UPDATE = new Identifier("suso:entity_update");
 
+    public static final Identifier HUD_DATA = new Identifier("suso:hud_data");
+
     public static final Identifier JUMP_INPUT = new Identifier("suso:jump_input");
 
     public static final Identifier LOGIN_CHECK = new Identifier("suso:login_check");

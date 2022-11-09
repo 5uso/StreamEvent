@@ -10,11 +10,13 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import suso.event_base.EvtBaseConstants;
 import suso.event_base.custom.entities.EventUpdatable;
+import suso.event_base.custom.render.CustomRender;
 
 public class MiscNetworking {
     public static void registerPacketListeners() {
         ClientPlayNetworking.registerGlobalReceiver(EvtBaseConstants.FIREWORK_PARTICLE, MiscNetworking::fireworkParticleHandler);
         ClientPlayNetworking.registerGlobalReceiver(EvtBaseConstants.ENTITY_UPDATE, MiscNetworking::entityUpdateHandler);
+        ClientPlayNetworking.registerGlobalReceiver(EvtBaseConstants.HUD_DATA, MiscNetworking::hudDataHandler);
     }
 
     private static void fireworkParticleHandler(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
@@ -36,5 +38,9 @@ public class MiscNetworking {
                 e.customUpdate(nbt);
             }
         });
+    }
+
+    private static void hudDataHandler(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+        client.execute(() -> CustomRender.CUSTOM_HUD.onHudData(buf));
     }
 }
