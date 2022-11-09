@@ -21,8 +21,17 @@ public class DrawableHelperMixin {
             )
     )
     private static Supplier<Shader> replaceShader(Supplier<Shader> shaderSupplier) {
-        if(CustomRender.getCurrentDrawShader() != null) return CustomRender::getCurrentDrawShader;
+        return CustomRender.getCurrentDrawShader() == null ? shaderSupplier : CustomRender::getCurrentDrawShader;
+    }
 
-        return shaderSupplier;
+    @ModifyArg(
+            method = "fill(Lnet/minecraft/util/math/Matrix4f;IIIII)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShader(Ljava/util/function/Supplier;)V"
+            )
+    )
+    private static Supplier<Shader> replaceFillShader(Supplier<Shader> shaderSupplier) {
+        return CustomRender.getCurrentDrawShader() == null ? shaderSupplier : CustomRender::getCurrentDrawShader;
     }
 }
