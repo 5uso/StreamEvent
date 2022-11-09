@@ -130,7 +130,7 @@ public class PrimaticaIngameHandler implements StateHandler {
     }
 
     public void updateClientTimer(ServerPlayerEntity player) {
-        ShaderUtil.setShaderUniform(player, "MinigameEnd", (int)(startMillis + durationMillis) % 0x80000000);
+        HudUtil.setTimer(player, startMillis + durationMillis);
     }
 
     public void increaseDuration(long millis) {

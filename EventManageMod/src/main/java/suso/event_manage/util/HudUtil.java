@@ -18,4 +18,12 @@ public class HudUtil {
 
         ServerPlayNetworking.send(player, EvtBaseConstants.HUD_DATA, p);
     }
+
+    public static void setTimer(ServerPlayerEntity player, long time) {
+        PacketByteBuf p = PacketByteBufs.create();
+        p.writeInt(DataTypes.TIMER.ordinal());
+        p.writeLong(time);
+
+        ServerPlayNetworking.send(player, EvtBaseConstants.HUD_DATA, p);
+    }
 }
