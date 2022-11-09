@@ -77,6 +77,7 @@ public class EventManager implements ModInitializer {
             data.registerPlayer(player);
         }
 
+        HudUtil.setState(player, handler.getState());
         handler.onPlayerJoin(player, data.getPlayerData(player));
     }
 
