@@ -11,11 +11,14 @@ import net.minecraft.client.render.VertexFormats;
 import net.minecraft.resource.ResourceManager;
 import suso.event_base.client.shader.ShaderNetworking;
 import suso.event_base.custom.blocks.CustomBlocks;
+import suso.event_base.custom.render.hud.CustomHud;
 
 import java.io.IOException;
 
 @Environment(EnvType.CLIENT)
 public class CustomRender {
+    public static final CustomHud CUSTOM_HUD = new CustomHud();
+
     private static Shader FEED_SHADER;
 
     private static Shader currentDrawShader;
@@ -63,11 +66,7 @@ public class CustomRender {
     }
 
     public static void registerHud() {
-        HudRenderCallback.EVENT.register(new HudTest());
-    }
-
-    public static Shader getFeedShader() {
-        return FEED_SHADER;
+        HudRenderCallback.EVENT.register(CUSTOM_HUD);
     }
 
     public static Shader getCurrentDrawShader() {
@@ -76,5 +75,9 @@ public class CustomRender {
 
     public static void setCurrentDrawShader(Shader shader) {
         currentDrawShader = shader;
+    }
+
+    public static Shader getFeedShader() {
+        return FEED_SHADER;
     }
 }
