@@ -88,6 +88,11 @@ public class IdleHandler implements StateHandler {
     }
 
     @Override
+    public void prepare() {
+
+    }
+
+    @Override
     public void cleanup() {
 
     }

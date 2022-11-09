@@ -145,6 +145,7 @@ public class EventManager implements ModInitializer {
         this.handler = handler;
         this.handler.getStateCommands().register(server);
         server.getPlayerManager().getPlayerList().forEach(p -> HudUtil.setState(p, handler.getState()));
+        this.handler.prepare();
     }
 
     public StateHandler getStateHandler() {

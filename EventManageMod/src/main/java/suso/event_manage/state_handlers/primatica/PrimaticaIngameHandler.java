@@ -84,15 +84,6 @@ public class PrimaticaIngameHandler implements StateHandler {
         this.tickables = new LinkedList<>();
 
         this.playerInfo = new HashMap<>();
-
-        prepare();
-    }
-
-    private void prepare() {
-        MinecraftServer server = EventManager.getInstance().getServer();
-
-        EventData edata = EventData.getInstance();
-        server.getPlayerManager().getPlayerList().forEach(player -> onPlayerJoin(player, Objects.requireNonNull(edata.getPlayerData(player))));
     }
 
     public void triggerEnd(MinecraftServer server) {
@@ -568,6 +559,14 @@ public class PrimaticaIngameHandler implements StateHandler {
         if(victim instanceof ServerPlayerEntity) {
             SoundUtil.playSound(player, new Identifier("eniah:sfx.fall"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
         }
+    }
+
+    @Override
+    public void prepare() {
+        MinecraftServer server = EventManager.getInstance().getServer();
+
+        EventData edata = EventData.getInstance();
+        server.getPlayerManager().getPlayerList().forEach(player -> onPlayerJoin(player, Objects.requireNonNull(edata.getPlayerData(player))));
     }
 
     @Override

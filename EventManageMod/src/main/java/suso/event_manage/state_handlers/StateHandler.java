@@ -23,6 +23,7 @@ public interface StateHandler {
     void onPlayerJump(ServerPlayerEntity player, EventPlayerData data, BlockPos jumpingPos);
     boolean onPlayerShoot(ServerPlayerEntity player, EventPlayerData data, ItemStack bow, int useTicks);
     void onPlayerKill(ServerPlayerEntity player, Entity victim, DamageSource source);
+    void prepare();
     void cleanup();
     boolean canDropItems(ServerPlayerEntity player, EventPlayerData data);
     StateCommands getStateCommands();
