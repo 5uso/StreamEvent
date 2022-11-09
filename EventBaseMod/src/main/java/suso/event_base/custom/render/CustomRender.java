@@ -26,6 +26,7 @@ public class CustomRender {
 
     private static Shader FEED_SHADER;
     private static Shader TIMER_SHADER;
+    private static Shader AGILITY_SHADER;
 
     private static Shader currentDrawShader;
 
@@ -67,6 +68,7 @@ public class CustomRender {
         try {
             FEED_SHADER = new Shader(manager, "suso_feed", VertexFormats.POSITION_TEXTURE);
             TIMER_SHADER = new Shader(manager, "suso_timer", VertexFormats.POSITION_TEXTURE);
+            AGILITY_SHADER = new Shader(manager, "suso_agility", VertexFormats.POSITION_COLOR);
         } catch (IOException e) {
             printShaderException(e);
         }
@@ -90,6 +92,10 @@ public class CustomRender {
 
     public static Shader getTimerShader() {
         return TIMER_SHADER;
+    }
+
+    public static Shader getAgilityShader() {
+        return AGILITY_SHADER;
     }
 
     // Print a shader exception in chat.

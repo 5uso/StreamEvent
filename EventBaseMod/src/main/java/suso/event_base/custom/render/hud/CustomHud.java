@@ -18,7 +18,7 @@ import java.util.function.Supplier;
 
 public class CustomHud implements HudRenderCallback {
     public enum DataTypes {
-        STATE, TIMER, FEED
+        STATE, TIMER, FEED, AGILITY
     }
 
     private static final Map<EvtBaseConstants.States, Supplier<StateHud>> stateFactories = ImmutableMap.<EvtBaseConstants.States, Supplier<StateHud>>builder()
