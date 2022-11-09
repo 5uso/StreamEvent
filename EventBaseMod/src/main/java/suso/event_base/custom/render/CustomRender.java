@@ -4,14 +4,19 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.color.block.BlockColors;
+import net.minecraft.client.gl.ShaderParseException;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.Shader;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.resource.ResourceManager;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import suso.event_base.client.shader.ShaderNetworking;
 import suso.event_base.custom.blocks.CustomBlocks;
 import suso.event_base.custom.render.hud.CustomHud;
+import suso.event_base.mixin.client.KeyboardInvoker;
 
 import java.io.IOException;
 
@@ -63,7 +68,7 @@ public class CustomRender {
             FEED_SHADER = new Shader(manager, "suso_feed", VertexFormats.POSITION_TEXTURE);
             TIMER_SHADER = new Shader(manager, "suso_timer", VertexFormats.POSITION_TEXTURE);
         } catch (IOException e) {
-            e.printStackTrace();
+            printShaderException(e);
         }
     }
 
@@ -85,5 +90,24 @@ public class CustomRender {
 
     public static Shader getTimerShader() {
         return TIMER_SHADER;
+    }
+
+    // Print a shader exception in chat.
+    private static void printShaderException(Exception exception) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        Throwable throwable = exception;
+        while (!(throwable instanceof ShaderParseException)) {
+            Throwable cause = throwable.getCause();
+            if (cause != null) throwable = cause;
+            else {
+                String translationKey = "debug.reload_shaders.unknown_error";
+                ((KeyboardInvoker) client.keyboard).invokeDebugError(translationKey);
+                throwable.printStackTrace();
+                return;
+            }
+        }
+        String translationKey = "debug.reload_shaders.error";
+        ((KeyboardInvoker) client.keyboard).invokeDebugError(translationKey);
+        client.inGameHud.getChatHud().addMessage(Text.literal(throwable.getMessage()).formatted(Formatting.GRAY));
     }
 }
