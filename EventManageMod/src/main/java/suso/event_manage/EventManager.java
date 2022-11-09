@@ -39,10 +39,6 @@ import java.util.List;
 import java.util.Set;
 
 public class EventManager implements ModInitializer {
-    public enum ServerState {
-        IDLE, PRIMATICA_INGAME
-    }
-
     private static EventManager instance;
 
     private MinecraftServer server;

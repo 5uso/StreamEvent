@@ -4,11 +4,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import suso.event_manage.EventManager;
+import suso.event_manage.EvtBaseConstants;
 import suso.event_manage.data.EventPlayerData;
 
 public interface StateHandler {
@@ -27,5 +26,5 @@ public interface StateHandler {
     void cleanup();
     boolean canDropItems(ServerPlayerEntity player, EventPlayerData data);
     StateCommands getStateCommands();
-    EventManager.ServerState getState();
+    EvtBaseConstants.States getState();
 }

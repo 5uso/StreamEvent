@@ -18,4 +18,8 @@ public class EvtBaseConstants {
     public static final Identifier JUMP_INPUT = new Identifier("suso:jump_input");
 
     public static final Identifier LOGIN_CHECK = new Identifier("suso:login_check");
+
+    public enum States {
+        IDLE, PRIMATICA_INGAME
+    }
 }

@@ -35,6 +35,7 @@ import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.GameMode;
 import org.jetbrains.annotations.Nullable;
 import suso.event_manage.EventManager;
+import suso.event_manage.EvtBaseConstants;
 import suso.event_manage.ModCheck;
 import suso.event_manage.data.EventData;
 import suso.event_manage.data.EventPlayerData;
@@ -598,7 +599,7 @@ public class PrimaticaIngameHandler implements StateHandler {
     }
 
     @Override
-    public EventManager.ServerState getState() {
-        return EventManager.ServerState.PRIMATICA_INGAME;
+    public EvtBaseConstants.States getState() {
+        return EvtBaseConstants.States.PRIMATICA_INGAME;
     }
 }

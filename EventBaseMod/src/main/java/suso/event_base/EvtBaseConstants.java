@@ -20,4 +20,8 @@ public class EvtBaseConstants {
     public static final Identifier LOGIN_CHECK = new Identifier("suso:login_check");
 
     public static final boolean DEBUG = false;
+
+    public enum States {
+        IDLE, PRIMATICA_INGAME
+    }
 }
