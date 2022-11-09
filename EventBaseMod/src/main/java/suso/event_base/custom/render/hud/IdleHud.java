@@ -1,7 +1,7 @@
 package suso.event_base.custom.render.hud;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.network.PacketByteBuf;
 
 public class IdleHud implements StateHud {
     @Override
@@ -9,7 +9,7 @@ public class IdleHud implements StateHud {
     }
 
     @Override
-    public void onHudMessage(PacketByteBuf msg) {
+    public void onHudMessage(CustomHud.DataTypes type, ByteBuf msg) {
 
     }
 }

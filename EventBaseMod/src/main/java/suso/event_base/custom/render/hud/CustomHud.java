@@ -3,11 +3,11 @@ package suso.event_base.custom.render.hud;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.systems.RenderSystem;
+import io.netty.buffer.ByteBuf;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.PlayerSkinDrawer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import suso.event_base.EvtBaseConstants;
@@ -60,14 +60,14 @@ public class CustomHud implements HudRenderCallback {
         currentStateHud = hud;
     }
 
-    public void onHudData(PacketByteBuf msg) {
-        DataTypes type = DataTypes.values()[msg.getInt(0)];
+    public void onHudData(ByteBuf msg) {
+        DataTypes type = DataTypes.values()[msg.readInt()];
         switch(type) {
             case STATE -> {
-                EvtBaseConstants.States state = EvtBaseConstants.States.values()[msg.getInt(1)];
+                EvtBaseConstants.States state = EvtBaseConstants.States.values()[msg.readInt()];
                 setCurrentStateHud(stateFactories.get(state).get());
             }
-            default -> currentStateHud.onHudMessage(msg);
+            default -> currentStateHud.onHudMessage(type, msg);
         }
     }
 }

@@ -7,12 +7,13 @@ import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.Shader;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+import suso.event_base.client.ModCheck;
 import suso.event_base.custom.render.CustomRender;
 
 public class Timer implements HudRenderCallback {
     private static final Identifier timerTexture = new Identifier("suso:textures/hud/timer.png");
 
-    public int msToDisplay = 0;
+    public long msEnd = 0;
 
     @Override
     public void onHudRender(MatrixStack matrixStack, float tickDelta) {
@@ -22,7 +23,8 @@ public class Timer implements HudRenderCallback {
         RenderSystem.defaultBlendFunc();
 
         Shader timerShader = CustomRender.getTimerShader();
-        timerShader.getUniformOrDefault("Timer").set(msToDisplay);
+        int displayedMs = (int)(Math.max(0, msEnd - ModCheck.getTime()));
+        timerShader.getUniformOrDefault("Timer").set(displayedMs);
         CustomRender.setCurrentDrawShader(timerShader);
 
         RenderSystem.setShaderTexture(0, timerTexture);

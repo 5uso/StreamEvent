@@ -41,6 +41,6 @@ public class MiscNetworking {
     }
 
     private static void hudDataHandler(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-        client.execute(() -> CustomRender.CUSTOM_HUD.onHudData(buf));
+        CustomRender.CUSTOM_HUD.onHudData(buf.retainedDuplicate());
     }
 }

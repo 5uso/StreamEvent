@@ -1,8 +1,8 @@
 package suso.event_base.custom.render.hud;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.network.PacketByteBuf;
 import suso.event_base.custom.render.hud.elements.Timer;
 
 public class PrimaticaIngameHud implements StateHud {
@@ -13,10 +13,9 @@ public class PrimaticaIngameHud implements StateHud {
     }
 
     @Override
-    public void onHudMessage(PacketByteBuf msg) {
-        CustomHud.DataTypes type = CustomHud.DataTypes.values()[msg.readInt()];
+    public void onHudMessage(CustomHud.DataTypes type, ByteBuf msg) {
         switch(type) {
-            case TIMER -> timer.msToDisplay = msg.readInt();
+            case TIMER -> timer.msEnd = msg.readLong();
             case FEED -> { /*TODO*/ }
         }
     }
