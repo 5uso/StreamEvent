@@ -5,10 +5,11 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import suso.event_manage.EvtBaseConstants;
+import suso.event_manage.state_handlers.primatica.PrimaticaScore;
 
 public class HudUtil {
     public enum DataTypes {
-        STATE, TIMER, FEED, AGILITY
+        STATE, TIMER, FEED, AGILITY, PRIMATICA_SCORE
     }
 
     public static void setState(ServerPlayerEntity player, EvtBaseConstants.States state) {
@@ -31,6 +32,19 @@ public class HudUtil {
         PacketByteBuf p = PacketByteBufs.create();
         p.writeInt(DataTypes.AGILITY.ordinal());
         p.writeBoolean(active);
+
+        ServerPlayNetworking.send(player, EvtBaseConstants.HUD_DATA, p);
+    }
+
+    public static void setPrimaticaScore(ServerPlayerEntity player, PrimaticaScore score) {
+        PacketByteBuf p = PacketByteBufs.create();
+        p.writeInt(DataTypes.PRIMATICA_SCORE.ordinal());
+
+        int[] scores = score.getScores();
+        for(int i = 0; i < 12; i++) p.writeInt(scores[i]);
+
+        int[] ranks = score.getRanks();
+        for(int i = 0; i < 12; i++) p.writeInt(ranks[i]);
 
         ServerPlayNetworking.send(player, EvtBaseConstants.HUD_DATA, p);
     }

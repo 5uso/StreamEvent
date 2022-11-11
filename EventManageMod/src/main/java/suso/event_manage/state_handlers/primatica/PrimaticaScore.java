@@ -32,6 +32,10 @@ public class PrimaticaScore {
         return scores[EvtBaseConstants.teamIndexes.get(team.getColor().getColorIndex())];
     }
 
+    public int[] getScores() {
+        return scores;
+    }
+
     public int[] getRanks() {
         return ranks;
     }

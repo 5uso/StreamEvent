@@ -119,7 +119,7 @@ public class PrimaticaIngameHandler implements StateHandler {
     }
 
     public void updateClientScores(ServerPlayerEntity player) {
-        ShaderUtil.setShaderUniform(player, "TeamPositions", scores.getRanks());
+        HudUtil.setPrimaticaScore(player, scores);
     }
 
     public void score(AbstractTeam team) {
