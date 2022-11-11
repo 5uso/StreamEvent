@@ -65,7 +65,7 @@ public class PrimaticaIngameHud implements StateHud {
         }
 
         matrixStack.push();
-        matrixStack.translate(width - height * (0.05 + 0.0426 * 738.0 / 155.0), height * 0.05, 0.0);
+        matrixStack.translate(width - height * (0.04 + 0.0426 * 738.0 / 155.0), height * 0.02, 0.0);
         matrixStack.scale(0.0426f, 0.0426f, 1.0f);
         timer.onHudRender(matrixStack, tickDelta);
         matrixStack.pop();

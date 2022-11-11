@@ -18,6 +18,10 @@ public class Timer implements HudRenderCallback {
     @Override
     public void onHudRender(MatrixStack matrixStack, float tickDelta) {
         MinecraftClient client = MinecraftClient.getInstance();
+        int height = client.getWindow().getScaledHeight();
+        int width = height * 738 / 155;
+
+        DrawableHelper.fill(matrixStack, -height/10, -height/10, (int) (width + height/5 + height * 0.13), height + height/5, 0x7F000000);
 
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
@@ -29,8 +33,7 @@ public class Timer implements HudRenderCallback {
 
         RenderSystem.setShaderTexture(0, timerTexture);
 
-        int height = client.getWindow().getScaledHeight();
-        int width = height * 738 / 155;
+
         DrawableHelper.drawTexture(matrixStack, 0, 0, 0.0f, 0.0f, width, height, width, height);
 
         RenderSystem.disableBlend();
