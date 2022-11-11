@@ -18,7 +18,7 @@ import java.util.function.Supplier;
 
 public class CustomHud implements HudRenderCallback {
     public enum DataTypes {
-        STATE, TIMER, FEED, AGILITY
+        STATE, TIMER, FEED, AGILITY, PRIMATICA_SCORE
     }
 
     private static final Map<EvtBaseConstants.States, Supplier<StateHud>> stateFactories = ImmutableMap.<EvtBaseConstants.States, Supplier<StateHud>>builder()
@@ -42,7 +42,7 @@ public class CustomHud implements HudRenderCallback {
             textureId = client.getSkinProvider().loadSkin(pro);
         }
 
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        /*RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, textureId);
         PlayerSkinDrawer.draw(matrixStack, 0, 100, 32);
 
@@ -51,7 +51,7 @@ public class CustomHud implements HudRenderCallback {
         float x = client.getWindow().getScaledWidth() / 10.0f - MinecraftClient.getInstance().textRenderer.getWidth("haha") / 2.0f;
         float y = client.getWindow().getScaledHeight() / 10.0f;
         MinecraftClient.getInstance().textRenderer.draw(matrixStack, "haha", x, y, Formatting.GOLD.getColorValue());
-        matrixStack.pop();
+        matrixStack.pop();*/
 
         currentStateHud.onHudRender(matrixStack, tickDelta);
     }

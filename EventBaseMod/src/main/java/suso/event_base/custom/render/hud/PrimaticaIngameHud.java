@@ -4,22 +4,24 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.Shader;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 import suso.event_base.custom.render.CustomRender;
+import suso.event_base.custom.render.hud.elements.PrimaticaScoreboard;
 import suso.event_base.custom.render.hud.elements.Timer;
 
 public class PrimaticaIngameHud implements StateHud {
     private final Timer timer;
     private boolean agility;
     private float agilityProgress;
+    private final PrimaticaScoreboard scoreboard;
 
     public PrimaticaIngameHud() {
         timer = new Timer();
         agility = false;
         agilityProgress = 0.0f;
+        scoreboard = new PrimaticaScoreboard();
     }
 
     @Override
@@ -28,6 +30,15 @@ public class PrimaticaIngameHud implements StateHud {
             case TIMER -> timer.msEnd = msg.readLong();
             case FEED -> { /*TODO*/ }
             case AGILITY -> agility = msg.readBoolean();
+            case PRIMATICA_SCORE -> {
+                int[] scores = new int[12];
+                for(int i = 0; i < 12; i++) scores[i] = msg.readInt();
+
+                int[] ranks = new int[12];
+                for(int i = 0; i < 12; i++) ranks[i] = msg.readInt();
+
+                scoreboard.setScores(scores, ranks);
+            }
         }
     }
 
@@ -58,5 +69,7 @@ public class PrimaticaIngameHud implements StateHud {
         matrixStack.scale(0.0426f, 0.0426f, 1.0f);
         timer.onHudRender(matrixStack, tickDelta);
         matrixStack.pop();
+
+        scoreboard.onHudRender(matrixStack, tickDelta);
     }
 }
