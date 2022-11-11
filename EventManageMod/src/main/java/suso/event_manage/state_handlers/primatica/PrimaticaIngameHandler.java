@@ -124,8 +124,6 @@ public class PrimaticaIngameHandler implements StateHandler {
 
     public void score(AbstractTeam team) {
         scores.score(team, overtime ? 5 : 1);
-        System.out.println(team.getName() + ": " + scores.getScore(team));
-
         EventManager.getInstance().getServer().getPlayerManager().getPlayerList().forEach(this::updateClientScores);
     }
 
