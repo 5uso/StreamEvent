@@ -1,15 +1,13 @@
 package suso.event_manage.state_handlers.primatica;
 
-import com.google.common.collect.ImmutableMap;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.StringNbtReader;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Vec3d;
+import suso.event_manage.EvtBaseConstants;
 import suso.event_manage.util.RndSet;
 
 import java.util.Arrays;
-import java.util.Map;
 
 public class PrimaticaInfo {
     public enum Powerups {
@@ -181,30 +179,15 @@ public class PrimaticaInfo {
     }
 
 
-    private static final Map<Integer, String> colorCorrespondence = ImmutableMap.<Integer, String>builder()
-            .put(Formatting.GRAY.getColorIndex(), "gray")
-            .put(Formatting.WHITE.getColorIndex(), "white")
-            .put(Formatting.LIGHT_PURPLE.getColorIndex(), "pink")
-            .put(Formatting.DARK_PURPLE.getColorIndex(), "purple")
-            .put(Formatting.BLUE.getColorIndex(), "blue")
-            .put(Formatting.DARK_AQUA.getColorIndex(), "cyan")
-            .put(Formatting.AQUA.getColorIndex(), "light_blue")
-            .put(Formatting.DARK_GREEN.getColorIndex(), "green")
-            .put(Formatting.GREEN.getColorIndex(), "lime")
-            .put(Formatting.YELLOW.getColorIndex(), "yellow")
-            .put(Formatting.GOLD.getColorIndex(), "orange")
-            .put(Formatting.DARK_RED.getColorIndex(), "red")
-            .build();
-
     public static String getCorrespondingGunk(int colorIndex) {
-        return "suso:" + colorCorrespondence.get(colorIndex) + "_gunk";
+        return "suso:" + EvtBaseConstants.getTeamColor(colorIndex) + "_gunk";
     }
 
     public static String getCorrespondingBlock(int colorIndex) {
-        return "suso:" + colorCorrespondence.get(colorIndex) + "_holoblock";
+        return "suso:" + EvtBaseConstants.getTeamColor(colorIndex) + "_holoblock";
     }
 
     public static String getCorrespondingEmp(int colorIndex) {
-        return "suso:" + colorCorrespondence.get(colorIndex) + "_emp";
+        return "suso:" + EvtBaseConstants.getTeamColor(colorIndex) + "_emp";
     }
 }
