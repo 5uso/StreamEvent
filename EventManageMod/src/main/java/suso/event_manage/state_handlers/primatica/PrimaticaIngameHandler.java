@@ -455,7 +455,7 @@ public class PrimaticaIngameHandler implements StateHandler {
                 SoundUtil.playSound(player, new Identifier("suso:bow.charge"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
                 SoundUtil.playFadeSound(player, new Identifier("suso:bow.loop"), 0.4f, 1.0f, true, SoundCategory.PLAYERS, true);
             } else {
-                SoundUtil.playSound(player, new Identifier("minecraft:item.crossbow.loading_middle"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
+                SoundUtil.playFadeSound(player,  new Identifier("minecraft:item.crossbow.loading_middle"), 1.0f, 1.0f, false, SoundCategory.PLAYERS, true);
             }
         }
         return false;
