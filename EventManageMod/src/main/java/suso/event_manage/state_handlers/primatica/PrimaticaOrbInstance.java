@@ -91,7 +91,7 @@ public class PrimaticaOrbInstance implements TickableInstance {
         AbstractTeam team = player.getScoreboardTeam();
         if(team == null) return;
 
-        handler.score(team);
+        handler.score(team, player);
 
         List<ServerPlayerEntity> players = world.getPlayers();
 
