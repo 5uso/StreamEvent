@@ -4,3 +4,12 @@ accessible method net/minecraft/client/color/block/BlockColors registerColorProp
 accessible field net/minecraft/client/gl/ShaderEffect mainTarget Lnet/minecraft/client/gl/Framebuffer;
 accessible field net/minecraft/client/render/GameRenderer shadersEnabled Z
 accessible method net/minecraft/client/render/GameRenderer getFov (Lnet/minecraft/client/render/Camera;FZ)D
+accessible method net/minecraft/client/gui/screen/Screen remove (Lnet/minecraft/client/gui/Element;)V
+accessible method net/minecraft/client/gui/screen/Screen addDrawableChild (Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;
+accessible method net/minecraft/client/gui/DrawableHelper fillGradient (Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V
+accessible method net/minecraft/client/gui/screen/Screen renderTextHoverEffect (Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Style;II)V
+accessible field net/minecraft/client/gui/screen/Screen client Lnet/minecraft/client/MinecraftClient;
+accessible field net/minecraft/client/gui/screen/Screen textRenderer Lnet/minecraft/client/font/TextRenderer;
+accessible field net/minecraft/client/gui/screen/Screen title Lnet/minecraft/text/Text;
+accessible field net/minecraft/client/gui/widget/ClickableWidget width I
+accessible field net/minecraft/client/gui/widget/ClickableWidget height I
