@@ -83,6 +83,4 @@ public abstract class ServerPlayerEntityMixin implements ServerPlayerEntityExten
     public boolean isJumpPressed() {
         return isJumpPressed;
     }
-
-
 }
