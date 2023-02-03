@@ -3,6 +3,7 @@ package suso.event_manage.state_handlers.primatica;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.damage.DamageRecord;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -423,6 +424,19 @@ public class PrimaticaIngameHandler implements StateHandler {
         info.changePitch(0.5f, 40);
 
         SoundUtil.playSound(player, new Identifier("eniah:sfx.crash"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
+
+        boolean displayed = false;
+        DamageRecord src = player.getDamageTracker().getMostRecentDamage();
+        if(src != null) {
+            if(src.getAttacker() instanceof ServerPlayerEntity killer) {
+                HudUtil.broadcastFeedMessage(killer.getUuid(), new Identifier("minecraft:textures/item/iron_sword.png"), player.getUuid());
+                displayed = true;
+            }
+        }
+        if(!displayed) {
+            HudUtil.broadcastFeedMessage(player.getUuid(), new Identifier("minecraft:textures/block/poppy.png"), EvtBaseConstants.NULL_UUID);
+        }
+
         return true;
     }
 
