@@ -51,4 +51,6 @@ public class EvtBaseConstants {
     public static String getTeamColor(int colorIndex) {
         return colorCorrespondence.get(teamIndexes.get(colorIndex));
     }
+
+    public static final UUID NULL_UUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 }

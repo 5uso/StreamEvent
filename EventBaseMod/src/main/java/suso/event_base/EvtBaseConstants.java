@@ -6,6 +6,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class EvtBaseConstants {
     public static final Identifier PLAY_FADE_SOUND = new Identifier("suso:play_fade_sound");
@@ -53,4 +54,6 @@ public class EvtBaseConstants {
     public static String getTeamColor(int colorIndex) {
         return colorCorrespondence.get(teamIndexes.get(colorIndex));
     }
+
+    public static final UUID NULL_UUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 }
