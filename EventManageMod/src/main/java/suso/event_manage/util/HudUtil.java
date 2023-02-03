@@ -4,8 +4,13 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
+import suso.event_manage.EventManager;
 import suso.event_manage.EvtBaseConstants;
 import suso.event_manage.state_handlers.primatica.PrimaticaScore;
+
+import java.util.UUID;
 
 public class HudUtil {
     public enum DataTypes {
@@ -47,5 +52,16 @@ public class HudUtil {
         for(int i = 0; i < 12; i++) p.writeInt(ranks[i]);
 
         ServerPlayNetworking.send(player, EvtBaseConstants.HUD_DATA, p);
+    }
+
+    public static void broadcastFeedMessage(UUID player1, Identifier texture, @Nullable UUID player2) {
+        PacketByteBuf p = PacketByteBufs.create();
+        p.writeInt(DataTypes.FEED.ordinal());
+
+        p.writeUuid(player1);
+        p.writeIdentifier(texture);
+        p.writeUuid(player2 == null ? EvtBaseConstants.NULL_UUID : player2);
+
+        EventManager.getInstance().getServer().getPlayerManager().getPlayerList().forEach(player -> ServerPlayNetworking.send(player, EvtBaseConstants.HUD_DATA, p));
     }
 }
