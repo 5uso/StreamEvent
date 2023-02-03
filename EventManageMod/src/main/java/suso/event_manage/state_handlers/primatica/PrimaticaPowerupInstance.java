@@ -19,6 +19,7 @@ import net.minecraft.util.registry.Registry;
 import suso.event_manage.custom.blocks.CustomBlocks;
 import suso.event_manage.custom.blocks.entity.PrimaticaPowerupBlockEntity;
 import suso.event_manage.state_handlers.TickableInstance;
+import suso.event_manage.util.HudUtil;
 import suso.event_manage.util.InventoryUtil;
 import suso.event_manage.util.MiscUtil;
 import suso.event_manage.util.SoundUtil;
@@ -89,10 +90,22 @@ public class PrimaticaPowerupInstance implements TickableInstance {
         UUID id = player.getUuid();
         if(!handler.getPlayerInfo(id).hasPowerup) {
             switch (type) {
-                case AGILITY -> InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.AGILITY));
-                case BRIDGE -> InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.BRIDGE));
-                case GRAVITY -> InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.GRAVITY));
-                case EMP -> InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.EMP));
+                case AGILITY -> {
+                    InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.AGILITY));
+                    HudUtil.setInfo(player, new Identifier("suso:textures/hud/info//lang//singularity.png"));
+                }
+                case BRIDGE -> {
+                    InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.BRIDGE));
+                    HudUtil.setInfo(player, new Identifier("suso:textures/hud/info//lang//singularity.png"));
+                }
+                case GRAVITY -> {
+                    InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.GRAVITY));
+                    HudUtil.setInfo(player, new Identifier("suso:textures/hud/info//lang//singularity.png"));
+                }
+                case EMP -> {
+                    InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.EMP));
+                    HudUtil.setInfo(player, new Identifier("suso:textures/hud/info//lang//singularity.png"));
+                }
                 case ARROW -> {
                     Inventory playerInventory = player.getInventory();
                     int size = playerInventory.size();
@@ -102,8 +115,12 @@ public class PrimaticaPowerupInstance implements TickableInstance {
                             slot = i == 40 ? 99 : i;
                     }
                     InventoryUtil.replaceSlot(player, slot, ItemStack.fromNbt(PrimaticaInfo.ARROW_BOW));
+                    HudUtil.setInfo(player, new Identifier("suso:textures/hud/info//lang//singularity.png"));
                 }
-                case GUNK -> InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.GUNK));
+                case GUNK -> {
+                    InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.GUNK));
+                    HudUtil.setInfo(player, new Identifier("suso:textures/hud/info//lang//singularity.png"));
+                }
             }
             handler.setHasPowerup(id, true);
             SoundUtil.playSound(player, new Identifier("eniah:sfx.collect"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.8f);

@@ -299,6 +299,7 @@ public class PrimaticaIngameHandler implements StateHandler {
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.INSTANT_HEALTH, 1, 100, false, false, false));
 
             setHasPowerup(player.getUuid(), false);
+            HudUtil.setInfo(player, null);
 
             PrimaticaPlayerInfo info = getPlayerInfo(player.getUuid());
             info.setAgilityActive(false);
@@ -458,6 +459,7 @@ public class PrimaticaIngameHandler implements StateHandler {
             }) {
                 InventoryUtil.replaceSlot(player, hand == Hand.MAIN_HAND ? player.getInventory().selectedSlot : 99, ItemStack.EMPTY);
                 player.swingHand(hand, true);
+                HudUtil.setInfo(player, null);
             }
             return true;
         }
@@ -557,6 +559,7 @@ public class PrimaticaIngameHandler implements StateHandler {
                 }
                 bow = ItemStack.fromNbt(bowNbt);
                 setHasPowerup(player.getUuid(), false);
+                HudUtil.setInfo(player, null);
             }
         }
         InventoryUtil.replaceSlot(player, player.getActiveHand() == Hand.MAIN_HAND ? player.getInventory().selectedSlot : 99, bow);
