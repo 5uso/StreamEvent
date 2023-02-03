@@ -14,7 +14,7 @@ import java.util.UUID;
 
 public class HudUtil {
     public enum DataTypes {
-        STATE, TIMER, FEED, AGILITY, PRIMATICA_SCORE
+        STATE, TIMER, FEED, AGILITY, PRIMATICA_SCORE, INFO
     }
 
     public static void setState(ServerPlayerEntity player, EvtBaseConstants.States state) {
@@ -63,5 +63,15 @@ public class HudUtil {
         p.writeUuid(player2 == null ? EvtBaseConstants.NULL_UUID : player2);
 
         EventManager.getInstance().getServer().getPlayerManager().getPlayerList().forEach(player -> ServerPlayNetworking.send(player, EvtBaseConstants.HUD_DATA, p));
+    }
+
+    public static void setInfo(ServerPlayerEntity player, Identifier id) {
+        PacketByteBuf p = PacketByteBufs.create();
+        p.writeInt(DataTypes.INFO.ordinal());
+
+        p.writeBoolean(id != null);
+        if(id != null) p.writeIdentifier(id);
+
+        ServerPlayNetworking.send(player, EvtBaseConstants.HUD_DATA, p);
     }
 }
