@@ -47,7 +47,7 @@ public class EvtBaseConstants {
             .put(Formatting.DARK_RED.getColorIndex(), 11)
             .build();
 
-    public static final List<Formatting> formattingCorrespondence = List.of(Formatting.GRAY, Formatting.WHITE, Formatting.LIGHT_PURPLE, Formatting.DARK_PURPLE, Formatting.BLUE, Formatting.DARK_AQUA,Formatting.AQUA, Formatting.DARK_GREEN, Formatting.GREEN, Formatting.YELLOW, Formatting.GOLD, Formatting.RED);
+    public static final List<Formatting> formattingCorrespondence = List.of(Formatting.GRAY, Formatting.WHITE, Formatting.LIGHT_PURPLE, Formatting.DARK_PURPLE, Formatting.BLUE, Formatting.DARK_AQUA,Formatting.AQUA, Formatting.DARK_GREEN, Formatting.GREEN, Formatting.YELLOW, Formatting.GOLD, Formatting.DARK_RED);
     public static final List<String> colorCorrespondence = List.of("gray", "white", "pink", "purple", "blue", "cyan", "light_blue", "green", "lime", "yellow", "orange", "red");
 
     public static String getTeamColor(int colorIndex) {
