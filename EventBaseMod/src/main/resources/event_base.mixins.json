@@ -10,9 +10,9 @@
     "client.InGameHudMixin"
   ],
   "client": [
-    "client.KeyboardInvoker",
     "client.BlockColorsMixin",
     "client.CoreMixin",
+    "client.DeathScreenMixin",
     "client.DrawableHelperMixin",
     "client.GameRendererAccess",
     "client.GameRendererMixin",
@@ -20,6 +20,7 @@
     "client.HeldItemRendererMixin",
     "client.IdentifierMixin",
     "client.KeyboardInputMixin",
+    "client.KeyboardInvoker",
     "client.KeyboardMixin",
     "client.PostProcessMixin",
     "client.SoundManagerAccess",
