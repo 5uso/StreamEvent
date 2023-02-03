@@ -166,7 +166,7 @@ public class EventManager implements ModInitializer {
         rules.get(GameRules.NATURAL_REGENERATION).set(true, server);
         rules.get(GameRules.DO_DAYLIGHT_CYCLE).set(false, server);
         rules.get(GameRules.LOG_ADMIN_COMMANDS).set(false, server);
-        rules.get(GameRules.SHOW_DEATH_MESSAGES).set(true, server);
+        rules.get(GameRules.SHOW_DEATH_MESSAGES).set(false, server);
         rules.get(GameRules.RANDOM_TICK_SPEED).set(0, server);
         rules.get(GameRules.SEND_COMMAND_FEEDBACK).set(true, server);
         rules.get(GameRules.REDUCED_DEBUG_INFO).set(false, server);
