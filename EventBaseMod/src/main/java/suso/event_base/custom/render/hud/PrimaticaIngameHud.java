@@ -11,6 +11,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.MathHelper;
 import suso.event_base.custom.render.CustomRender;
 import suso.event_base.custom.render.hud.elements.Feed;
+import suso.event_base.custom.render.hud.elements.ItemInfo;
 import suso.event_base.custom.render.hud.elements.PrimaticaScoreboard;
 import suso.event_base.custom.render.hud.elements.Timer;
 
@@ -20,6 +21,7 @@ public class PrimaticaIngameHud implements StateHud {
     private boolean agility;
     private float agilityProgress;
     private final PrimaticaScoreboard scoreboard;
+    private final ItemInfo info;
 
     public PrimaticaIngameHud() {
         timer = new Timer();
@@ -27,6 +29,7 @@ public class PrimaticaIngameHud implements StateHud {
         agility = false;
         agilityProgress = 0.0f;
         scoreboard = new PrimaticaScoreboard();
+        info = new ItemInfo();
     }
 
     @Override
@@ -43,6 +46,14 @@ public class PrimaticaIngameHud implements StateHud {
                 for(int i = 0; i < 12; i++) ranks[i] = msg.readInt();
 
                 scoreboard.setScores(scores, ranks);
+            }
+            case INFO -> {
+                boolean info_active = msg.readBoolean();
+                if(info_active) {
+                    PacketByteBuf buf = PacketByteBufs.copy(msg);
+                    info.show(buf.readIdentifier());
+                }
+                else info.hide();
             }
         }
     }
@@ -81,5 +92,7 @@ public class PrimaticaIngameHud implements StateHud {
         matrixStack.pop();
 
         scoreboard.onHudRender(matrixStack, tickDelta);
+
+        info.onHudRender(matrixStack, tickDelta);
     }
 }
