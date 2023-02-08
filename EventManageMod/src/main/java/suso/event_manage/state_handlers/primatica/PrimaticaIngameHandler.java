@@ -1,5 +1,7 @@
 package suso.event_manage.state_handlers.primatica;
 
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -15,6 +17,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtInt;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleTypes;
@@ -23,6 +26,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
@@ -571,9 +575,20 @@ public class PrimaticaIngameHandler implements StateHandler {
 
     @Override
     public void onPlayerKill(ServerPlayerEntity player, Entity victim, DamageSource source) {
-        if(victim instanceof ServerPlayerEntity) {
-            SoundUtil.playSound(player, new Identifier("eniah:sfx.fall"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
+        if(victim instanceof ServerPlayerEntity v) {
+            //SoundUtil.playSound(player, new Identifier("eniah:sfx.fall"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
+            //HudUtil.sendKill(player, v);
         }
+
+        SoundUtil.playSound(player, new Identifier("eniah:sfx.fall"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
+
+        PacketByteBuf p = PacketByteBufs.create();
+        p.writeInt(HudUtil.DataTypes.KILL.ordinal());
+
+        p.writeString(victim.getName().getString());
+        p.writeInt(victim.getScoreboardTeam() == null ? Formatting.WHITE.ordinal() : victim.getScoreboardTeam().getColor().ordinal());
+
+        ServerPlayNetworking.send(player, EvtBaseConstants.HUD_DATA, p);
     }
 
     @Override

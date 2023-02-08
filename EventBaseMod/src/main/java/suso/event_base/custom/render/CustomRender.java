@@ -24,10 +24,11 @@ import java.io.IOException;
 public class CustomRender {
     public static final CustomHud CUSTOM_HUD = new CustomHud();
 
-    private static Shader FEED_SHADER;
     private static Shader TIMER_SHADER;
     private static Shader AGILITY_SHADER;
     private static Shader SCORE_SHADER;
+    private static Shader KILL_SHADER;
+    private static Shader KILL_BORDER_SHADER;
 
     private static Shader currentDrawShader;
 
@@ -67,10 +68,11 @@ public class CustomRender {
     public static void setupShaders(ResourceManager manager) {
         System.out.println("Loading custom shaders...");
         try {
-            FEED_SHADER = new Shader(manager, "suso_feed", VertexFormats.POSITION_TEXTURE);
             TIMER_SHADER = new Shader(manager, "suso_timer", VertexFormats.POSITION_TEXTURE);
             AGILITY_SHADER = new Shader(manager, "suso_agility", VertexFormats.POSITION_COLOR);
             SCORE_SHADER = new Shader(manager, "suso_score", VertexFormats.POSITION_TEXTURE);
+            KILL_SHADER = new Shader(manager, "suso_kill", VertexFormats.POSITION_COLOR);
+            KILL_BORDER_SHADER = new Shader(manager, "suso_kill_border", VertexFormats.POSITION_COLOR);
         } catch (IOException e) {
             printShaderException(e);
         }
@@ -88,10 +90,6 @@ public class CustomRender {
         currentDrawShader = shader;
     }
 
-    public static Shader getFeedShader() {
-        return FEED_SHADER;
-    }
-
     public static Shader getTimerShader() {
         return TIMER_SHADER;
     }
@@ -102,6 +100,14 @@ public class CustomRender {
 
     public static Shader getScoreShader() {
         return SCORE_SHADER;
+    }
+
+    public static Shader getKillShader() {
+        return KILL_SHADER;
+    }
+
+    public static Shader getKillBorderShader() {
+        return KILL_BORDER_SHADER;
     }
 
     // Print a shader exception in chat.

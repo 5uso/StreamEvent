@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import suso.event_manage.EventManager;
@@ -14,7 +15,7 @@ import java.util.UUID;
 
 public class HudUtil {
     public enum DataTypes {
-        STATE, TIMER, FEED, AGILITY, PRIMATICA_SCORE, INFO
+        STATE, TIMER, FEED, AGILITY, PRIMATICA_SCORE, INFO, KILL
     }
 
     public static void setState(ServerPlayerEntity player, EvtBaseConstants.States state) {
@@ -71,6 +72,16 @@ public class HudUtil {
 
         p.writeBoolean(id != null);
         if(id != null) p.writeIdentifier(id);
+
+        ServerPlayNetworking.send(player, EvtBaseConstants.HUD_DATA, p);
+    }
+
+    public static void sendKill(ServerPlayerEntity player, ServerPlayerEntity victim) {
+        PacketByteBuf p = PacketByteBufs.create();
+        p.writeInt(DataTypes.KILL.ordinal());
+
+        p.writeString(victim.getEntityName());
+        p.writeInt(victim.getScoreboardTeam() == null ? Formatting.WHITE.ordinal() : victim.getScoreboardTeam().getColor().ordinal());
 
         ServerPlayNetworking.send(player, EvtBaseConstants.HUD_DATA, p);
     }

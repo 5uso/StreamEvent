@@ -8,12 +8,10 @@ import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.Shader;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.MathHelper;
 import suso.event_base.custom.render.CustomRender;
-import suso.event_base.custom.render.hud.elements.Feed;
-import suso.event_base.custom.render.hud.elements.ItemInfo;
-import suso.event_base.custom.render.hud.elements.PrimaticaScoreboard;
-import suso.event_base.custom.render.hud.elements.Timer;
+import suso.event_base.custom.render.hud.elements.*;
 
 public class PrimaticaIngameHud implements StateHud {
     private final Timer timer;
@@ -22,6 +20,7 @@ public class PrimaticaIngameHud implements StateHud {
     private float agilityProgress;
     private final PrimaticaScoreboard scoreboard;
     private final ItemInfo info;
+    private final KillMessage killMessage;
 
     public PrimaticaIngameHud() {
         timer = new Timer();
@@ -30,6 +29,7 @@ public class PrimaticaIngameHud implements StateHud {
         agilityProgress = 0.0f;
         scoreboard = new PrimaticaScoreboard();
         info = new ItemInfo();
+        killMessage = new KillMessage();
     }
 
     @Override
@@ -54,6 +54,10 @@ public class PrimaticaIngameHud implements StateHud {
                     info.show(buf.readIdentifier());
                 }
                 else info.hide();
+            }
+            case KILL -> {
+                PacketByteBuf buf = PacketByteBufs.copy(msg);
+                killMessage.display(buf.readString(), Formatting.values()[buf.readInt()]);
             }
         }
     }
@@ -94,5 +98,7 @@ public class PrimaticaIngameHud implements StateHud {
         scoreboard.onHudRender(matrixStack, tickDelta);
 
         info.onHudRender(matrixStack, tickDelta);
+
+        killMessage.onHudRender(matrixStack, tickDelta);
     }
 }
