@@ -33,8 +33,7 @@ public class PrimaticaPowerupBlockEntity extends BlockEntity {
         type = PrimaticaInfo.Powerups.values()[nbt.getByte("type")];
     }
 
-    @Nullable
-    @Override
+    @Nullable @Override
     public Packet<ClientPlayPacketListener> toUpdatePacket() {
         return BlockEntityUpdateS2CPacket.create(this);
     }
