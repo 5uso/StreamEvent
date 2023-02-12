@@ -407,7 +407,7 @@ public class PrimaticaIngameHandler implements StateHandler {
         SoundUtil.playFadeSound(player, new Identifier("suso:hologram"), 0.0f, 1.0f, true, SoundCategory.BLOCKS, false);
         SoundUtil.playFadeSound(player, new Identifier("suso:gravity"), 0.0f, 1.0f, true, SoundCategory.PLAYERS, true);
 
-        ShaderUtil.setPostShader(player, new Identifier("suso:shaders/post/primatica.json"));
+        ShaderUtil.setPostShader(player, new Identifier("suso:shaders/post/main.json"));
         updateClientTimer(player);
 
         initPlayer(player, data);
@@ -416,6 +416,7 @@ public class PrimaticaIngameHandler implements StateHandler {
     @Override
     public void onPlayerRespawn(ServerPlayerEntity player, EventPlayerData data) {
         playerInfo.get(player.getUuid()).changePitch(1.0f, 0);
+        ShaderUtil.setPostShader(player, new Identifier("suso:shaders/post/main.json"));
         initPlayer(player, data);
     }
 
@@ -429,6 +430,8 @@ public class PrimaticaIngameHandler implements StateHandler {
         info.changePitch(0.5f, 40);
 
         SoundUtil.playSound(player, new Identifier("eniah:sfx.crash"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
+
+        ShaderUtil.setPostShader(player, new Identifier("suso:shaders/post/glitched.json"));
 
         boolean displayed = false;
         DamageRecord src = player.getDamageTracker().getMostRecentDamage();
