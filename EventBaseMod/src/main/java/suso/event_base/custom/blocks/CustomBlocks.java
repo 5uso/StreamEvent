@@ -54,6 +54,8 @@ public class CustomBlocks {
     public static BlockEntityType<PrimaticaPowerupBlockEntity> PRIMATICA_POWERUP_ENTITY;
     public static Block PRIMATICA_RESPAWN;
     public static BlockEntityType<PrimaticaRespawnBlockEntity> PRIMATICA_RESPAWN_ENTITY;
+    public static Block PRIMATICA_DOOR;
+    public static BlockEntityType<PrimaticaDoorBlockEntity> PRIMATICA_DOOR_ENTITY;
 
     private static Block register(String id, Block block) {
         return Registry.register(Registry.BLOCK, id, block);
@@ -111,5 +113,8 @@ public class CustomBlocks {
         PRIMATICA_RESPAWN = register("suso:primatica_respawn", new PrimaticaRespawnBlock(FabricBlockSettings.of(Material.METAL).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
         PRIMATICA_RESPAWN_ENTITY = register("suso:primatica_respawn_entity", FabricBlockEntityTypeBuilder.create(PrimaticaRespawnBlockEntity::new, PRIMATICA_RESPAWN).build());
         BlockEntityRendererRegistry.register(PRIMATICA_RESPAWN_ENTITY, ctx -> new PrimaticaRespawnRenderer());
+        PRIMATICA_DOOR = register("suso:primatica_door", new PrimaticaDoorBlock(FabricBlockSettings.of(Material.METAL).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        PRIMATICA_DOOR_ENTITY = register("suso:primatica_door_entity", FabricBlockEntityTypeBuilder.create(PrimaticaDoorBlockEntity::new, PRIMATICA_DOOR).build());
+        BlockEntityRendererRegistry.register(PRIMATICA_DOOR_ENTITY, ctx -> new PrimaticaDoorRenderer());
     }
 }

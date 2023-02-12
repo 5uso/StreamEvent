@@ -1,0 +1,41 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.primatica_door",
+				"texture_width": 256,
+				"texture_height": 256,
+				"visible_bounds_width": 10,
+				"visible_bounds_height": 6.5,
+				"visible_bounds_offset": [0, 2.75, 0]
+			},
+			"bones": [
+				{
+					"name": "A",
+					"pivot": [-40, 40, 8],
+					"cubes": [
+						{"origin": [-40, 0, 7], "size": [40, 80, 1], "uv": [0, 81]}
+					]
+				},
+				{
+					"name": "B",
+					"pivot": [40, 40, 8],
+					"cubes": [
+						{"origin": [0, 0, 7], "size": [40, 80, 1], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "hinges",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-41, 16, 6], "size": [2, 6, 3], "uv": [82, 27]},
+						{"origin": [-41, 60, 6], "size": [2, 6, 3], "uv": [82, 18]},
+						{"origin": [39, 16, 6], "size": [2, 6, 3], "uv": [82, 9]},
+						{"origin": [39, 60, 6], "size": [2, 6, 3], "uv": [82, 0]}
+					]
+				}
+			]
+		}
+	]
+}
