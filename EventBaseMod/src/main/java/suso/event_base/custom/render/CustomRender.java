@@ -29,6 +29,7 @@ public class CustomRender {
     private static Shader SCORE_SHADER;
     private static Shader KILL_SHADER;
     private static Shader KILL_BORDER_SHADER;
+    private static Shader DEATH_SHADER;
 
     private static Shader currentDrawShader;
 
@@ -73,6 +74,7 @@ public class CustomRender {
             SCORE_SHADER = new Shader(manager, "suso_score", VertexFormats.POSITION_TEXTURE);
             KILL_SHADER = new Shader(manager, "suso_kill", VertexFormats.POSITION_COLOR);
             KILL_BORDER_SHADER = new Shader(manager, "suso_kill_border", VertexFormats.POSITION_COLOR);
+            DEATH_SHADER = new Shader(manager, "suso_death", VertexFormats.POSITION_COLOR);
         } catch (IOException e) {
             printShaderException(e);
         }
@@ -108,6 +110,10 @@ public class CustomRender {
 
     public static Shader getKillBorderShader() {
         return KILL_BORDER_SHADER;
+    }
+
+    public static Shader getDeathShader() {
+        return DEATH_SHADER;
     }
 
     // Print a shader exception in chat.

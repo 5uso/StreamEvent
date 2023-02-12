@@ -1,9 +1,12 @@
 package suso.event_base.mixin.client;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.DeathScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.render.Shader;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -15,6 +18,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import suso.event_base.custom.render.CustomRender;
 
 import java.util.List;
 import java.util.Objects;
@@ -64,7 +68,13 @@ public abstract class DeathScreenMixin extends Screen {
         MinecraftClient client = MinecraftClient.getInstance();
         int guiScale = client.options.getGuiScale().getValue();
 
-        s.fillGradient(matrices, 0, 0, s.width, s.height, 0x60500000, 0xA0803030);
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        CustomRender.setCurrentDrawShader(CustomRender.getDeathShader());
+        DrawableHelper.fill(matrices, 0, 0, s.width, s.height, 0);
+        //s.fillGradient(matrices, 0, 0, s.width, s.height, 0x60500000, 0xA0803030);
+        RenderSystem.disableBlend();
+        CustomRender.setCurrentDrawShader(null);
 
         matrices.push();
         matrices.translate(s.width / 2.0, s.height / 2.0, 0.0);
