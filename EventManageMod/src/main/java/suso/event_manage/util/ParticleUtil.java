@@ -11,6 +11,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import org.joml.Vector3f;
 import suso.event_manage.EventManager;
 import suso.event_manage.EvtBaseConstants;
+import suso.event_manage.custom.network.payloads.FireworkParticlePayload;
 
 import java.awt.*;
 import java.util.List;
@@ -34,14 +35,6 @@ public class ParticleUtil {
     }
 
     public static void fireworkParticle(List<ServerPlayerEntity> players, double x, double y, double z, double vx, double vy, double vz, NbtCompound firework) {
-        PacketByteBuf p = PacketByteBufs.create();
-        p.writeDouble(x);
-        p.writeDouble(y);
-        p.writeDouble(z);
-        p.writeDouble(vx);
-        p.writeDouble(vy);
-        p.writeDouble(vz);
-        p.writeNbt(firework);
-        players.forEach(player -> ServerPlayNetworking.send(player, EvtBaseConstants.FIREWORK_PARTICLE, p));
+        players.forEach(player -> ServerPlayNetworking.send(player, new FireworkParticlePayload(x, y, z, vx, vy, vz, firework)));
     }
 }

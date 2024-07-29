@@ -14,5 +14,8 @@ public class CustomPackets {
         PayloadTypeRegistry.playS2C().register(SetShaderUniformPayload.ID, SetShaderUniformPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(SetPostShaderPayload.ID, SetPostShaderPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(SetBlockColorPayload.ID, SetBlockColorPayload.CODEC);
+
+        //Particle packets
+        PayloadTypeRegistry.playS2C().register(FireworkParticlePayload.ID, FireworkParticlePayload.CODEC);
     }
 }
