@@ -2,7 +2,6 @@ package suso.event_manage.data;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mojang.authlib.Agent;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.ProfileLookupCallback;
 import net.minecraft.scoreboard.Scoreboard;
@@ -95,15 +94,15 @@ public class EventData {
             System.err.println("Error loading player list: " + e);
         }
 
-        server.getGameProfileRepo().findProfilesByNames(toWhitelist.toArray(new String[0]), Agent.MINECRAFT, new ProfileLookupCallback() {
+        server.getGameProfileRepo().findProfilesByNames(toWhitelist.toArray(new String[0]), new ProfileLookupCallback() {
             @Override
             public void onProfileLookupSucceeded(GameProfile profile) {
                 server.getPlayerManager().getWhitelist().add(new WhitelistEntry(profile));
             }
 
             @Override
-            public void onProfileLookupFailed(GameProfile profile, Exception exception) {
-                System.err.println("Error adding player " + profile.getName() + " to whitelist: " + exception);
+            public void onProfileLookupFailed(String username, Exception exception) {
+                System.err.println("Error adding player " + username + " to whitelist: " + exception);
             }
         });
     }
@@ -126,15 +125,15 @@ public class EventData {
             System.err.println("Error loading admin list: " + e);
         }
 
-        server.getGameProfileRepo().findProfilesByNames(toOp.toArray(new String[0]), Agent.MINECRAFT, new ProfileLookupCallback() {
+        server.getGameProfileRepo().findProfilesByNames(toOp.toArray(new String[0]), new ProfileLookupCallback() {
             @Override
             public void onProfileLookupSucceeded(GameProfile profile) {
                 server.getPlayerManager().addToOperators(profile);
             }
 
             @Override
-            public void onProfileLookupFailed(GameProfile profile, Exception exception) {
-                System.err.println("Error adding player " + profile.getName() + " to ops: " + exception);
+            public void onProfileLookupFailed(String username, Exception exception) {
+                System.err.println("Error adding player " + username + " to ops: " + exception);
             }
         });
     }
