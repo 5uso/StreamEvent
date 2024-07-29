@@ -5,7 +5,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.registry.Registry;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -19,7 +19,7 @@ public class GunkBlockEntity extends BlockEntity {
     public GunkBlockEntity(BlockPos pos, BlockState state) {
         super(CustomBlocks.GUNK_ENTITY, pos, state);
 
-        previous = PrimaticaGunkInstance.previous == null ? Registry.BLOCK.get(new Identifier("air")).getDefaultState() : PrimaticaGunkInstance.previous;
+        previous = PrimaticaGunkInstance.previous == null ? Registries.BLOCK.get(new Identifier("air")).getDefaultState() : PrimaticaGunkInstance.previous;
         ticksLeft = PrimaticaGunkInstance.sendTicksLeft;
     }
 
@@ -53,7 +53,7 @@ public class GunkBlockEntity extends BlockEntity {
         if(prev_nbt != null) {
             previous = BlockState.CODEC.decode(NbtOps.INSTANCE, prev_nbt).getOrThrow(false, s -> {}).getFirst();
         } else {
-            previous = Registry.BLOCK.get(new Identifier("air")).getDefaultState();
+            previous = Registries.BLOCK.get(new Identifier("air")).getDefaultState();
         }
     }
 }

@@ -3,7 +3,7 @@ package suso.event_manage.state_handlers.primatica;
 import net.minecraft.block.BlockState;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.Registry;
+import net.minecraft.registry.Registries;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -33,7 +33,7 @@ public class PrimaticaBridgeInstance implements TickableInstance {
 
         AbstractTeam team = owner.getScoreboardTeam();
         Identifier blockId = new Identifier(PrimaticaInfo.getCorrespondingBlock(team == null ? 7 :team.getColor().getColorIndex()));
-        this.block = Registry.BLOCK.get(blockId).getDefaultState();
+        this.block = Registries.BLOCK.get(blockId).getDefaultState();
         this.color = team == null ? Vec3f.ZERO : ParticleUtil.teamColor(team);
 
         this.direction = Vec3d.fromPolar(0.0f, owner.getYaw()).multiply(0.6);

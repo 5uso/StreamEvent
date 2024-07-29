@@ -8,7 +8,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.Registry;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -143,7 +143,7 @@ public class PrimaticaPowerupInstance implements TickableInstance {
             int y = random.nextInt(66, 153);
 
             BlockPos r = new BlockPos(x, y, z);
-            TagKey<Block> floor_tag = TagKey.of(Registry.BLOCK_KEY, new Identifier("suso:primatica_floor"));
+            TagKey<Block> floor_tag = TagKey.of(Registries.BLOCK.getKey(), new Identifier("suso:primatica_floor"));
             for(int j = 0; j < 10; j++) {
                 if(!w.getBlockState(r).isAir()) break;
                 if(w.getBlockState(r.down()).isIn(floor_tag)) {

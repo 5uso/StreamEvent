@@ -11,7 +11,7 @@ import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.Registry;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -44,7 +44,7 @@ public class PrimaticaGunkInstance implements TickableInstance {
 
         AbstractTeam team = owner.getScoreboardTeam();
         Identifier blockId = new Identifier(PrimaticaInfo.getCorrespondingGunk(team == null ? 7 :team.getColor().getColorIndex()));
-        this.block = Registry.BLOCK.get(blockId).getDefaultState();
+        this.block = Registries.BLOCK.get(blockId).getDefaultState();
 
         Vec3d pos = owner.getEyePos().add(owner.getRotationVector());
         entity = new SnowballEntity(world, pos.x, pos.y, pos.z);
@@ -77,7 +77,7 @@ public class PrimaticaGunkInstance implements TickableInstance {
         }
 
         BlockPos impactPos = entity.getBlockPos();
-        TagKey<Block> safeTag = TagKey.of(Registry.BLOCK_KEY, new Identifier("suso:gunk_safe"));
+        TagKey<Block> safeTag = TagKey.of(Registries.BLOCK.getKey(), new Identifier("suso:gunk_safe"));
 
         Vec3d center = new Vec3d(impactPos.getX(), impactPos.getY(), impactPos.getZ()).add(0.5, 0.5, 0.5);
         for(double a = 0.0; a < 2.0 * Math.PI; a += 0.025 * Math.PI) {

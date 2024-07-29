@@ -21,7 +21,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.Registry;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.MinecraftServer;
@@ -297,7 +297,7 @@ public class PrimaticaIngameHandler implements StateHandler {
 
             InventoryUtil.replaceSlot(player, 2, ItemStack.fromNbt(blockNbt));
 
-            InventoryUtil.replaceSlot(player, 9, new ItemStack(Registry.ITEM.get(new Identifier("minecraft:arrow"))));
+            InventoryUtil.replaceSlot(player, 9, new ItemStack(Registries.ITEM.get(new Identifier("minecraft:arrow"))));
 
             InventoryUtil.replaceSlot(player, 103, ItemStack.fromNbt(helmetNbt));
             InventoryUtil.replaceSlot(player, 102, ItemStack.fromNbt(chestplateNbt));

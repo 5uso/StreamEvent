@@ -6,7 +6,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.Registry;
+import net.minecraft.registry.Registries;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -48,7 +48,7 @@ public class PrimaticaEMPInstance implements TickableInstance {
         List<ServerPlayerEntity> players = world.getPlayers();
 
         Identifier blockId = new Identifier(PrimaticaInfo.getCorrespondingEmp(team == null ? 7 :team.getColor().getColorIndex()));
-        world.setBlockState(pos, Registry.BLOCK.get(blockId).getDefaultState());
+        world.setBlockState(pos, Registries.BLOCK.get(blockId).getDefaultState());
         players.forEach(p -> ShaderUtil.setBlockColor(p, pos, (int)(player.world.getTime() % 24000)));
 
         SoundUtil.playSound(players, new Identifier("minecraft:entity.bee.sting"), SoundCategory.BLOCKS, position, 2.0f, 0.5f);

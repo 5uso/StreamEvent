@@ -5,6 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.world.World;
 
@@ -12,7 +13,7 @@ public class CustomEntities {
     public static EntityType<PrimaticaOrbEntity> PRIMATICA_ORB;
 
     private static <T extends Entity> EntityType<T> register(String id, EntityType<T> entity) {
-        return Registry.register(Registry.ENTITY_TYPE, id, entity);
+        return Registry.register(Registries.ENTITY_TYPE, id, entity);
     }
 
     public static void register() {

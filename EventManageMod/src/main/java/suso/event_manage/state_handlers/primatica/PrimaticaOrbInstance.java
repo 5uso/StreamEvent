@@ -12,7 +12,7 @@ import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.Registry;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.scoreboard.Team;
@@ -99,7 +99,7 @@ public class PrimaticaOrbInstance implements TickableInstance {
         world.spawnParticles(ParticleTypes.FLASH, pos.x, pos.y + 0.3, pos.z, 1, 0.0, 0.0, 0.0, 1.0);
 
         world.spawnParticles(new DustParticleEffect(ParticleUtil.teamColor(team), 2.0f), player.getX(), player.getY() + 0.3, player.getZ(), 15, 0.5, 0.5, 0.5, 2.0);
-        world.spawnParticles(new ItemStackParticleEffect(ParticleTypes.ITEM, new ItemStack(Registry.ITEM.get(new Identifier(PrimaticaInfo.getCorrespondingBlock(team.getColor().getColorIndex()))))), pos.x, pos.y + 0.3, pos.z, 70, 0.0, 0.0, 0.0, 0.6);
+        world.spawnParticles(new ItemStackParticleEffect(ParticleTypes.ITEM, new ItemStack(Registries.ITEM.get(new Identifier(PrimaticaInfo.getCorrespondingBlock(team.getColor().getColorIndex()))))), pos.x, pos.y + 0.3, pos.z, 70, 0.0, 0.0, 0.0, 0.6);
 
         try {
             NbtCompound firework = StringNbtReader.parse("{Explosions:[{Type:1,Colors:[I;" + team.getColor().getColorValue() + "]}]}");
@@ -122,7 +122,7 @@ public class PrimaticaOrbInstance implements TickableInstance {
     }
 
     private void clearSphere() {
-        TagKey<Block> breakable = TagKey.of(Registry.BLOCK_KEY, new Identifier("suso:primatica_breakable"));
+        TagKey<Block> breakable = TagKey.of(Registries.BLOCK.getKey(), new Identifier("suso:primatica_breakable"));
         for(float yaw = 0.0f; yaw < 359.0f; yaw += 10.0f) {
             for(float pitch = -90.0f; pitch < 91.0f; pitch += 15.0f) {
                 for(float d = 0.4f; d < 6.5f; d += 0.5f) {
