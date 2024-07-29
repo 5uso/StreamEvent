@@ -17,8 +17,6 @@ import net.minecraft.server.PlayerManager;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.LiteralTextContent;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import suso.event_manage.EventManager;
 import suso.event_manage.data.EventData;
@@ -79,11 +77,11 @@ public class CommandUtil {
             ServerPlayerEntity player = (ServerPlayerEntity) server.getOverworld().getEntity(p.getId());
             if(player != null) {
                 EventManager.getInstance().onPlayerJoin(player);
-                player.sendMessage(MutableText.of(new LiteralTextContent(isPlayer ? "You are now a player" : "You are no longer a player")));
+                player.sendMessage(Text.literal(isPlayer ? "You are now a player" : "You are no longer a player"));
             }
 
             if(player == null || (source.getPlayer() != null && !player.getUuid().equals(source.getPlayer().getUuid()))) {
-                source.sendFeedback(MutableText.of(new LiteralTextContent(p.getName() + (isPlayer ? " is now a player" : " is no longer a player"))), true);
+                source.sendFeedback(() -> Text.literal(p.getName() + (isPlayer ? " is now a player" : " is no longer a player")), true);
             }
         }
         return profiles.size();
@@ -120,7 +118,7 @@ public class CommandUtil {
         EventTeamData td = d.getTeamData(team);
 
         if(td == null) {
-            source.sendError(MutableText.of(new LiteralTextContent("Error getting team data")));
+            source.sendError(Text.literal("Error getting team data"));
             return 0;
         }
 
@@ -133,11 +131,11 @@ public class CommandUtil {
             ServerPlayerEntity player = (ServerPlayerEntity) server.getOverworld().getEntity(p.getId());
             if(player != null) {
                 EventManager.getInstance().onPlayerJoin(player);
-                player.sendMessage(MutableText.of(new LiteralTextContent("You are now part of team ")).append(teamName));
+                player.sendMessage(Text.literal("You are now part of team ").append(teamName));
             }
 
             if(player == null || (source.getPlayer() != null && !player.getUuid().equals(source.getPlayer().getUuid()))) {
-                source.sendFeedback(MutableText.of(new LiteralTextContent(p.getName() + (" is now part of team "))).append(teamName), true);
+                source.sendFeedback(() -> Text.literal(p.getName() + (" is now part of team ")).append(teamName), true);
             }
         }
         return profiles.size();
@@ -154,7 +152,7 @@ public class CommandUtil {
         EventTeamData td = d.getTeamData(team);
 
         if(td == null) {
-            source.sendError(MutableText.of(new LiteralTextContent("Error getting team data")));
+            source.sendError(Text.literal("Error getting team data"));
             return 0;
         }
 
@@ -167,11 +165,11 @@ public class CommandUtil {
             ServerPlayerEntity player = (ServerPlayerEntity) server.getOverworld().getEntity(p.getId());
             if(player != null) {
                 EventManager.getInstance().onPlayerJoin(player);
-                player.sendMessage(MutableText.of(new LiteralTextContent("You are no longer part of team ")).append(teamName));
+                player.sendMessage(Text.literal("You are no longer part of team ").append(teamName));
             }
 
             if(player == null || (source.getPlayer() != null && !player.getUuid().equals(source.getPlayer().getUuid()))) {
-                source.sendFeedback(MutableText.of(new LiteralTextContent(p.getName() + (" is no longer part of team "))).append(teamName), true);
+                source.sendFeedback(() -> Text.literal(p.getName() + (" is no longer part of team ")).append(teamName), true);
             }
         }
         return profiles.size();

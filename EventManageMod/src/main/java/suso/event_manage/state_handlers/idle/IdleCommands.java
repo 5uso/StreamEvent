@@ -4,8 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.LiteralTextContent;
-import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 import suso.event_manage.EventManager;
 import suso.event_manage.state_handlers.StateCommands;
 import suso.event_manage.state_handlers.primatica.PrimaticaIngameHandler;
@@ -33,7 +32,7 @@ public class IdleCommands implements StateCommands {
     static {
         PRIMATICA_CMD.executes(context -> {
             EventManager.getInstance().setStateHandler(new PrimaticaIngameHandler(5 * 60 * 1000));
-            context.getSource().sendFeedback(MutableText.of(new LiteralTextContent("Starting primatica!")), true);
+            context.getSource().sendFeedback(() -> Text.literal("Starting primatica!"), true);
             return 1;
         });
     }

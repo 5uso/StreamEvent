@@ -9,8 +9,7 @@ import net.minecraft.scoreboard.Team;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.WhitelistEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.LiteralTextContent;
-import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
 
@@ -85,7 +84,7 @@ public class EventData {
             String line;
             while((line = br.readLine()) != null) {
                 line = line.strip();
-                if(line.length() > 0) {
+                if(!line.isEmpty()) {
                     playerList.add(line);
                     toWhitelist.add(line);
                 }
@@ -117,7 +116,7 @@ public class EventData {
             String line;
             while((line = br.readLine()) != null) {
                 line = line.strip();
-                if(line.length() > 0) {
+                if(!line.isEmpty()) {
                     toOp.add(line);
                 }
             }
@@ -181,7 +180,7 @@ public class EventData {
             List<EventTeamData> teams = new Gson().fromJson(reader, new TypeToken<List<EventTeamData>>() {}.getType());
             for(EventTeamData team : teams) {
                 Team t = s.addTeam(team.name);
-                t.setDisplayName(MutableText.of(new LiteralTextContent(team.display)));
+                t.setDisplayName(Text.literal(team.display));
                 t.setColor(Formatting.byColorIndex(team.color));
                 for(String player : team.members) s.addScoreHolderToTeam(player, t);
 
