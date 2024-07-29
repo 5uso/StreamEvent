@@ -12,18 +12,18 @@ import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
-import net.minecraft.util.registry.Registry;
 import suso.event_manage.custom.entities.PrimaticaOrbEntity;
 import suso.event_manage.state_handlers.TickableInstance;
 import suso.event_manage.util.ParticleUtil;
@@ -45,8 +45,8 @@ public class PrimaticaOrbInstance implements TickableInstance {
         entity = new PrimaticaOrbEntity(world, pos);
         entity.setNoGravity(true);
         entity.setGlowing(true);
-        entity.addScoreboardTag("primatica_objective");
-        entity.addScoreboardTag("volatile");
+        entity.addCommandTag("primatica_objective");
+        entity.addCommandTag("volatile");
         world.spawnEntity(entity);
 
         handler.orbLocations.add(pos);
@@ -68,14 +68,14 @@ public class PrimaticaOrbInstance implements TickableInstance {
         MinecraftServer server = world.getServer();
         if(player instanceof ServerPlayerEntity sPlayer) {
             if(player.getScoreboardTeam() == null) return false;
-            server.getScoreboard().addPlayerToTeam(entity.getUuidAsString(), (Team) player.getScoreboardTeam());
+            server.getScoreboard().addScoreHolderToTeam(entity.getUuidAsString(), (Team) player.getScoreboardTeam());
 
             if(player.getBoundingBox().intersects(entity.getBoundingBox().expand(0.1))) {
                 collectOrb(sPlayer);
                 return true;
             }
         } else {
-            server.getScoreboard().clearPlayerTeam(entity.getUuidAsString());
+            server.getScoreboard().clearTeam(entity.getUuidAsString());
         }
 
         return false;

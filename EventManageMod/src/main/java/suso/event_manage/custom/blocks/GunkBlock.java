@@ -24,7 +24,7 @@ public class GunkBlock extends BlockWithEntity implements BlockEntityProvider {
 
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return checkType(type, CustomBlocks.GUNK_ENTITY, GunkBlockEntity::tick);
+        return validateTicker(type, CustomBlocks.GUNK_ENTITY, GunkBlockEntity::tick);
     }
 
     @Nullable @Override

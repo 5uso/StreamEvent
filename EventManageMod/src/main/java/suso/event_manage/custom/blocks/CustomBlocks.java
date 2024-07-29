@@ -5,9 +5,9 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.registry.Registry;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.DyeColor;
-import net.minecraft.util.registry.Registry;
 import suso.event_manage.custom.blocks.entity.GunkBlockEntity;
 import suso.event_manage.custom.blocks.entity.PrimaticaDoorBlockEntity;
 import suso.event_manage.custom.blocks.entity.PrimaticaPowerupBlockEntity;
@@ -81,18 +81,18 @@ public class CustomBlocks {
         ORANGE_HOLOBLOCK = register("suso:orange_holoblock", new StainedGlassBlock(DyeColor.ORANGE, FabricBlockSettings.of(Material.AMETHYST, MapColor.ORANGE).sounds(BlockSoundGroup.AMETHYST_BLOCK).nonOpaque()));
         RED_HOLOBLOCK = register("suso:red_holoblock", new StainedGlassBlock(DyeColor.RED, FabricBlockSettings.of(Material.AMETHYST, MapColor.RED).sounds(BlockSoundGroup.AMETHYST_BLOCK).nonOpaque()));
 
-        GRAY_EMP = register("suso:gray_emp", new EMPBlock(AbstractBlock.Settings.of(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
-        WHITE_EMP = register("suso:white_emp", new EMPBlock(AbstractBlock.Settings.of(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
-        PINK_EMP = register("suso:pink_emp", new EMPBlock(AbstractBlock.Settings.of(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
-        PURPLE_EMP = register("suso:purple_emp", new EMPBlock(AbstractBlock.Settings.of(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
-        BLUE_EMP = register("suso:blue_emp", new EMPBlock(AbstractBlock.Settings.of(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
-        CYAN_EMP = register("suso:cyan_emp", new EMPBlock(AbstractBlock.Settings.of(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
-        LIGHT_BLUE_EMP = register("suso:light_blue_emp", new EMPBlock(AbstractBlock.Settings.of(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
-        GREEN_EMP = register("suso:green_emp", new EMPBlock(AbstractBlock.Settings.of(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
-        LIME_EMP = register("suso:lime_emp", new EMPBlock(AbstractBlock.Settings.of(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
-        YELLOW_EMP = register("suso:yellow_emp", new EMPBlock(AbstractBlock.Settings.of(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
-        ORANGE_EMP = register("suso:orange_emp", new EMPBlock(AbstractBlock.Settings.of(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
-        RED_EMP = register("suso:red_emp", new EMPBlock(AbstractBlock.Settings.of(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        GRAY_EMP = register("suso:gray_emp", new EMPBlock(AbstractBlock.Settings.create(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        WHITE_EMP = register("suso:white_emp", new EMPBlock(AbstractBlock.Settings.create(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        PINK_EMP = register("suso:pink_emp", new EMPBlock(AbstractBlock.Settings.create(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        PURPLE_EMP = register("suso:purple_emp", new EMPBlock(AbstractBlock.Settings.create(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        BLUE_EMP = register("suso:blue_emp", new EMPBlock(AbstractBlock.Settings.create(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        CYAN_EMP = register("suso:cyan_emp", new EMPBlock(AbstractBlock.Settings.create(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        LIGHT_BLUE_EMP = register("suso:light_blue_emp", new EMPBlock(AbstractBlock.Settings.create(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        GREEN_EMP = register("suso:green_emp", new EMPBlock(AbstractBlock.Settings.create(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        LIME_EMP = register("suso:lime_emp", new EMPBlock(AbstractBlock.Settings.create(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        YELLOW_EMP = register("suso:yellow_emp", new EMPBlock(AbstractBlock.Settings.create(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        ORANGE_EMP = register("suso:orange_emp", new EMPBlock(AbstractBlock.Settings.create(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        RED_EMP = register("suso:red_emp", new EMPBlock(AbstractBlock.Settings.create(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
 
         GRAY_GUNK = register("suso:gray_gunk", new GunkBlock(FabricBlockSettings.of(Material.ORGANIC_PRODUCT, MapColor.GRAY).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)));
         WHITE_GUNK = register("suso:white_gunk", new GunkBlock(FabricBlockSettings.of(Material.ORGANIC_PRODUCT, MapColor.WHITE).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)));
@@ -109,11 +109,11 @@ public class CustomBlocks {
 
         GUNK_ENTITY = register("suso:gunk_entity", FabricBlockEntityTypeBuilder.create(GunkBlockEntity::new, GRAY_GUNK, WHITE_GUNK, PINK_GUNK, PURPLE_GUNK, BLUE_GUNK, CYAN_GUNK, LIGHT_BLUE_GUNK, GREEN_GUNK, LIME_GUNK, YELLOW_GUNK, ORANGE_GUNK, RED_GUNK).build());
 
-        PRIMATICA_POWERUP = register("suso:primatica_powerup", new PrimaticaPowerupBlock(FabricBlockSettings.of(Material.METAL).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        PRIMATICA_POWERUP = register("suso:primatica_powerup", new PrimaticaPowerupBlock(FabricBlockSettings.create(Material.METAL).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
         PRIMATICA_POWERUP_ENTITY = register("suso:primatica_powerup_entity", FabricBlockEntityTypeBuilder.create(PrimaticaPowerupBlockEntity::new, PRIMATICA_POWERUP).build());
-        PRIMATICA_RESPAWN = register("suso:primatica_respawn", new PrimaticaRespawnBlock(FabricBlockSettings.of(Material.METAL).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        PRIMATICA_RESPAWN = register("suso:primatica_respawn", new PrimaticaRespawnBlock(FabricBlockSettings.create(Material.METAL).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
         PRIMATICA_RESPAWN_ENTITY = register("suso:primatica_respawn_entity", FabricBlockEntityTypeBuilder.create(PrimaticaRespawnBlockEntity::new, PRIMATICA_RESPAWN).build());
-        PRIMATICA_DOOR = register("suso:primatica_door", new PrimaticaDoorBlock(FabricBlockSettings.of(Material.METAL).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        PRIMATICA_DOOR = register("suso:primatica_door", new PrimaticaDoorBlock(FabricBlockSettings.create(Material.METAL).strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
         PRIMATICA_DOOR_ENTITY = register("suso:primatica_door_entity", FabricBlockEntityTypeBuilder.create(PrimaticaDoorBlockEntity::new, PRIMATICA_DOOR).build());
     }
 }

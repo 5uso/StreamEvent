@@ -11,15 +11,15 @@ import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
 import suso.event_manage.custom.blocks.entity.GunkBlockEntity;
 import suso.event_manage.state_handlers.TickableInstance;
 import suso.event_manage.util.ParticleUtil;
@@ -48,8 +48,8 @@ public class PrimaticaGunkInstance implements TickableInstance {
 
         Vec3d pos = owner.getEyePos().add(owner.getRotationVector());
         entity = new SnowballEntity(world, pos.x, pos.y, pos.z);
-        entity.addScoreboardTag("primatica_gunk");
-        entity.addScoreboardTag("volatile");
+        entity.addCommandTag("primatica_gunk");
+        entity.addCommandTag("volatile");
         entity.setVelocity(owner.getRotationVector().multiply(1.75));
 
         NbtCompound nbt = PrimaticaInfo.GUNK_DISPLAY.copy();

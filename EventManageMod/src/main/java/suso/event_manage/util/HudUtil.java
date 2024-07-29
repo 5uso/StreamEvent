@@ -80,7 +80,7 @@ public class HudUtil {
         PacketByteBuf p = PacketByteBufs.create();
         p.writeInt(DataTypes.KILL.ordinal());
 
-        p.writeString(victim.getEntityName());
+        p.writeString(victim.getNameForScoreboard());
         p.writeInt(victim.getScoreboardTeam() == null ? Formatting.WHITE.ordinal() : victim.getScoreboardTeam().getColor().ordinal());
 
         ServerPlayNetworking.send(player, EvtBaseConstants.HUD_DATA, p);

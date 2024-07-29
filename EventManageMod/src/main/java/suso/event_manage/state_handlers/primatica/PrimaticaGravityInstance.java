@@ -38,8 +38,8 @@ public class PrimaticaGravityInstance implements TickableInstance {
 
         entity = new SnowballEntity(world, pos.x, pos.y - 0.125, pos.z);
         entity.setNoGravity(true);
-        entity.addScoreboardTag("primatica_gravity");
-        entity.addScoreboardTag("volatile");
+        entity.addCommandTag("primatica_gravity");
+        entity.addCommandTag("volatile");
         entity.setVelocity(owner.getRotationVector().multiply(1.75));
         entity.setItem(getItem(0, false));
 
@@ -182,8 +182,8 @@ public class PrimaticaGravityInstance implements TickableInstance {
 
         entity = tempEntity;
         entity.setNoGravity(true);
-        entity.addScoreboardTag("primatica_gravity");
-        entity.addScoreboardTag("volatile");
+        entity.addCommandTag("primatica_gravity");
+        entity.addCommandTag("volatile");
         entity.setItem(getItem(-time, false));
         world.spawnEntity(entity);
         return false;

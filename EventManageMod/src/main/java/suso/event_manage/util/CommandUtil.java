@@ -125,7 +125,7 @@ public class CommandUtil {
         }
 
         for(GameProfile p : profiles) {
-            s.addPlayerToTeam(p.getName(), team);
+            s.addScoreHolderToTeam(p.getName(), team);
             ArrayList<String> memberList = new ArrayList<>(Arrays.asList(td.members));
             memberList.add(p.getName());
             td.members = memberList.toArray(new String[0]);
@@ -159,7 +159,7 @@ public class CommandUtil {
         }
 
         for(GameProfile p : profiles) {
-            s.removePlayerFromTeam(p.getName(), team);
+            s.removeScoreHolderFromTeam(p.getName(), team);
             ArrayList<String> memberList = new ArrayList<>(Arrays.asList(td.members));
             memberList.removeIf(name -> name.equals(p.getName()));
             td.members = memberList.toArray(new String[0]);

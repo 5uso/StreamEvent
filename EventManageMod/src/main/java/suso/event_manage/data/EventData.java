@@ -109,7 +109,7 @@ public class EventData {
     }
 
     public boolean isInPlayerList(ServerPlayerEntity player) {
-        return playerList.contains(player.getEntityName());
+        return playerList.contains(player.getNameForScoreboard());
     }
 
     public void loadAdminList(MinecraftServer server) {
@@ -184,7 +184,7 @@ public class EventData {
                 Team t = s.addTeam(team.name);
                 t.setDisplayName(MutableText.of(new LiteralTextContent(team.display)));
                 t.setColor(Formatting.byColorIndex(team.color));
-                for(String player : team.members) s.addPlayerToTeam(player, t);
+                for(String player : team.members) s.addScoreHolderToTeam(player, t);
 
                 if(teamData.containsKey(team.name)) {
                     EventTeamData prev = teamData.get(team.name);

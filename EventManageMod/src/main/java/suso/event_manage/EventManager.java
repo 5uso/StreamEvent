@@ -127,7 +127,7 @@ public class EventManager implements ModInitializer {
     }
 
     public void onEntityLoad(Entity entity, World world) {
-        Set<String> tags = entity.getScoreboardTags();
+        Set<String> tags = entity.getCommandTags();
         if(tags.contains("volatile_firstload")) entity.kill();
         else if(tags.contains("volatile")) tags.add("volatile_firstload");
     }
