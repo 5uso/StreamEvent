@@ -7,54 +7,28 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import suso.event_manage.EvtBaseConstants;
+import suso.event_manage.custom.network.payloads.SetBlockColorPayload;
+import suso.event_manage.custom.network.payloads.SetPostShaderPayload;
+import suso.event_manage.custom.network.payloads.SetShaderUniformPayload;
 
 public class ShaderUtil {
     public static void setShaderUniform(ServerPlayerEntity player, String name, float... values) {
-        PacketByteBuf p = PacketByteBufs.create();
-
-        p.writeString(name);
-        p.writeBoolean(true);
-        p.writeInt(values.length);
-        for(float f : values) p.writeFloat(f);
-
-        ServerPlayNetworking.send(player, EvtBaseConstants.SET_SHADER_UNIFORM, p);
+        ServerPlayNetworking.send(player, new SetShaderUniformPayload(name, values));
     }
 
     public static void setShaderUniform(ServerPlayerEntity player, String name, int... values) {
-        PacketByteBuf p = PacketByteBufs.create();
-
-        p.writeString(name);
-        p.writeBoolean(false);
-        p.writeInt(values.length);
-        for(int i : values) p.writeInt(i);
-
-        ServerPlayNetworking.send(player, EvtBaseConstants.SET_SHADER_UNIFORM, p);
+        ServerPlayNetworking.send(player, new SetShaderUniformPayload(name, values));
     }
 
     public static void setPostShader(ServerPlayerEntity player, Identifier id) {
-        PacketByteBuf p = PacketByteBufs.create();
-
-        p.writeString(id.toString());
-
-        ServerPlayNetworking.send(player, EvtBaseConstants.SET_POST_SHADER, p);
+        ServerPlayNetworking.send(player, new SetPostShaderPayload(id));
     }
 
     public static void setBlockColor(ServerPlayerEntity player, BlockPos pos, int color) {
-        PacketByteBuf p = PacketByteBufs.create();
-
-        p.writeBlockPos(pos);
-        p.writeBoolean(true);
-        p.writeInt(color);
-
-        ServerPlayNetworking.send(player, EvtBaseConstants.SET_BLOCK_COLOR, p);
+        ServerPlayNetworking.send(player, new SetBlockColorPayload(pos, color));
     }
 
     public static void unsetBlockColor(ServerPlayerEntity player, BlockPos pos) {
-        PacketByteBuf p = PacketByteBufs.create();
-
-        p.writeBlockPos(pos);
-        p.writeBoolean(false);
-
-        ServerPlayNetworking.send(player, EvtBaseConstants.SET_BLOCK_COLOR, p);
+        ServerPlayNetworking.send(player, new SetBlockColorPayload(pos));
     }
 }

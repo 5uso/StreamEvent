@@ -8,10 +8,6 @@ import net.minecraft.util.Identifier;
 import java.util.*;
 
 public class EvtBaseConstants {
-    public static final Identifier SET_SHADER_UNIFORM = new Identifier("suso:set_shader_uniform");
-    public static final Identifier SET_POST_SHADER = new Identifier("suso:set_post_shader");
-    public static final Identifier SET_BLOCK_COLOR = new Identifier("suso:set_block_color");
-
     public static final Identifier FIREWORK_PARTICLE = new Identifier("suso:firework_particle");
 
     public static final Identifier ENTITY_UPDATE = new Identifier("suso:entity_update");
