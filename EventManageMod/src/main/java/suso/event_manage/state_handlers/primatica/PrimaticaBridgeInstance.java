@@ -30,7 +30,7 @@ public class PrimaticaBridgeInstance implements TickableInstance {
     private int ticksLeft;
 
     public PrimaticaBridgeInstance(ServerPlayerEntity owner) {
-        this.world = owner.getWorld();
+        this.world = owner.getServerWorld();
 
         AbstractTeam team = owner.getScoreboardTeam();
         Identifier blockId = new Identifier(PrimaticaInfo.getCorrespondingBlock(team == null ? 7 :team.getColor().getColorIndex()));
@@ -86,7 +86,7 @@ public class PrimaticaBridgeInstance implements TickableInstance {
     }
 
     public static boolean shouldSpawn(ServerPlayerEntity owner) {
-        ServerWorld world = owner.getWorld();
+        ServerWorld world = owner.getServerWorld();
         int count = 0;
         Vec3d direction = Vec3d.fromPolar(0.0f, owner.getYaw()).multiply(0.6);
         Vec3d position = owner.getPos().add(0.0, Math.min(0.0, owner.getVelocity().y + 0.05) * 5.0 - 0.8, 0.0);

@@ -37,7 +37,7 @@ public class PrimaticaEMPInstance implements TickableInstance {
     private int ticksLeft;
 
     public PrimaticaEMPInstance(ServerPlayerEntity player, BlockPos pos, PrimaticaIngameHandler handler) {
-        this.world = player.getWorld();
+        this.world = player.getServerWorld();
         this.team = player.getScoreboardTeam();
         this.position = new Vec3d(pos.getX(), pos.getY(), pos.getZ()).add(0.5, 0.5, 0.5);
         this.pos = pos;

@@ -40,7 +40,7 @@ public class PrimaticaGunkInstance implements TickableInstance {
     private final AbstractTeam team;
 
     public PrimaticaGunkInstance(ServerPlayerEntity owner) {
-        this.world = owner.getWorld();
+        this.world = owner.getServerWorld();
         this.team = owner.getScoreboardTeam();
 
         AbstractTeam team = owner.getScoreboardTeam();

@@ -30,7 +30,7 @@ public class PrimaticaGravityInstance implements TickableInstance {
     private int time;
 
     public PrimaticaGravityInstance(ServerPlayerEntity owner, PrimaticaIngameHandler handler) {
-        this.world = owner.getWorld();
+        this.world = owner.getServerWorld();
         this.handler = handler;
         this.owner = owner;
 

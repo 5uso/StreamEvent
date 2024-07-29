@@ -30,7 +30,7 @@ public class PrimaticaPlayerInfo {
 
     public PrimaticaPlayerInfo(ServerPlayerEntity player) {
         this.player = player.getUuid();
-        this.world = player.getWorld();
+        this.world = player.getServerWorld();
     }
 
     public void setAgilityActive(boolean value) {

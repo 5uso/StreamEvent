@@ -198,7 +198,7 @@ public class PrimaticaIngameHandler implements StateHandler {
 
         AbstractTeam team = player.getScoreboardTeam();
         Vector3f color = team == null ? new Vector3f().zero() : ParticleUtil.teamColor(team);
-        player.getWorld().spawnParticles(ParticleTypes.ENTITY_EFFECT, player.getX(), player.getY(), player.getZ(), 50, color.getX(), color.getY(), color.getZ(), 0.0);
+        player.getServerWorld().spawnParticles(ParticleTypes.ENTITY_EFFECT, player.getX(), player.getY(), player.getZ(), 50, color.getX(), color.getY(), color.getZ(), 0.0);
 
         SoundUtil.playFadeSound(player, new Identifier("minecraft:entity.elder_guardian.curse"), 0.5f, 0.5f, false, SoundCategory.PLAYERS, false);
         SoundUtil.playFadeSound(player, new Identifier("minecraft:item.trident.thunder"), 1.0f, 2.0f, false, SoundCategory.PLAYERS, true);
@@ -386,13 +386,13 @@ public class PrimaticaIngameHandler implements StateHandler {
         }
 
         if(info.agilityActive) {
-            player.getWorld().spawnParticles(ParticleTypes.GLOW, player.getX(), player.getY() + 1.0, player.getZ(), 1, 0.3, 0.5, 0.3, 0.0);
+            player.getServerWorld().spawnParticles(ParticleTypes.GLOW, player.getX(), player.getY() + 1.0, player.getZ(), 1, 0.3, 0.5, 0.3, 0.0);
         }
 
         if(player.isOnGround()) info.gunkBounce = false;
         if(info.gunkBounce) {
             AbstractTeam team = player.getScoreboardTeam();
-            player.getWorld().spawnParticles(new DustParticleEffect(ParticleUtil.teamColor(team), 2), player.getX(), player.getY(), player.getZ(), Math.round(1.0f + speed), 0.3, 0.3, 0.3, 0.0);
+            player.getServerWorld().spawnParticles(new DustParticleEffect(ParticleUtil.teamColor(team), 2), player.getX(), player.getY(), player.getZ(), Math.round(1.0f + speed), 0.3, 0.3, 0.3, 0.0);
         }
     }
 
@@ -499,7 +499,7 @@ public class PrimaticaIngameHandler implements StateHandler {
     public boolean onPlayerLand(ServerPlayerEntity player, EventPlayerData data, double heightDifference, BlockPos landingPos) {
         if(player.fallDistance < 0.75) return false;
 
-        BlockState landingBlock = player.getWorld().getBlockState(landingPos);
+        BlockState landingBlock = player.getServerWorld().getBlockState(landingPos);
         Optional<RegistryKey<Block>> op = landingBlock.getRegistryEntry().getKey();
         if(op.isPresent()) {
             Identifier id = op.get().getValue();
@@ -525,7 +525,7 @@ public class PrimaticaIngameHandler implements StateHandler {
 
     @Override
     public void onPlayerJump(ServerPlayerEntity player, EventPlayerData data, BlockPos jumpingPos) {
-        BlockState jumpingBlock = player.getWorld().getBlockState(jumpingPos);
+        BlockState jumpingBlock = player.getServerWorld().getBlockState(jumpingPos);
         Optional<RegistryKey<Block>> op = jumpingBlock.getRegistryEntry().getKey();
         if(op.isPresent()) {
             Identifier id = op.get().getValue();

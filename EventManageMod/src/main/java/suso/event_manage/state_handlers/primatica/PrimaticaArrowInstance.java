@@ -36,7 +36,7 @@ public class PrimaticaArrowInstance implements TickableInstance {
 
     public PrimaticaArrowInstance(ServerPlayerEntity owner) {
         this.owner = owner;
-        this.world = owner.getWorld();
+        this.world = owner.getServerWorld();
         this.team = owner.getScoreboardTeam();
 
         this.direction = Vec3d.fromPolar(owner.getPitch(), owner.getYaw()).multiply(STEP_SIZE);
