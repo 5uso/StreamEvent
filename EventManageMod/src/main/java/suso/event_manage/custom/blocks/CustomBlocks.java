@@ -73,26 +73,26 @@ public class CustomBlocks {
         ORANGE_EMP = register("suso:orange_emp", new EMPBlock(AbstractBlock.Settings.create().strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()), false);
         RED_EMP = register("suso:red_emp", new EMPBlock(AbstractBlock.Settings.create().strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()), false);
 
-        GRAY_GUNK = register("suso:gray_gunk", new GunkBlock(AbstractBlock.Settings.create().mapColor(MapColor.GRAY).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)));
-        WHITE_GUNK = register("suso:white_gunk", new GunkBlock(AbstractBlock.Settings.create().mapColor(MapColor.WHITE).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)));
-        PINK_GUNK = register("suso:pink_gunk", new GunkBlock(AbstractBlock.Settings.create().mapColor(MapColor.PINK).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)));
-        PURPLE_GUNK = register("suso:purple_gunk", new GunkBlock(AbstractBlock.Settings.create().mapColor(MapColor.PURPLE).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)));
-        BLUE_GUNK = register("suso:blue_gunk", new GunkBlock(AbstractBlock.Settings.create().mapColor(MapColor.BLUE).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)));
-        CYAN_GUNK = register("suso:cyan_gunk", new GunkBlock(AbstractBlock.Settings.create().mapColor(MapColor.CYAN).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)));
-        LIGHT_BLUE_GUNK = register("suso:light_blue_gunk", new GunkBlock(AbstractBlock.Settings.create().mapColor(MapColor.LIGHT_BLUE).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)));
-        GREEN_GUNK = register("suso:green_gunk", new GunkBlock(AbstractBlock.Settings.create().mapColor(MapColor.GREEN).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)));
-        LIME_GUNK = register("suso:lime_gunk", new GunkBlock(AbstractBlock.Settings.create().mapColor(MapColor.LIME).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)));
-        YELLOW_GUNK = register("suso:yellow_gunk", new GunkBlock(AbstractBlock.Settings.create().mapColor(MapColor.YELLOW).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)));
-        ORANGE_GUNK = register("suso:orange_gunk", new GunkBlock(AbstractBlock.Settings.create().mapColor(MapColor.ORANGE).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)));
-        RED_GUNK = register("suso:red_gunk", new GunkBlock(AbstractBlock.Settings.create().mapColor(MapColor.RED).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)));
+        GRAY_GUNK = register("suso:gray_gunk", new GunkBlock(AbstractBlock.Settings.create().mapColor(MapColor.GRAY).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)), false);
+        WHITE_GUNK = register("suso:white_gunk", new GunkBlock(AbstractBlock.Settings.create().mapColor(MapColor.WHITE).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)), false);
+        PINK_GUNK = register("suso:pink_gunk", new GunkBlock(AbstractBlock.Settings.create().mapColor(MapColor.PINK).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)), false);
+        PURPLE_GUNK = register("suso:purple_gunk", new GunkBlock(AbstractBlock.Settings.create().mapColor(MapColor.PURPLE).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)), false);
+        BLUE_GUNK = register("suso:blue_gunk", new GunkBlock(AbstractBlock.Settings.create().mapColor(MapColor.BLUE).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)), false);
+        CYAN_GUNK = register("suso:cyan_gunk", new GunkBlock(AbstractBlock.Settings.create().mapColor(MapColor.CYAN).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)), false);
+        LIGHT_BLUE_GUNK = register("suso:light_blue_gunk", new GunkBlock(AbstractBlock.Settings.create().mapColor(MapColor.LIGHT_BLUE).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)), false);
+        GREEN_GUNK = register("suso:green_gunk", new GunkBlock(AbstractBlock.Settings.create().mapColor(MapColor.GREEN).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)), false);
+        LIME_GUNK = register("suso:lime_gunk", new GunkBlock(AbstractBlock.Settings.create().mapColor(MapColor.LIME).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)), false);
+        YELLOW_GUNK = register("suso:yellow_gunk", new GunkBlock(AbstractBlock.Settings.create().mapColor(MapColor.YELLOW).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)), false);
+        ORANGE_GUNK = register("suso:orange_gunk", new GunkBlock(AbstractBlock.Settings.create().mapColor(MapColor.ORANGE).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)), false);
+        RED_GUNK = register("suso:red_gunk", new GunkBlock(AbstractBlock.Settings.create().mapColor(MapColor.RED).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)), false);
 
         GUNK_ENTITY = register("suso:gunk_entity", BlockEntityType.Builder.create(GunkBlockEntity::new, GRAY_GUNK, WHITE_GUNK, PINK_GUNK, PURPLE_GUNK, BLUE_GUNK, CYAN_GUNK, LIGHT_BLUE_GUNK, GREEN_GUNK, LIME_GUNK, YELLOW_GUNK, ORANGE_GUNK, RED_GUNK).build());
 
-        PRIMATICA_POWERUP = register("suso:primatica_powerup", new PrimaticaPowerupBlock(AbstractBlock.Settings.create().strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        PRIMATICA_POWERUP = register("suso:primatica_powerup", new PrimaticaPowerupBlock(AbstractBlock.Settings.create().strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()), false);
         PRIMATICA_POWERUP_ENTITY = register("suso:primatica_powerup_entity", BlockEntityType.Builder.create(PrimaticaPowerupBlockEntity::new, PRIMATICA_POWERUP).build());
-        PRIMATICA_RESPAWN = register("suso:primatica_respawn", new PrimaticaRespawnBlock(AbstractBlock.Settings.create().strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        PRIMATICA_RESPAWN = register("suso:primatica_respawn", new PrimaticaRespawnBlock(AbstractBlock.Settings.create().strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()), false);
         PRIMATICA_RESPAWN_ENTITY = register("suso:primatica_respawn_entity", BlockEntityType.Builder.create(PrimaticaRespawnBlockEntity::new, PRIMATICA_RESPAWN).build());
-        PRIMATICA_DOOR = register("suso:primatica_door", new PrimaticaDoorBlock(AbstractBlock.Settings.create().strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()));
+        PRIMATICA_DOOR = register("suso:primatica_door", new PrimaticaDoorBlock(AbstractBlock.Settings.create().strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()), false);
         PRIMATICA_DOOR_ENTITY = register("suso:primatica_door_entity", BlockEntityType.Builder.create(PrimaticaDoorBlockEntity::new, PRIMATICA_DOOR).build());
     }
 }
