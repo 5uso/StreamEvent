@@ -77,7 +77,7 @@ public class PrimaticaArrowInstance implements TickableInstance {
                 }
             }
 
-            BlockPos pos = new BlockPos(position);
+            BlockPos pos = MiscUtil.blockPosFrom3d(position);
             if(!world.getBlockState(pos).getCollisionShape(world, pos).isEmpty()) {
                 explode();
                 return true;

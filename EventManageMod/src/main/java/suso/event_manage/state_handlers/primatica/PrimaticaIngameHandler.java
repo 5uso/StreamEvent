@@ -36,9 +36,9 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.GameMode;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 import suso.event_manage.EventManager;
 import suso.event_manage.EvtBaseConstants;
 import suso.event_manage.ModCheck;
@@ -197,7 +197,7 @@ public class PrimaticaIngameHandler implements StateHandler {
         tickables.add(new ScheduleInstance(200, () -> endAgility(player)));
 
         AbstractTeam team = player.getScoreboardTeam();
-        Vec3f color = team == null ? Vec3f.ZERO : ParticleUtil.teamColor(team);
+        Vector3f color = team == null ? new Vector3f().zero() : ParticleUtil.teamColor(team);
         player.getWorld().spawnParticles(ParticleTypes.ENTITY_EFFECT, player.getX(), player.getY(), player.getZ(), 50, color.getX(), color.getY(), color.getZ(), 0.0);
 
         SoundUtil.playFadeSound(player, new Identifier("minecraft:entity.elder_guardian.curse"), 0.5f, 0.5f, false, SoundCategory.PLAYERS, false);
@@ -428,7 +428,7 @@ public class PrimaticaIngameHandler implements StateHandler {
     public boolean onPlayerDeath(ServerPlayerEntity player, EventPlayerData data, DamageSource damageSource, float damageAmount) {
         MinecraftServer server = EventManager.getInstance().getServer();
 
-        player.setSpawnPoint(server.getOverworld().getRegistryKey(), new BlockPos(0.5, 134.00, 87.5), -180.0f, true, false);
+        player.setSpawnPoint(server.getOverworld().getRegistryKey(), new BlockPos(0, 134, 87), -180.0f, true, false);
 
         PrimaticaPlayerInfo info = playerInfo.get(player.getUuid());
         info.changePitch(0.5f, 40);

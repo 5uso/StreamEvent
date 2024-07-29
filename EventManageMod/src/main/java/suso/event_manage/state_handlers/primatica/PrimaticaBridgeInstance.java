@@ -11,8 +11,9 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
+import org.joml.Vector3f;
 import suso.event_manage.state_handlers.TickableInstance;
+import suso.event_manage.util.MiscUtil;
 import suso.event_manage.util.ParticleUtil;
 import suso.event_manage.util.SoundUtil;
 
@@ -24,7 +25,7 @@ public class PrimaticaBridgeInstance implements TickableInstance {
 
     private final ServerWorld world;
     private final BlockState block;
-    private final Vec3f color;
+    private final Vector3f color;
 
     private int ticksLeft;
 
@@ -34,7 +35,7 @@ public class PrimaticaBridgeInstance implements TickableInstance {
         AbstractTeam team = owner.getScoreboardTeam();
         Identifier blockId = new Identifier(PrimaticaInfo.getCorrespondingBlock(team == null ? 7 :team.getColor().getColorIndex()));
         this.block = Registries.BLOCK.get(blockId).getDefaultState();
-        this.color = team == null ? Vec3f.ZERO : ParticleUtil.teamColor(team);
+        this.color = team == null ? new Vector3f().zero() : ParticleUtil.teamColor(team);
 
         this.direction = Vec3d.fromPolar(0.0f, owner.getYaw()).multiply(0.6);
         this.position = owner.getPos().add(0.0, Math.min(0.0, owner.getVelocity().y + 0.05) * 5.0 - 0.8, 0.0);
@@ -53,9 +54,9 @@ public class PrimaticaBridgeInstance implements TickableInstance {
     public boolean tick() {
         if(--ticksLeft < 0) return true;
 
-        BlockPos prevPos = new BlockPos(position);
+        BlockPos prevPos = MiscUtil.blockPosFrom3d(position);
         position = position.add(direction);
-        BlockPos pos = new BlockPos(position);
+        BlockPos pos = MiscUtil.blockPosFrom3d(position);
 
         world.spawnParticles(ParticleTypes.DOLPHIN, position.x, position.y, position.z, 20, 1.0, 0.7, 1.0, 0.5);
         world.spawnParticles(ParticleTypes.SCULK_CHARGE_POP, position.x, position.y, position.z, 1, 0.5, 0.5, 0.5, 0.1);
@@ -90,7 +91,7 @@ public class PrimaticaBridgeInstance implements TickableInstance {
         Vec3d direction = Vec3d.fromPolar(0.0f, owner.getYaw()).multiply(0.6);
         Vec3d position = owner.getPos().add(0.0, Math.min(0.0, owner.getVelocity().y + 0.05) * 5.0 - 0.8, 0.0);
         for(int i = 0; i < 7; i++) {
-            if(world.getBlockState(new BlockPos(position)).isAir()) {
+            if(world.getBlockState(MiscUtil.blockPosFrom3d(position)).isAir()) {
                 if(++count > 1) return true;
             }
             position = position.add(direction);

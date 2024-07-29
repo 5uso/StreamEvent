@@ -8,7 +8,7 @@ import net.minecraft.network.packet.s2c.play.ParticleS2CPacket;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.math.Vec3f;
+import org.joml.Vector3f;
 import suso.event_manage.EventManager;
 import suso.event_manage.EvtBaseConstants;
 
@@ -16,14 +16,14 @@ import java.awt.*;
 import java.util.List;
 
 public class ParticleUtil {
-    public static Vec3f teamColor(AbstractTeam team) {
-        if(team == null) return new Vec3f(1.0f, 1.0f, 1.0f);
+    public static Vector3f teamColor(AbstractTeam team) {
+        if(team == null) return new Vector3f(1.0f, 1.0f, 1.0f);
 
         Integer rgb = team.getColor().getColorValue();
         Color color = new Color(rgb == null ? 0xFFFFFF : rgb);
 
-        Vec3f v_rgb = new Vec3f(color.getRed(), color.getGreen(), color.getBlue());
-        v_rgb.scale(1.0f / 255.0f);
+        Vector3f v_rgb = new Vector3f(color.getRed(), color.getGreen(), color.getBlue());
+        v_rgb.mul(1.0f / 255.0f);
 
         return v_rgb;
     }

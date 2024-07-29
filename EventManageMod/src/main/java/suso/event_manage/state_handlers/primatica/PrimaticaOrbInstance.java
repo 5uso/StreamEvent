@@ -23,9 +23,10 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
+import org.joml.Vector3f;
 import suso.event_manage.custom.entities.PrimaticaOrbEntity;
 import suso.event_manage.state_handlers.TickableInstance;
+import suso.event_manage.util.MiscUtil;
 import suso.event_manage.util.ParticleUtil;
 import suso.event_manage.util.SoundUtil;
 
@@ -62,7 +63,7 @@ public class PrimaticaOrbInstance implements TickableInstance {
     public boolean tick() {
         if(entity.isRemoved()) return true;
 
-        world.spawnParticles(new DustParticleEffect(new Vec3f(1.0f, 1.0f, 1.0f), 1.0f), pos.x, pos.y + 0.3, pos.z, 1, 0.2, 0.2, 0.2, 0.0);
+        world.spawnParticles(new DustParticleEffect(new Vector3f(1.0f, 1.0f, 1.0f), 1.0f), pos.x, pos.y + 0.3, pos.z, 1, 0.2, 0.2, 0.2, 0.0);
 
         PlayerEntity player = world.getClosestPlayer(entity, 20.0);
         MinecraftServer server = world.getServer();
@@ -126,7 +127,7 @@ public class PrimaticaOrbInstance implements TickableInstance {
         for(float yaw = 0.0f; yaw < 359.0f; yaw += 10.0f) {
             for(float pitch = -90.0f; pitch < 91.0f; pitch += 15.0f) {
                 for(float d = 0.4f; d < 6.5f; d += 0.5f) {
-                    BlockPos t = new BlockPos(pos.add(Vec3d.fromPolar(pitch, yaw).multiply(d)));
+                    BlockPos t = MiscUtil.blockPosFrom3d(pos.add(Vec3d.fromPolar(pitch, yaw).multiply(d)));
                     if(world.getBlockState(t).isIn(breakable)) world.setBlockState(t, Blocks.AIR.getDefaultState());
                 }
             }

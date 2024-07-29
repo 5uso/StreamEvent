@@ -22,6 +22,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import suso.event_manage.custom.blocks.entity.GunkBlockEntity;
 import suso.event_manage.state_handlers.TickableInstance;
+import suso.event_manage.util.MiscUtil;
 import suso.event_manage.util.ParticleUtil;
 import suso.event_manage.util.SoundUtil;
 
@@ -87,7 +88,7 @@ public class PrimaticaGunkInstance implements TickableInstance {
             double shape = 1.0 + Math.sin(b * 2.0) * 4.0;
             for(double dist = 0.0; dist < shape; dist += 0.1) {
                 temp = temp.add(direction);
-                BlockPos gaming = searchY(new BlockPos(temp));
+                BlockPos gaming = searchY(MiscUtil.blockPosFrom3d(temp));
                 if(gaming != null) placeGunk(gaming, 250 - (int)(dist * 10.0), safeTag);
             }
         }
