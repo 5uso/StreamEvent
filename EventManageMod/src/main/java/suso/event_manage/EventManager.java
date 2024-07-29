@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import suso.event_manage.custom.blocks.CustomBlocks;
 import suso.event_manage.custom.entities.CustomEntities;
 import suso.event_manage.custom.items.CustomItems;
+import suso.event_manage.custom.network.CustomPackets;
 import suso.event_manage.data.EventData;
 import suso.event_manage.data.EventPlayerData;
 import suso.event_manage.mixin.MinecraftServerAccess;
@@ -218,6 +219,7 @@ public class EventManager implements ModInitializer {
         CustomBlocks.register();
         CustomItems.register();
         CustomEntities.register();
+        CustomPackets.register();
 
         ServerLifecycleEvents.SERVER_STARTED.register(this::onServerStart);
         ServerTickEvents.END_SERVER_TICK.register(this::onServerTick);
