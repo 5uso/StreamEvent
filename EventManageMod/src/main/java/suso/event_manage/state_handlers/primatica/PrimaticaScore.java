@@ -9,7 +9,7 @@ public class PrimaticaScore {
     private final int[] inv_ranks = new int[12];
 
     public PrimaticaScore() {
-        for(int i = 0; i < 12; i++) ranks[i] = inv_ranks[i] = i;
+        this.reset();
     }
 
     public void score(AbstractTeam team, int amount) {
@@ -38,5 +38,12 @@ public class PrimaticaScore {
 
     public int[] getRanks() {
         return ranks;
+    }
+
+    public void reset() {
+        for(int i = 0; i < 12; i++) {
+            ranks[i] = inv_ranks[i] = i;
+            scores[i] = 0;
+        }
     }
 }

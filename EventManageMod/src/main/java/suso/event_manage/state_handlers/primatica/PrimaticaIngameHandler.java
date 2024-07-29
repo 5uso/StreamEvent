@@ -130,7 +130,11 @@ public class PrimaticaIngameHandler implements StateHandler {
     public void score(AbstractTeam team, ServerPlayerEntity player) {
         scores.score(team, overtime ? 5 : 1);
         EventManager.getInstance().getServer().getPlayerManager().getPlayerList().forEach(this::updateClientScores);
-        HudUtil.broadcastFeedMessage(player.getUuid(), new Identifier("minecraft:textures/block/sunflower_front.png"), null);
+        HudUtil.broadcastFeedMessage(Objects.isNull(player) ? EvtBaseConstants.NULL_UUID : player.getUuid(), new Identifier("minecraft:textures/block/sunflower_front.png"), null);
+    }
+
+    public void resetScores() {
+        this.scores.reset();
     }
 
     public void updateClientTimer(ServerPlayerEntity player) {
