@@ -1,8 +1,6 @@
 package suso.event_manage.custom.entities;
 
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.registry.Registries;
@@ -17,6 +15,6 @@ public class CustomEntities {
     }
 
     public static void register() {
-        PRIMATICA_ORB = register("suso:primatica_orb", FabricEntityTypeBuilder.create(SpawnGroup.MISC, (EntityType<PrimaticaOrbEntity> type, World world) -> new PrimaticaOrbEntity(type, world)).dimensions(EntityDimensions.fixed(1.0f, 1.0f)).disableSaving().build());
+        PRIMATICA_ORB = register("suso:primatica_orb", EntityType.Builder.create((EntityType<PrimaticaOrbEntity> type, World world) -> new PrimaticaOrbEntity(type, world), SpawnGroup.MISC).dimensions(1.0f, 1.0f).disableSaving().build());
     }
 }
