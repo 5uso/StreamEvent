@@ -2,7 +2,6 @@ package suso.event_manage.custom.network.packets;
 
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.util.Identifier;
 
 public class FireworkParticlePacket {
     private final double x, y, z, vx, vy, vz;

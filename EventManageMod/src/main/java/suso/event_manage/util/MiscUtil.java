@@ -1,6 +1,5 @@
 package suso.event_manage.util;
 
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
@@ -10,6 +9,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LightningEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -19,7 +19,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import suso.event_manage.EventManager;
-import suso.event_manage.EvtBaseConstants;
+import suso.event_manage.custom.network.payloads.EntityUpdatePayload;
 
 public class MiscUtil {
     public static double distance(Box rect, Vec3d p) {
@@ -62,11 +62,9 @@ public class MiscUtil {
     }
 
     public static void sendCustomEntityUpdate(Entity e, NbtCompound nbt) {
-        PacketByteBuf p = PacketByteBufs.create();
-        p.writeInt(e.getId());
-        p.writeNbt(nbt);
         if(e.getWorld() instanceof ServerWorld sw) {
-            sw.getPlayers().forEach(player -> ServerPlayNetworking.send(player, EvtBaseConstants.ENTITY_UPDATE, p));
+            CustomPayload p = new EntityUpdatePayload(e, nbt);
+            sw.getPlayers().forEach(player -> ServerPlayNetworking.send(player, p));
         }
     }
 }

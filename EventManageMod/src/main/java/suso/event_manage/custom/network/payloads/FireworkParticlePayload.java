@@ -6,7 +6,6 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.util.Identifier;
 import suso.event_manage.custom.network.packets.FireworkParticlePacket;
-import suso.event_manage.custom.network.packets.SetPostShaderPacket;
 
 public class FireworkParticlePayload extends FireworkParticlePacket implements CustomPayload {
     public static final Id<FireworkParticlePayload> ID = new Id<>(Identifier.of("suso", "firework_particle"));
