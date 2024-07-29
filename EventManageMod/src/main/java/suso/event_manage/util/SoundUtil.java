@@ -3,10 +3,12 @@ package suso.event_manage.util;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.packet.s2c.play.PlaySoundIdS2CPacket;
+import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
 import net.minecraft.network.packet.s2c.play.StopSoundS2CPacket;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import suso.event_manage.EvtBaseConstants;
@@ -51,7 +53,8 @@ public class SoundUtil {
     }
 
     public static void playSound(ServerPlayerEntity player, Identifier sound, SoundCategory category, Vec3d pos, float volume, float pitch) {
-        player.networkHandler.sendPacket(new PlaySoundIdS2CPacket(sound, category, pos, volume, pitch, r.nextLong()));
+        RegistryEntry<SoundEvent> registryEntry = RegistryEntry.of(SoundEvent.of(sound));
+        player.networkHandler.sendPacket(new PlaySoundS2CPacket(registryEntry, category, pos.x, pos.y, pos.z, volume, pitch, r.nextLong()));
     }
 
     public static void playSound(List<ServerPlayerEntity> players, Identifier sound, SoundCategory category, Vec3d pos, float volume, float pitch) {
