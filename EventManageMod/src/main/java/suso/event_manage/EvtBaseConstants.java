@@ -9,8 +9,6 @@ import java.util.Map;
 import java.util.UUID;
 
 public class EvtBaseConstants {
-    public static final Identifier LOGIN_CHECK = new Identifier("suso:login_check");
-
     public enum States {
         IDLE, PRIMATICA_INGAME
     }

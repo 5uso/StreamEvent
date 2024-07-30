@@ -6,8 +6,6 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.networking.v1.ServerLoginConnectionEvents;
-import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemPlacementContext;
@@ -222,9 +220,6 @@ public class EventManager implements ModInitializer {
         ServerLifecycleEvents.SERVER_STARTED.register(this::onServerStart);
         ServerTickEvents.END_SERVER_TICK.register(this::onServerTick);
         ServerLifecycleEvents.SERVER_STOPPING.register(this::cleanup);
-
-        ServerLoginConnectionEvents.QUERY_START.register(ModCheck::handleConnection);
-        ServerLoginNetworking.registerGlobalReceiver(EvtBaseConstants.LOGIN_CHECK, ModCheck::handleResponse);
 
         CommandRegistrationCallback.EVENT.register(CommandUtil::registerGlobalCommands);
 

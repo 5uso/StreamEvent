@@ -9,13 +9,14 @@ import net.minecraft.server.network.ServerLoginNetworkHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Util;
+import suso.event_manage.custom.network.payloads.LoginCheckPayload;
 
 public class ModCheck {
     public static void handleConnection(ServerLoginNetworkHandler handler, MinecraftServer server, PacketSender sender, ServerLoginNetworking.LoginSynchronizer synchronizer) {
         PacketByteBuf p = PacketByteBufs.create();
         p.writeLong(Util.getMeasuringTimeMs());
 
-        sender.sendPacket(EvtBaseConstants.LOGIN_CHECK, p);
+        sender.sendPacket(new LoginCheckPayload(Util.getMeasuringTimeMs()));
     }
 
     public static void handleResponse(MinecraftServer server, ServerLoginNetworkHandler handler, boolean understood, PacketByteBuf buf, ServerLoginNetworking.LoginSynchronizer synchronizer, PacketSender responseSender) {
