@@ -2,7 +2,6 @@ package suso.event_manage;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
 
 import java.util.List;
 import java.util.Map;

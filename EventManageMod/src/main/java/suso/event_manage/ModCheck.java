@@ -1,6 +1,5 @@
 package suso.event_manage;
 
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking;
 import net.minecraft.network.PacketByteBuf;
@@ -13,9 +12,6 @@ import suso.event_manage.custom.network.payloads.LoginCheckPayload;
 
 public class ModCheck {
     public static void handleConnection(ServerLoginNetworkHandler handler, MinecraftServer server, PacketSender sender, ServerLoginNetworking.LoginSynchronizer synchronizer) {
-        PacketByteBuf p = PacketByteBufs.create();
-        p.writeLong(Util.getMeasuringTimeMs());
-
         sender.sendPacket(new LoginCheckPayload(Util.getMeasuringTimeMs()));
     }
 
