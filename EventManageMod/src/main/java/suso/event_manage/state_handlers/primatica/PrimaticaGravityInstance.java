@@ -1,6 +1,7 @@
 package suso.event_manage.state_handlers.primatica;
 
 import net.minecraft.entity.projectile.thrown.SnowballEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtInt;
@@ -19,6 +20,7 @@ import suso.event_manage.util.SoundUtil;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class PrimaticaGravityInstance implements TickableInstance {
     private SnowballEntity entity;
@@ -192,8 +194,10 @@ public class PrimaticaGravityInstance implements TickableInstance {
         NbtCompound nbt = PrimaticaInfo.GRAVITY_DISPLAY.copy();
         int color = (int)((world.getTime() + offset) % 24000) | (owner.getScoreboardTeam() == null ? 7 : owner.getScoreboardTeam().getColor().getColorIndex()) << 16;
         if(inactive) color |= 0x800000;
-        nbt.getCompound("tag").getCompound("display").put("color", NbtInt.of(color));
-        return ItemStack.fromNbt(nbt);
+        nbt.getCompound("components").getCompound("dyed_color").put("rgb", NbtInt.of(color));
+
+        Optional<ItemStack> stack = ItemStack.fromNbt(world.getRegistryManager(), nbt);
+        return stack.orElse(ItemStack.EMPTY);
     }
 
     private double empDistance() {

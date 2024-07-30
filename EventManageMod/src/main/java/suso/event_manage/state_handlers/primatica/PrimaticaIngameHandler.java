@@ -3,6 +3,8 @@ package suso.event_manage.state_handlers.primatica;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.CustomModelDataComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageRecord;
 import net.minecraft.entity.damage.DamageSource;
@@ -19,6 +21,7 @@ import net.minecraft.nbt.NbtString;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.scoreboard.AbstractTeam;
@@ -279,29 +282,33 @@ public class PrimaticaIngameHandler implements StateHandler {
             NbtCompound bootsNbt = PrimaticaInfo.BOOTS.copy();
             AbstractTeam team = player.getScoreboardTeam();
             if(team != null && team.getColor().getColorValue() != null) {
-                bowNbt.getCompound("tag").put("CustomModelData", NbtInt.of(team.getColor().getColorIndex()));
-                blockNbt.put("id", NbtString.of(PrimaticaInfo.getCorrespondingBlock(team.getColor().getColorIndex())));
-                blockNbt.getCompound("tag").getList("CanPlaceOn", NbtList.STRING_TYPE).add(NbtString.of(PrimaticaInfo.getCorrespondingGunk(team.getColor().getColorIndex())));
+                bowNbt.getCompound("components").put("custom_model_data", NbtInt.of(team.getColor().getColorIndex()));
 
-                NbtCompound armorDisplay = new NbtCompound();
-                armorDisplay.put("color", NbtInt.of(team.getColor().getColorValue()));
-                helmetNbt.getCompound("tag").put("display", armorDisplay);
-                chestplateNbt.getCompound("tag").put("display", armorDisplay);
-                leggingsNbt.getCompound("tag").put("display", armorDisplay);
-                bootsNbt.getCompound("tag").put("display", armorDisplay);
+                NbtCompound blockFilter = new NbtCompound();
+                blockNbt.put("id", NbtString.of(PrimaticaInfo.getCorrespondingBlock(team.getColor().getColorIndex())));
+                blockFilter.putString("blocks", PrimaticaInfo.getCorrespondingGunk(team.getColor().getColorIndex()));
+                blockNbt.getCompound("components").getCompound("can_place_on").getList("predicates", NbtList.COMPOUND_TYPE).add(blockFilter);
+
+                NbtCompound armorColor = new NbtCompound();
+                armorColor.putInt("rgb", team.getColor().getColorValue());
+                helmetNbt.getCompound("components").put("dyed_color", armorColor);
+                chestplateNbt.getCompound("components").put("dyed_color", armorColor);
+                leggingsNbt.getCompound("components").put("dyed_color", armorColor);
+                bootsNbt.getCompound("components").put("dyed_color", armorColor);
             }
 
-            InventoryUtil.replaceSlot(player, 0, ItemStack.fromNbt(bowNbt));
-            InventoryUtil.replaceSlot(player, 1, ItemStack.fromNbt(PrimaticaInfo.PICKAXE));
+            DynamicRegistryManager rm = player.getRegistryManager();
+            InventoryUtil.replaceSlot(player, 0, ItemStack.fromNbt(rm, bowNbt).orElse(ItemStack.EMPTY));
+            InventoryUtil.replaceSlot(player, 1, ItemStack.fromNbt(rm, PrimaticaInfo.PICKAXE).orElse(ItemStack.EMPTY));
 
-            InventoryUtil.replaceSlot(player, 2, ItemStack.fromNbt(blockNbt));
+            InventoryUtil.replaceSlot(player, 2, ItemStack.fromNbt(rm, blockNbt).orElse(ItemStack.EMPTY));
 
             InventoryUtil.replaceSlot(player, 9, new ItemStack(Registries.ITEM.get(Identifier.ofVanilla("arrow"))));
 
-            InventoryUtil.replaceSlot(player, 103, ItemStack.fromNbt(helmetNbt));
-            InventoryUtil.replaceSlot(player, 102, ItemStack.fromNbt(chestplateNbt));
-            InventoryUtil.replaceSlot(player, 101, ItemStack.fromNbt(leggingsNbt));
-            InventoryUtil.replaceSlot(player, 100, ItemStack.fromNbt(bootsNbt));
+            InventoryUtil.replaceSlot(player, 103, ItemStack.fromNbt(rm, helmetNbt).orElse(ItemStack.EMPTY));
+            InventoryUtil.replaceSlot(player, 102, ItemStack.fromNbt(rm, chestplateNbt).orElse(ItemStack.EMPTY));
+            InventoryUtil.replaceSlot(player, 101, ItemStack.fromNbt(rm, leggingsNbt).orElse(ItemStack.EMPTY));
+            InventoryUtil.replaceSlot(player, 100, ItemStack.fromNbt(rm, bootsNbt).orElse(ItemStack.EMPTY));
 
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.INSTANT_HEALTH, 1, 100, false, false, false));
 
@@ -336,7 +343,7 @@ public class PrimaticaIngameHandler implements StateHandler {
             if(orbLocations.size() < orbTarget) trySummonOrb(manager, w);
             if(leftMillis <= 0) triggerOvertime(w);
         } else {
-            if(!ended && orbLocations.size() == 0) triggerEnd(server);
+            if(!ended && orbLocations.isEmpty()) triggerEnd(server);
         }
 
         if(stop) EventManager.getInstance().setStateHandler(new IdleHandler());
@@ -457,8 +464,8 @@ public class PrimaticaIngameHandler implements StateHandler {
 
     @Override
     public boolean onPlayerRightClick(ServerPlayerEntity player, EventPlayerData data, ItemStack stack, Hand hand) {
-        if(stack.isOf(Items.FEATHER) && stack.getNbt() != null) {
-            int powerupId = stack.getNbt().getInt("CustomModelData");
+        if(stack.isOf(Items.FEATHER) && stack.contains(DataComponentTypes.CUSTOM_MODEL_DATA)) {
+            int powerupId = stack.get(DataComponentTypes.CUSTOM_MODEL_DATA).value();
             if(switch (powerupId) {
                 case 1 -> useAgility(player);
                 case 2 -> useBridge(player);
@@ -477,8 +484,7 @@ public class PrimaticaIngameHandler implements StateHandler {
         if(stack.isOf(Items.BOW)) {
             PrimaticaPlayerInfo info = playerInfo.get(player.getUuid());
             info.isChargingBow = true;
-
-            if(stack.getNbt() != null && stack.getNbt().getInt("CustomModelData") == 1) {
+            if(stack.getOrDefault(DataComponentTypes.CUSTOM_MODEL_DATA, CustomModelDataComponent.DEFAULT).value() == 1) {
                 SoundUtil.playSound(player, Identifier.of("suso", "bow.charge"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
                 SoundUtil.playFadeSound(player, Identifier.of("suso", "bow.loop"), 0.4f, 1.0f, true, SoundCategory.PLAYERS, true);
             } else {
@@ -538,7 +544,7 @@ public class PrimaticaIngameHandler implements StateHandler {
     public boolean onPlayerShoot(ServerPlayerEntity player, EventPlayerData data, ItemStack bow, int useTicks) {
         SoundUtil.stopSound(player, Identifier.ofVanilla("item.crossbow.loading_middle"), null);
 
-        if(bow.getNbt() == null || bow.getNbt().getInt("CustomModelData") != 1) return false;
+        if(bow.getOrDefault(DataComponentTypes.CUSTOM_MODEL_DATA, CustomModelDataComponent.DEFAULT).value() != 1) return false;
 
         PrimaticaPlayerInfo info = playerInfo.get(player.getUuid());
         SoundUtil.stopSound(player, Identifier.of("suso", "bow.charge"), null);
@@ -567,7 +573,7 @@ public class PrimaticaIngameHandler implements StateHandler {
                 if(team != null && team.getColor().getColorValue() != null) {
                     bowNbt.getCompound("tag").put("CustomModelData", NbtInt.of(team.getColor().getColorIndex()));
                 }
-                bow = ItemStack.fromNbt(bowNbt);
+                bow = ItemStack.fromNbt(player.getRegistryManager(), bowNbt).orElse(ItemStack.EMPTY);
                 setHasPowerup(player.getUuid(), false);
                 HudUtil.setInfo(player, null);
             }

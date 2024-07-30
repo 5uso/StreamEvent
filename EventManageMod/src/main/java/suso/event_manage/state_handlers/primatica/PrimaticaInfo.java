@@ -155,23 +155,23 @@ public class PrimaticaInfo {
     public static NbtCompound BOW, PICKAXE, BLOCK, HELMET, CHESTPLATE, LEGGINGS, BOOTS, AGILITY, BRIDGE, GRAVITY, EMP, ARROW_BOW, GUNK, GRAVITY_DISPLAY, GUNK_DISPLAY;
     static {
         try {
-            BOW = StringNbtReader.parse("{id:'bow',Count:1b,tag:{CustomModelData:7,Enchantments:[{id:'minecraft:punch',lvl:1s},{id:'minecraft:infinity',lvl:1s},{id:'minecraft:knockback',lvl:1s}],Unbreakable:1b}}");
-            PICKAXE = StringNbtReader.parse("{id:'iron_pickaxe',Count:1b,tag:{CanDestroy:['#suso:primatica_breakable'],HideFlags:8,Unbreakable:1b,Enchantments:[{id:'minecraft:efficiency',lvl:10s}]}}");
-            BLOCK =  StringNbtReader.parse("{id:'gray_holoblock',Count:1b,tag:{infinite:1b,CanPlaceOn:['#suso:all'],HideFlags:16}}");
-            HELMET = StringNbtReader.parse("{id:'leather_helmet',Count:1b,tag:{display:{color:0},Unbreakable:1b,HideFlags:64}}");
-            CHESTPLATE = StringNbtReader.parse("{id:'leather_chestplate',Count:1b,tag:{display:{color:0},Unbreakable:1b,HideFlags:64}}");
-            LEGGINGS = StringNbtReader.parse("{id:'leather_leggings',Count:1b,tag:{display:{color:0},Unbreakable:1b,HideFlags:64}}");
-            BOOTS = StringNbtReader.parse("{id:'leather_boots',Count:1b,tag:{display:{color:0},Unbreakable:1b,HideFlags:64}}");
+            BOW = StringNbtReader.parse("{id:'bow',count:1,components:{'custom_model_data':7,'enchantments':{levels:{'knockback':1,'infinity':1,'punch':1}},'unbreakable':{}}}");
+            PICKAXE = StringNbtReader.parse("{id:'iron_pickaxe',count:1,components:{'unbreakable':{},'can_break':{predicates:[{blocks:'#suso:primatica_breakable'}],show_in_tooltip:false},'enchantments':{levels:{'minecraft:efficiency':10}}}}");
+            BLOCK =  StringNbtReader.parse("{id:'suso:gray_holoblock',count:1,components:{'custom_data':{infinite:1b},'can_place_on':{predicates:[{blocks:'#suso:all'}],show_in_tooltip:false}}}");
+            HELMET = StringNbtReader.parse("{id:'leather_helmet',count:1,components:{'dyed_color':{rgb:0,show_in_tooltip:false},'unbreakable':{}}}");
+            CHESTPLATE = StringNbtReader.parse("{id:'leather_chestplate',count:1,components:{'dyed_color':{rgb:0,show_in_tooltip:false},'unbreakable':{}}}");
+            LEGGINGS = StringNbtReader.parse("{id:'leather_leggings',count:1,components:{'dyed_color':{rgb:0,show_in_tooltip:false},'unbreakable':{}}}");
+            BOOTS = StringNbtReader.parse("{id:'leather_boots',count:1,components:{'dyed_color':{rgb:0,show_in_tooltip:false},'unbreakable':{}}}");
 
-            AGILITY = StringNbtReader.parse("{id:'feather',Count:1b,tag:{CustomModelData:1,display:{Name:'{\"translate\":\"event.suso.agility\"}'}}}");
-            BRIDGE = StringNbtReader.parse("{id:'feather',Count:1b,tag:{CustomModelData:2,display:{Name:'{\"translate\":\"event.suso.bridge\"}'}}}");
-            GRAVITY = StringNbtReader.parse("{id:'feather',Count:1b,tag:{CustomModelData:3,display:{Name:'{\"translate\":\"event.suso.gravity\"}'}}}");
-            EMP = StringNbtReader.parse("{id:'feather',Count:1b,tag:{CustomModelData:4,display:{Name:'{\"translate\":\"event.suso.emp\"}'},CanPlaceOn:['#minecraft:all'],HideFlags:16}}");
-            ARROW_BOW = StringNbtReader.parse("{id:'bow',Count:3b,tag:{CustomModelData:1,Enchantments:[{id:'minecraft:punch',lvl:1s},{id:'minecraft:infinity',lvl:1s},{id:'minecraft:knockback',lvl:1s}],Unbreakable:1b}}");
-            GUNK = StringNbtReader.parse("{id:'feather',Count:1b,tag:{CustomModelData:5,display:{Name:'{\"translate\":\"event.suso.gunk\"}'}}}");
+            AGILITY = StringNbtReader.parse("{id:'feather',count:1,components:{'custom_model_data':1,'custom_name':'{\"translate\":\"event.suso.agility\"}'}}");
+            BRIDGE = StringNbtReader.parse("{id:'feather',count:1,components:{'custom_model_data':2,'custom_name':'{\"translate\":\"event.suso.bridge\"}'}}");
+            GRAVITY = StringNbtReader.parse("{id:'feather',count:1,components:{'custom_model_data':3,'custom_name':'{\"translate\":\"event.suso.gravity\"}'}}");
+            EMP = StringNbtReader.parse("{id:'feather',count:1,components:{'custom_model_data':4,'custom_name':'{\"translate\":\"event.suso.emp\"}','can_place_on':{predicates:[{blocks:'#minecraft:all'}],show_in_tooltip:false}}}");
+            ARROW_BOW = StringNbtReader.parse("{id:'bow',count:3,components:{'custom_model_data':1,'custom_name':'{\"translate\":\"event.suso.arrow_bow\"}','enchantments':{levels:{'knockback':1,'infinity':1,'punch':1}},'unbreakable':{}}}");
+            GUNK = StringNbtReader.parse("{id:'feather',count:1,components:{'custom_model_data':5,'custom_name':'{\"translate\":\"event.suso.gunk\"}'}}");
 
-            GRAVITY_DISPLAY = StringNbtReader.parse("{id:'leather_chestplate',Count:1b,tag:{CustomModelData:1,display:{color:0}}}");
-            GUNK_DISPLAY = StringNbtReader.parse("{id:'leather_helmet',Count:1b,tag:{CustomModelData:1,display:{color:0}}}");
+            GRAVITY_DISPLAY = StringNbtReader.parse("{id:'leather_chestplate',count:1,components:{'custom_model_data':1,'dyed_color':{rgb:0}}}");
+            GUNK_DISPLAY = StringNbtReader.parse("{id:'leather_helmet',count:1,components:{'custom_model_data':1,'dyed_color':{rgb:0}}}");
         } catch (CommandSyntaxException e) {
             e.printStackTrace();
             System.exit(0xDEADBEEF);

@@ -55,15 +55,15 @@ public class PrimaticaGunkInstance implements TickableInstance {
 
         NbtCompound nbt = PrimaticaInfo.GUNK_DISPLAY.copy();
         int color = team == null ? 0 : team.getColor().getColorValue() == null ? 0 : team.getColor().getColorValue();
-        nbt.getCompound("tag").getCompound("display").put("color", NbtInt.of(color));
-        entity.setItem(ItemStack.fromNbt(nbt));
+        nbt.getCompound("components").getCompound("dyed_color").put("rgb", NbtInt.of(color));
+        entity.setItem(ItemStack.fromNbt(world.getRegistryManager(), nbt).orElse(ItemStack.EMPTY));
 
         world.spawnEntity(entity);
 
-        NbtCompound nbt2 = PrimaticaInfo.BOW.copy();
+        NbtCompound bow_nbt = PrimaticaInfo.BOW.copy();
         int customModelData = team == null ? 7 : team.getColor().getColorIndex();
-        nbt2.getCompound("tag").put("CustomModelData", NbtInt.of(customModelData));
-        this.particle = new ItemStackParticleEffect(ParticleTypes.ITEM, ItemStack.fromNbt(nbt2));
+        bow_nbt.getCompound("tag").put("CustomModelData", NbtInt.of(customModelData));
+        this.particle = new ItemStackParticleEffect(ParticleTypes.ITEM, ItemStack.fromNbt(world.getRegistryManager(), bow_nbt).orElse(ItemStack.EMPTY));
 
         SoundUtil.playSound(owner, Identifier.ofVanilla("item.glow_ink_sac.use"), SoundCategory.PLAYERS, owner.getPos(), 1.0f, 1.0f);
         SoundUtil.playSound(owner, Identifier.ofVanilla("item.glow_ink_sac.use"), SoundCategory.PLAYERS, owner.getPos(), 1.0f, 0.5f);
@@ -100,7 +100,7 @@ public class PrimaticaGunkInstance implements TickableInstance {
         world.spawnParticles(new DustParticleEffect(ParticleUtil.teamColor(team), 0.5f), entity.prevX, entity.prevY, entity.prevZ, 100, 1.5, 0.05, 1.5, 0.0);
 
         try {
-            NbtCompound firework = StringNbtReader.parse("{Explosions:[{Type:2,Colors:[I;" + team.getColor().getColorValue() + "]}]}");
+            NbtCompound firework = StringNbtReader.parse("{explosions:[{shape:'star',colors:[I;" + team.getColor().getColorValue() + "]}]}");
             ParticleUtil.fireworkParticle(players, entity.getX(), entity.getY(), entity.getZ(), 0.0, 0.0, 0.0, firework);
         } catch (CommandSyntaxException | NullPointerException e) {
             e.printStackTrace();

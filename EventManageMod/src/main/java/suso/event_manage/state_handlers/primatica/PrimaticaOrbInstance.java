@@ -102,7 +102,7 @@ public class PrimaticaOrbInstance implements TickableInstance {
         world.spawnParticles(new ItemStackParticleEffect(ParticleTypes.ITEM, new ItemStack(Registries.ITEM.get(Identifier.of(PrimaticaInfo.getCorrespondingBlock(team.getColor().getColorIndex()))))), pos.x, pos.y + 0.3, pos.z, 70, 0.0, 0.0, 0.0, 0.6);
 
         try {
-            NbtCompound firework = StringNbtReader.parse("{Explosions:[{Type:1,Colors:[I;" + team.getColor().getColorValue() + "]}]}");
+            NbtCompound firework = StringNbtReader.parse("{explosions:[{shape:'large_ball',colors:[I;" + team.getColor().getColorValue() + "]}]}");
             ParticleUtil.fireworkParticle(players, pos.x, pos.y + 0.3, pos.z, 0.0, 0.0, 0.0, firework);
         } catch (CommandSyntaxException | NullPointerException e) {
             e.printStackTrace();

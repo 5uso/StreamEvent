@@ -1,5 +1,7 @@
 package suso.event_manage.mixin;
 
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.NbtComponent;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemPlacementContext;
@@ -46,8 +48,8 @@ public class BlockItemMixin {
             )
     )
     private void dontDecrementIfInfinite(ItemStack instance, int amount) {
-        NbtCompound nbt = instance.getNbt();
-        if(nbt != null && nbt.getBoolean("infinite")) return;
+        NbtCompound nbt = instance.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).getNbt();
+        if(nbt.getBoolean("infinite")) return;
 
         instance.decrement(amount);
     }

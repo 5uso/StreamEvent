@@ -8,6 +8,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -88,22 +89,23 @@ public class PrimaticaPowerupInstance implements TickableInstance {
 
     private void collectPowerup(ServerPlayerEntity player) {
         UUID id = player.getUuid();
+        DynamicRegistryManager rm = world.getRegistryManager();
         if(!handler.getPlayerInfo(id).hasPowerup) {
             switch (type) {
                 case AGILITY -> {
-                    InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.AGILITY));
+                    InventoryUtil.giveItem(player, ItemStack.fromNbt(rm, PrimaticaInfo.AGILITY).orElse(ItemStack.EMPTY));
                     HudUtil.setInfo(player, Identifier.of("suso", "textures/hud/info//lang//singularity.png"));
                 }
                 case BRIDGE -> {
-                    InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.BRIDGE));
+                    InventoryUtil.giveItem(player, ItemStack.fromNbt(rm, PrimaticaInfo.BRIDGE).orElse(ItemStack.EMPTY));
                     HudUtil.setInfo(player, Identifier.of("suso", "textures/hud/info//lang//singularity.png"));
                 }
                 case GRAVITY -> {
-                    InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.GRAVITY));
+                    InventoryUtil.giveItem(player, ItemStack.fromNbt(rm, PrimaticaInfo.GRAVITY).orElse(ItemStack.EMPTY));
                     HudUtil.setInfo(player, Identifier.of("suso", "textures/hud/info//lang//singularity.png"));
                 }
                 case EMP -> {
-                    InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.EMP));
+                    InventoryUtil.giveItem(player, ItemStack.fromNbt(rm, PrimaticaInfo.EMP).orElse(ItemStack.EMPTY));
                     HudUtil.setInfo(player, Identifier.of("suso", "textures/hud/info//lang//singularity.png"));
                 }
                 case ARROW -> {
@@ -114,11 +116,11 @@ public class PrimaticaPowerupInstance implements TickableInstance {
                         if(playerInventory.getStack(i).itemMatches(item -> item.matchesId(Identifier.ofVanilla("bow"))))
                             slot = i == 40 ? 99 : i;
                     }
-                    InventoryUtil.replaceSlot(player, slot, ItemStack.fromNbt(PrimaticaInfo.ARROW_BOW));
+                    InventoryUtil.replaceSlot(player, slot, ItemStack.fromNbt(rm, PrimaticaInfo.ARROW_BOW).orElse(ItemStack.EMPTY));
                     HudUtil.setInfo(player, Identifier.of("suso", "textures/hud/info//lang//singularity.png"));
                 }
                 case GUNK -> {
-                    InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.GUNK));
+                    InventoryUtil.giveItem(player, ItemStack.fromNbt(rm, PrimaticaInfo.GUNK).orElse(ItemStack.EMPTY));
                     HudUtil.setInfo(player, Identifier.of("suso", "textures/hud/info//lang//singularity.png"));
                 }
             }
