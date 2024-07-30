@@ -47,13 +47,13 @@ public class PrimaticaEMPInstance implements TickableInstance {
 
         List<ServerPlayerEntity> players = world.getPlayers();
 
-        Identifier blockId = new Identifier(PrimaticaInfo.getCorrespondingEmp(team == null ? 7 :team.getColor().getColorIndex()));
+        Identifier blockId = Identifier.of(PrimaticaInfo.getCorrespondingEmp(team == null ? 7 :team.getColor().getColorIndex()));
         world.setBlockState(pos, Registries.BLOCK.get(blockId).getDefaultState());
         players.forEach(p -> ShaderUtil.setBlockColor(p, pos, (int)(player.world.getTime() % 24000)));
 
-        SoundUtil.playSound(players, new Identifier("minecraft:entity.bee.sting"), SoundCategory.BLOCKS, position, 2.0f, 0.5f);
-        SoundUtil.playSound(players, new Identifier("minecraft:block.beacon.activate"), SoundCategory.BLOCKS, position, 2.0f, 2.0f);
-        SoundUtil.playSound(players, new Identifier("minecraft:block.bell.resonate"), SoundCategory.BLOCKS, position, 2.0f, 2.0f);
+        SoundUtil.playSound(players, Identifier.ofVanilla("entity.bee.sting"), SoundCategory.BLOCKS, position, 2.0f, 0.5f);
+        SoundUtil.playSound(players, Identifier.ofVanilla("block.beacon.activate"), SoundCategory.BLOCKS, position, 2.0f, 2.0f);
+        SoundUtil.playSound(players, Identifier.ofVanilla("block.bell.resonate"), SoundCategory.BLOCKS, position, 2.0f, 2.0f);
         world.spawnParticles(ParticleTypes.FLASH, position.x, position.y, position.z, 1, 0.0, 0.0, 0.0, 0.0);
         Vec3d v = player.getEyePos();
         Vec3d d = position.subtract(v).normalize().multiply(0.2);
@@ -109,7 +109,7 @@ public class PrimaticaEMPInstance implements TickableInstance {
             Vec3d target = e.getPos().subtract(position).normalize();
             if(MiscUtil.vec3Angle(motion, target) > 0.55) {
                 e.setVelocity(target);
-                SoundUtil.playSound(players, new Identifier("minecraft:block.end_portal_frame.fill"), SoundCategory.BLOCKS, position, 1.0f, 0.5f);
+                SoundUtil.playSound(players, Identifier.ofVanilla("block.end_portal_frame.fill"), SoundCategory.BLOCKS, position, 1.0f, 0.5f);
             }
         });
 

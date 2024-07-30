@@ -48,7 +48,7 @@ public class PrimaticaGravityInstance implements TickableInstance {
         time = 0;
 
         List<ServerPlayerEntity> players = world.getPlayers();
-        SoundUtil.playSound(players, new Identifier("minecraft:entity.firework_rocket.shoot"), SoundCategory.PLAYERS, pos, 2.0f, 0.5f);
+        SoundUtil.playSound(players, Identifier.ofVanilla("entity.firework_rocket.shoot"), SoundCategory.PLAYERS, pos, 2.0f, 0.5f);
     }
 
     @Override
@@ -58,8 +58,8 @@ public class PrimaticaGravityInstance implements TickableInstance {
 
         if(empDistance() < 3.1) {
             List<ServerPlayerEntity> players = world.getPlayers();
-            SoundUtil.playSound(players, new Identifier("minecraft:block.end_portal_frame.fill"), SoundCategory.PLAYERS, entity.getPos(), 2.0f, 2.0f);
-            SoundUtil.playSound(players, new Identifier("minecraft:block.end_portal_frame.fill"), SoundCategory.PLAYERS, entity.getPos(), 1.3f, 0.5f);
+            SoundUtil.playSound(players, Identifier.ofVanilla("block.end_portal_frame.fill"), SoundCategory.PLAYERS, entity.getPos(), 2.0f, 2.0f);
+            SoundUtil.playSound(players, Identifier.ofVanilla("block.end_portal_frame.fill"), SoundCategory.PLAYERS, entity.getPos(), 1.3f, 0.5f);
             entity.setItem(getItem(0, true));
             entity.setVelocity(entity.getVelocity().multiply(-0.1));
             entity.setNoGravity(false);
@@ -73,8 +73,8 @@ public class PrimaticaGravityInstance implements TickableInstance {
             List<ServerPlayerEntity> players = world.getPlayers();
             entity.setVelocity(entity.getVelocity().multiply(0.15));
 
-            SoundUtil.playSound(players, new Identifier("minecraft:entity.firework_rocket.large_blast"), SoundCategory.PLAYERS, entity.getPos(), 4.0f, 2.0f);
-            SoundUtil.playSound(players, new Identifier("minecraft:entity.illusioner.prepare_mirror"), SoundCategory.PLAYERS, entity.getPos(), 4.0f, 2.0f);
+            SoundUtil.playSound(players, Identifier.ofVanilla("entity.firework_rocket.large_blast"), SoundCategory.PLAYERS, entity.getPos(), 4.0f, 2.0f);
+            SoundUtil.playSound(players, Identifier.ofVanilla("entity.illusioner.prepare_mirror"), SoundCategory.PLAYERS, entity.getPos(), 4.0f, 2.0f);
             world.spawnParticles(ParticleTypes.CRIT, entity.getX(), entity.getY(), entity.getZ(), 15, 0.0, 0.0, 0.0, 2.0);
         } else if(time < 100) {
             Vec3d pos = entity.getPos();
@@ -90,12 +90,12 @@ public class PrimaticaGravityInstance implements TickableInstance {
                 if(player.getUuid().equals(owner.getUuid())) ownerPhysics(player, playerPos, pos, distance, info);
                 else otherPhysics(player, playerPos, pos, distance, info);
             }
-            if(time == 91) SoundUtil.playSound(players, new Identifier("eniah:sfx.riser_low"), SoundCategory.PLAYERS, entity.getPos(), 3.0f, 2.0f);
+            if(time == 91) SoundUtil.playSound(players, Identifier.of("eniah", "sfx.riser_low"), SoundCategory.PLAYERS, entity.getPos(), 3.0f, 2.0f);
         } else if(time == 110) {
             List<ServerPlayerEntity> players = world.getPlayers();
-            SoundUtil.playSound(players, new Identifier("minecraft:entity.firework_rocket.large_blast"), SoundCategory.PLAYERS, entity.getPos(), 4.0f, 2.0f);
-            SoundUtil.playSound(players, new Identifier("minecraft:entity.illusioner.prepare_mirror"), SoundCategory.PLAYERS, entity.getPos(), 4.0f, 1.0f);
-            SoundUtil.playSound(players, new Identifier("minecraft:entity.firework_rocket.twinkle"), SoundCategory.PLAYERS, entity.getPos(), 4.0f, 0.5f);
+            SoundUtil.playSound(players, Identifier.ofVanilla("entity.firework_rocket.large_blast"), SoundCategory.PLAYERS, entity.getPos(), 4.0f, 2.0f);
+            SoundUtil.playSound(players, Identifier.ofVanilla("entity.illusioner.prepare_mirror"), SoundCategory.PLAYERS, entity.getPos(), 4.0f, 1.0f);
+            SoundUtil.playSound(players, Identifier.ofVanilla("entity.firework_rocket.twinkle"), SoundCategory.PLAYERS, entity.getPos(), 4.0f, 0.5f);
 
             Vec3d pos = entity.getPos();
             for(ServerPlayerEntity player : players) {
@@ -168,7 +168,7 @@ public class PrimaticaGravityInstance implements TickableInstance {
         SnowballEntity tempEntity =  new SnowballEntity(world, entity.prevX, entity.prevY, entity.prevZ);
 
         world.spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK, world.getBlockState(entity.getBlockPos())), entity.prevX, entity.prevY, entity.prevZ, 15, 0.05, 0.05, 0.05, 0.2);
-        SoundUtil.playSound(world.getPlayers(), new Identifier("minecraft:block.end_portal_frame.fill"), SoundCategory.PLAYERS, entity.getPos(), 2.0f, 2.0f);
+        SoundUtil.playSound(world.getPlayers(), Identifier.ofVanilla("block.end_portal_frame.fill"), SoundCategory.PLAYERS, entity.getPos(), 2.0f, 2.0f);
 
         if(time < 7) {
             tempEntity.setItem(getItem(0, true));

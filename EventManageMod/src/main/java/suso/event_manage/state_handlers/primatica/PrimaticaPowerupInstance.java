@@ -52,7 +52,7 @@ public class PrimaticaPowerupInstance implements TickableInstance {
         }
         positions.add(position);
 
-        SoundUtil.playSound(world.getPlayers(), new Identifier("minecraft:block.beehive.exit"), SoundCategory.PLAYERS, position, 1.0f, 2.0f);
+        SoundUtil.playSound(world.getPlayers(), Identifier.ofVanilla("block.beehive.exit"), SoundCategory.PLAYERS, position, 1.0f, 2.0f);
     }
 
     @Override
@@ -92,42 +92,42 @@ public class PrimaticaPowerupInstance implements TickableInstance {
             switch (type) {
                 case AGILITY -> {
                     InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.AGILITY));
-                    HudUtil.setInfo(player, new Identifier("suso:textures/hud/info//lang//singularity.png"));
+                    HudUtil.setInfo(player, Identifier.of("suso", "textures/hud/info//lang//singularity.png"));
                 }
                 case BRIDGE -> {
                     InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.BRIDGE));
-                    HudUtil.setInfo(player, new Identifier("suso:textures/hud/info//lang//singularity.png"));
+                    HudUtil.setInfo(player, Identifier.of("suso", "textures/hud/info//lang//singularity.png"));
                 }
                 case GRAVITY -> {
                     InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.GRAVITY));
-                    HudUtil.setInfo(player, new Identifier("suso:textures/hud/info//lang//singularity.png"));
+                    HudUtil.setInfo(player, Identifier.of("suso", "textures/hud/info//lang//singularity.png"));
                 }
                 case EMP -> {
                     InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.EMP));
-                    HudUtil.setInfo(player, new Identifier("suso:textures/hud/info//lang//singularity.png"));
+                    HudUtil.setInfo(player, Identifier.of("suso", "textures/hud/info//lang//singularity.png"));
                 }
                 case ARROW -> {
                     Inventory playerInventory = player.getInventory();
                     int size = playerInventory.size();
                     int slot = 0;
                     for(int i = 0; i < size; i++) {
-                        if(playerInventory.getStack(i).itemMatches(item -> item.matchesId(new Identifier("minecraft:bow"))))
+                        if(playerInventory.getStack(i).itemMatches(item -> item.matchesId(Identifier.ofVanilla("bow"))))
                             slot = i == 40 ? 99 : i;
                     }
                     InventoryUtil.replaceSlot(player, slot, ItemStack.fromNbt(PrimaticaInfo.ARROW_BOW));
-                    HudUtil.setInfo(player, new Identifier("suso:textures/hud/info//lang//singularity.png"));
+                    HudUtil.setInfo(player, Identifier.of("suso", "textures/hud/info//lang//singularity.png"));
                 }
                 case GUNK -> {
                     InventoryUtil.giveItem(player, ItemStack.fromNbt(PrimaticaInfo.GUNK));
-                    HudUtil.setInfo(player, new Identifier("suso:textures/hud/info//lang//singularity.png"));
+                    HudUtil.setInfo(player, Identifier.of("suso", "textures/hud/info//lang//singularity.png"));
                 }
             }
             handler.setHasPowerup(id, true);
-            SoundUtil.playSound(player, new Identifier("eniah:sfx.collect"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.8f);
+            SoundUtil.playSound(player, Identifier.of("eniah", "sfx.collect"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.8f);
         }
 
         List<ServerPlayerEntity> players = world.getPlayers();
-        players.forEach(p -> SoundUtil.playSound(p, new Identifier("eniah:sfx.collect_fail"), SoundCategory.PLAYERS, position, p.equals(player) ? 1.0f : 0.5f, 1.0f));
+        players.forEach(p -> SoundUtil.playSound(p, Identifier.of("eniah", "sfx.collect_fail"), SoundCategory.PLAYERS, position, p.equals(player) ? 1.0f : 0.5f, 1.0f));
         world.spawnParticles(ParticleTypes.ENCHANTED_HIT, position.x, position.y, position.z, 10, 0.1, 0.1, 0.1, 0.5);
     }
 
@@ -143,7 +143,7 @@ public class PrimaticaPowerupInstance implements TickableInstance {
             int y = random.nextInt(66, 153);
 
             BlockPos r = new BlockPos(x, y, z);
-            TagKey<Block> floor_tag = TagKey.of(Registries.BLOCK.getKey(), new Identifier("suso:primatica_floor"));
+            TagKey<Block> floor_tag = TagKey.of(Registries.BLOCK.getKey(), Identifier.of("suso", "primatica_floor"));
             for(int j = 0; j < 10; j++) {
                 if(!w.getBlockState(r).isAir()) break;
                 if(w.getBlockState(r.down()).isIn(floor_tag)) {

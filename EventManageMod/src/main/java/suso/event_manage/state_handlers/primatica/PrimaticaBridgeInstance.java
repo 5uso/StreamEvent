@@ -33,7 +33,7 @@ public class PrimaticaBridgeInstance implements TickableInstance {
         this.world = owner.getServerWorld();
 
         AbstractTeam team = owner.getScoreboardTeam();
-        Identifier blockId = new Identifier(PrimaticaInfo.getCorrespondingBlock(team == null ? 7 :team.getColor().getColorIndex()));
+        Identifier blockId = Identifier.of(PrimaticaInfo.getCorrespondingBlock(team == null ? 7 :team.getColor().getColorIndex()));
         this.block = Registries.BLOCK.get(blockId).getDefaultState();
         this.color = team == null ? new Vector3f().zero() : ParticleUtil.teamColor(team);
 
@@ -45,9 +45,9 @@ public class PrimaticaBridgeInstance implements TickableInstance {
 
         List<ServerPlayerEntity> players = world.getPlayers();
         world.spawnParticles(ParticleTypes.SCULK_CHARGE_POP, owner.getX(), owner.getY() + 1.0, owner.getZ(), 50, 0.3, 0.5, 0.3, 0.3);
-        SoundUtil.playSound(players, new Identifier("minecraft:block.grindstone.use"), SoundCategory.BLOCKS, position, 1.0f, 0.5f);
-        SoundUtil.playSound(players, new Identifier("minecraft:block.conduit.activate"), SoundCategory.BLOCKS, position, 1.0f, 0.5f);
-        SoundUtil.playSound(players, new Identifier("minecraft:item.trident.riptide_3"), SoundCategory.BLOCKS, position, 1.0f, 0.5f);
+        SoundUtil.playSound(players, Identifier.ofVanilla("block.grindstone.use"), SoundCategory.BLOCKS, position, 1.0f, 0.5f);
+        SoundUtil.playSound(players, Identifier.ofVanilla("block.conduit.activate"), SoundCategory.BLOCKS, position, 1.0f, 0.5f);
+        SoundUtil.playSound(players, Identifier.ofVanilla("item.trident.riptide_3"), SoundCategory.BLOCKS, position, 1.0f, 0.5f);
     }
 
     @Override
@@ -73,8 +73,8 @@ public class PrimaticaBridgeInstance implements TickableInstance {
         if(world.getBlockState(pos).isAir()) {
             world.setBlockState(pos, block);
             List<ServerPlayerEntity> players = world.getPlayers();
-            SoundUtil.playSound(players, new Identifier("minecraft:block.scaffolding.place"), SoundCategory.BLOCKS, position, 1.0f, 1.0f);
-            SoundUtil.playSound(players, new Identifier("minecraft:block.amethyst_block.place"), SoundCategory.BLOCKS, position, 1.0f, 1.0f);
+            SoundUtil.playSound(players, Identifier.ofVanilla("block.scaffolding.place"), SoundCategory.BLOCKS, position, 1.0f, 1.0f);
+            SoundUtil.playSound(players, Identifier.ofVanilla("block.amethyst_block.place"), SoundCategory.BLOCKS, position, 1.0f, 1.0f);
         }
 
         return false;

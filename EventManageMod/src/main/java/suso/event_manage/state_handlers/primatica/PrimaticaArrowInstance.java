@@ -43,12 +43,12 @@ public class PrimaticaArrowInstance implements TickableInstance {
         this.position = owner.getEyePos();
 
         List<ServerPlayerEntity> players = world.getPlayers();
-        SoundUtil.playSound(players, new Identifier("minecraft:entity.arrow.hit"), SoundCategory.PLAYERS, position, 1.0f, 0.5f);
-        SoundUtil.playSound(players, new Identifier("minecraft:entity.bee.sting"), SoundCategory.PLAYERS, position, 1.0f, 0.5f);
-        SoundUtil.playSound(players, new Identifier("minecraft:entity.bee.sting"), SoundCategory.PLAYERS, position, 1.0f, 2.0f);
-        SoundUtil.playSound(players, new Identifier("minecraft:block.beacon.deactivate"), SoundCategory.PLAYERS, position, 1.0f, 2.0f);
-        SoundUtil.playSound(players, new Identifier("minecraft:item.trident.throw"), SoundCategory.PLAYERS, position, 1.0f, 2.0f);
-        SoundUtil.playSound(players, new Identifier("suso:bow.swoosh"), SoundCategory.PLAYERS, position, 1.0f, 1.0f);
+        SoundUtil.playSound(players, Identifier.ofVanilla("entity.arrow.hit"), SoundCategory.PLAYERS, position, 1.0f, 0.5f);
+        SoundUtil.playSound(players, Identifier.ofVanilla("entity.bee.sting"), SoundCategory.PLAYERS, position, 1.0f, 0.5f);
+        SoundUtil.playSound(players, Identifier.ofVanilla("entity.bee.sting"), SoundCategory.PLAYERS, position, 1.0f, 2.0f);
+        SoundUtil.playSound(players, Identifier.ofVanilla("block.beacon.deactivate"), SoundCategory.PLAYERS, position, 1.0f, 2.0f);
+        SoundUtil.playSound(players, Identifier.ofVanilla("item.trident.throw"), SoundCategory.PLAYERS, position, 1.0f, 2.0f);
+        SoundUtil.playSound(players, Identifier.of("suso", "bow.swoosh"), SoundCategory.PLAYERS, position, 1.0f, 1.0f);
 
         MiscUtil.flashSky(0, 0);
     }
@@ -68,7 +68,7 @@ public class PrimaticaArrowInstance implements TickableInstance {
                 empDist = empDistance();
                 if(empDist < 3.1) {
                     direction = position.subtract(closestEMP.getKey()).normalize().multiply(STEP_SIZE);
-                    SoundUtil.playSound(players, new Identifier("minecraft:block.end_portal_frame.fill"), SoundCategory.BLOCKS, position, 3.0f, 0.7f);
+                    SoundUtil.playSound(players, Identifier.ofVanilla("block.end_portal_frame.fill"), SoundCategory.BLOCKS, position, 3.0f, 0.7f);
 
                     if(closestEMP.getValue().getScoreboardTeam() != null) {
                         team = closestEMP.getValue().getScoreboardTeam();

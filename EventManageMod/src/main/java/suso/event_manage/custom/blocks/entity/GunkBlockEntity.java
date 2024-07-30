@@ -19,7 +19,7 @@ public class GunkBlockEntity extends BlockEntity {
     public GunkBlockEntity(BlockPos pos, BlockState state) {
         super(CustomBlocks.GUNK_ENTITY, pos, state);
 
-        previous = PrimaticaGunkInstance.previous == null ? Registries.BLOCK.get(new Identifier("air")).getDefaultState() : PrimaticaGunkInstance.previous;
+        previous = PrimaticaGunkInstance.previous == null ? Registries.BLOCK.get(Identifier.ofVanilla("air")).getDefaultState() : PrimaticaGunkInstance.previous;
         ticksLeft = PrimaticaGunkInstance.sendTicksLeft;
     }
 
@@ -53,7 +53,7 @@ public class GunkBlockEntity extends BlockEntity {
         if(prev_nbt != null) {
             previous = BlockState.CODEC.decode(NbtOps.INSTANCE, prev_nbt).getOrThrow(false, s -> {}).getFirst();
         } else {
-            previous = Registries.BLOCK.get(new Identifier("air")).getDefaultState();
+            previous = Registries.BLOCK.get(Identifier.ofVanilla("air")).getDefaultState();
         }
     }
 }

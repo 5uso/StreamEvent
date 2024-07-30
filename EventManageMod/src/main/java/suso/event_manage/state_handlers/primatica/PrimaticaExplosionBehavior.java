@@ -12,6 +12,6 @@ import net.minecraft.world.explosion.ExplosionBehavior;
 public class PrimaticaExplosionBehavior extends ExplosionBehavior {
     @Override
     public boolean canDestroyBlock(Explosion explosion, BlockView world, BlockPos pos, BlockState state, float power) {
-        return state.isIn(TagKey.of(Registries.BLOCK.getKey(), new Identifier("suso:primatica_breakable")));
+        return state.isIn(TagKey.of(Registries.BLOCK.getKey(), Identifier.of("suso", "primatica_breakable")));
     }
 }

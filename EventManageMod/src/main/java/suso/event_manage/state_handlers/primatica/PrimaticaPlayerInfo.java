@@ -90,55 +90,55 @@ public class PrimaticaPlayerInfo {
 
     private void transitionMain(int ticks) {
         ServerPlayerEntity player = (ServerPlayerEntity) world.getPlayerByUuid(this.player);
-        SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1b_main"), 1.0f, ticks);
-        SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1b_loweq"), 0.0f, ticks);
-        SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1b_underground"), 0.0f, ticks);
-        SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1b_undergroundloweq"), 0.0f, ticks);
-        SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1b_skyline"), 0.0f, ticks);
+        SoundUtil.updateFadeVolume(player, Identifier.of("eniah", "music.1b_main"), 1.0f, ticks);
+        SoundUtil.updateFadeVolume(player, Identifier.of("eniah", "music.1b_loweq"), 0.0f, ticks);
+        SoundUtil.updateFadeVolume(player, Identifier.of("eniah", "music.1b_underground"), 0.0f, ticks);
+        SoundUtil.updateFadeVolume(player, Identifier.of("eniah", "music.1b_undergroundloweq"), 0.0f, ticks);
+        SoundUtil.updateFadeVolume(player, Identifier.of("eniah", "music.1b_skyline"), 0.0f, ticks);
     }
 
     private void transitionLowEQ(int ticks) {
         ServerPlayerEntity player = (ServerPlayerEntity) world.getPlayerByUuid(this.player);
-        SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1b_main"), 0.0f, ticks);
-        SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1b_loweq"), 1.0f, ticks);
-        SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1b_underground"), 0.0f, ticks);
-        SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1b_undergroundloweq"), 0.0f, ticks);
-        SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1b_skyline"), 0.0f, ticks);
+        SoundUtil.updateFadeVolume(player, Identifier.of("eniah", "music.1b_main"), 0.0f, ticks);
+        SoundUtil.updateFadeVolume(player, Identifier.of("eniah", "music.1b_loweq"), 1.0f, ticks);
+        SoundUtil.updateFadeVolume(player, Identifier.of("eniah", "music.1b_underground"), 0.0f, ticks);
+        SoundUtil.updateFadeVolume(player, Identifier.of("eniah", "music.1b_undergroundloweq"), 0.0f, ticks);
+        SoundUtil.updateFadeVolume(player, Identifier.of("eniah", "music.1b_skyline"), 0.0f, ticks);
     }
 
     private void transitionUnderground(int ticks) {
         ServerPlayerEntity player = (ServerPlayerEntity) world.getPlayerByUuid(this.player);
-        SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1b_main"), 0.0f, ticks);
-        SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1b_loweq"), 0.0f, ticks);
-        SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1b_underground"), 1.0f, ticks);
-        SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1b_undergroundloweq"), 0.0f, ticks);
-        SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1b_skyline"), 0.0f, ticks);
+        SoundUtil.updateFadeVolume(player, Identifier.of("eniah", "music.1b_main"), 0.0f, ticks);
+        SoundUtil.updateFadeVolume(player, Identifier.of("eniah", "music.1b_loweq"), 0.0f, ticks);
+        SoundUtil.updateFadeVolume(player, Identifier.of("eniah", "music.1b_underground"), 1.0f, ticks);
+        SoundUtil.updateFadeVolume(player, Identifier.of("eniah", "music.1b_undergroundloweq"), 0.0f, ticks);
+        SoundUtil.updateFadeVolume(player, Identifier.of("eniah", "music.1b_skyline"), 0.0f, ticks);
     }
 
     private void transitionUndergroundLowEQ(int ticks) {
         ServerPlayerEntity player = (ServerPlayerEntity) world.getPlayerByUuid(this.player);
-        SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1b_main"), 0.0f, ticks);
-        SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1b_loweq"), 0.0f, ticks);
-        SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1b_underground"), 0.0f, ticks);
-        SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1b_undergroundloweq"), 1.0f, ticks);
-        SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1b_skyline"), 0.0f, ticks);
+        SoundUtil.updateFadeVolume(player, Identifier.of("eniah", "music.1b_main"), 0.0f, ticks);
+        SoundUtil.updateFadeVolume(player, Identifier.of("eniah", "music.1b_loweq"), 0.0f, ticks);
+        SoundUtil.updateFadeVolume(player, Identifier.of("eniah", "music.1b_underground"), 0.0f, ticks);
+        SoundUtil.updateFadeVolume(player, Identifier.of("eniah", "music.1b_undergroundloweq"), 1.0f, ticks);
+        SoundUtil.updateFadeVolume(player, Identifier.of("eniah", "music.1b_skyline"), 0.0f, ticks);
     }
 
     private void transitionSkyline(int ticks) {
         ServerPlayerEntity player = (ServerPlayerEntity) world.getPlayerByUuid(this.player);
-        SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1b_main"), 0.0f, ticks);
-        SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1b_loweq"), 0.0f, ticks);
-        SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1b_underground"), 0.0f, ticks);
-        SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1b_undergroundloweq"), 0.0f, ticks);
-        SoundUtil.updateFadeVolume(player, new Identifier("eniah:music.1b_skyline"), 1.0f, ticks);
+        SoundUtil.updateFadeVolume(player, Identifier.of("eniah", "music.1b_main"), 0.0f, ticks);
+        SoundUtil.updateFadeVolume(player, Identifier.of("eniah", "music.1b_loweq"), 0.0f, ticks);
+        SoundUtil.updateFadeVolume(player, Identifier.of("eniah", "music.1b_underground"), 0.0f, ticks);
+        SoundUtil.updateFadeVolume(player, Identifier.of("eniah", "music.1b_undergroundloweq"), 0.0f, ticks);
+        SoundUtil.updateFadeVolume(player, Identifier.of("eniah", "music.1b_skyline"), 1.0f, ticks);
     }
 
     public void changePitch(float pitch, int ticks) {
         ServerPlayerEntity player = (ServerPlayerEntity) world.getPlayerByUuid(this.player);
-        SoundUtil.updateFadePitch(player, new Identifier("eniah:music.1b_main"), pitch, ticks);
-        SoundUtil.updateFadePitch(player, new Identifier("eniah:music.1b_loweq"), pitch, ticks);
-        SoundUtil.updateFadePitch(player, new Identifier("eniah:music.1b_underground"), pitch, ticks);
-        SoundUtil.updateFadePitch(player, new Identifier("eniah:music.1b_undergroundloweq"), pitch, ticks);
-        SoundUtil.updateFadePitch(player, new Identifier("eniah:music.1b_skyline"), pitch, ticks);
+        SoundUtil.updateFadePitch(player, Identifier.of("eniah", "music.1b_main"), pitch, ticks);
+        SoundUtil.updateFadePitch(player, Identifier.of("eniah", "music.1b_loweq"), pitch, ticks);
+        SoundUtil.updateFadePitch(player, Identifier.of("eniah", "music.1b_underground"), pitch, ticks);
+        SoundUtil.updateFadePitch(player, Identifier.of("eniah", "music.1b_undergroundloweq"), pitch, ticks);
+        SoundUtil.updateFadePitch(player, Identifier.of("eniah", "music.1b_skyline"), pitch, ticks);
     }
 }

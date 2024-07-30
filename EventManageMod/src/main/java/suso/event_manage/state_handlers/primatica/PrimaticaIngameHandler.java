@@ -1,6 +1,5 @@
 package suso.event_manage.state_handlers.primatica;
 
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -17,7 +16,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtInt;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleTypes;
@@ -28,7 +26,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
@@ -131,7 +128,7 @@ public class PrimaticaIngameHandler implements StateHandler {
     public void score(AbstractTeam team, ServerPlayerEntity player) {
         scores.score(team, overtime ? 5 : 1);
         EventManager.getInstance().getServer().getPlayerManager().getPlayerList().forEach(this::updateClientScores);
-        HudUtil.broadcastFeedMessage(Objects.isNull(player) ? EvtBaseConstants.NULL_UUID : player.getUuid(), new Identifier("minecraft:textures/block/sunflower_front.png"), null);
+        HudUtil.broadcastFeedMessage(Objects.isNull(player) ? EvtBaseConstants.NULL_UUID : player.getUuid(), Identifier.ofVanilla("textures/block/sunflower_front.png"), null);
     }
 
     public void resetScores() {
@@ -201,8 +198,8 @@ public class PrimaticaIngameHandler implements StateHandler {
         Vector3f color = team == null ? new Vector3f().zero() : ParticleUtil.teamColor(team);
         player.getServerWorld().spawnParticles(ParticleTypes.ENTITY_EFFECT, player.getX(), player.getY(), player.getZ(), 50, color.getX(), color.getY(), color.getZ(), 0.0);
 
-        SoundUtil.playFadeSound(player, new Identifier("minecraft:entity.elder_guardian.curse"), 0.5f, 0.5f, false, SoundCategory.PLAYERS, false);
-        SoundUtil.playFadeSound(player, new Identifier("minecraft:item.trident.thunder"), 1.0f, 2.0f, false, SoundCategory.PLAYERS, true);
+        SoundUtil.playFadeSound(player, Identifier.ofVanilla("entity.elder_guardian.curse"), 0.5f, 0.5f, false, SoundCategory.PLAYERS, false);
+        SoundUtil.playFadeSound(player, Identifier.ofVanilla("item.trident.thunder"), 1.0f, 2.0f, false, SoundCategory.PLAYERS, true);
         setHasPowerup(player.getUuid(), false);
         return true;
     }
@@ -214,8 +211,8 @@ public class PrimaticaIngameHandler implements StateHandler {
         PrimaticaPlayerInfo info = playerInfo.get(player.getUuid());
         info.setAgilityActive(false);
 
-        SoundUtil.playFadeSound(player, new Identifier("minecraft:entity.splash_potion.break"), 1.0f, 0.5f, false, SoundCategory.PLAYERS, false);
-        SoundUtil.playFadeSound(player, new Identifier("minecraft:block.beacon.deactivate"), 1.0f, 2.0f, false, SoundCategory.PLAYERS, true);
+        SoundUtil.playFadeSound(player, Identifier.ofVanilla("entity.splash_potion.break"), 1.0f, 0.5f, false, SoundCategory.PLAYERS, false);
+        SoundUtil.playFadeSound(player, Identifier.ofVanilla("block.beacon.deactivate"), 1.0f, 2.0f, false, SoundCategory.PLAYERS, true);
     }
 
     protected boolean useBridge(ServerPlayerEntity player) {
@@ -260,7 +257,7 @@ public class PrimaticaIngameHandler implements StateHandler {
             Vec3d posDelta = player.getPosDelta();
             player.setVelocity(posDelta.x * 4.0, Math.max(1.5, bounceHeight), posDelta.z * 4.0);
             getPlayerInfo(player.getUuid()).gunkBounce = true;
-            SoundUtil.playFadeSound(player, new Identifier("minecraft:entity.slime.jump"), 1.0f, 1.0f, false, SoundCategory.BLOCKS, true);
+            SoundUtil.playFadeSound(player, Identifier.ofVanilla("entity.slime.jump"), 1.0f, 1.0f, false, SoundCategory.BLOCKS, true);
         } else player.setVelocity(0.0, 0.1, 0.0);
 
         player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(player));
@@ -370,19 +367,19 @@ public class PrimaticaIngameHandler implements StateHandler {
             heart = 0.0f;
         }
 
-        SoundUtil.updateFadeVolume(player, new Identifier("suso:falling"), speed, 0);
-        SoundUtil.updateFadeVolume(player, new Identifier("suso:heartbeat"), heart, 0);
-        SoundUtil.updateFadePitch(player, new Identifier("suso:heartbeat"), heart + 0.8f, 0);
-        SoundUtil.updateFadeVolume(player, new Identifier("suso:hologram"), info.hologramVolume, 0);
-        SoundUtil.updateFadeVolume(player, new Identifier("suso:gravity"), info.gravityVolume, 0);
+        SoundUtil.updateFadeVolume(player, Identifier.of("suso", "falling"), speed, 0);
+        SoundUtil.updateFadeVolume(player, Identifier.of("suso", "heartbeat"), heart, 0);
+        SoundUtil.updateFadePitch(player, Identifier.of("suso", "heartbeat"), heart + 0.8f, 0);
+        SoundUtil.updateFadeVolume(player, Identifier.of("suso", "hologram"), info.hologramVolume, 0);
+        SoundUtil.updateFadeVolume(player, Identifier.of("suso", "gravity"), info.gravityVolume, 0);
 
         info.hologramVolume = 0.0f;
         info.gravityVolume = 0.0f;
 
         if(info.isChargingBow && !player.isUsingItem()) {
-            SoundUtil.stopSound(player, new Identifier("minecraft:item.crossbow.loading_middle"), null);
-            SoundUtil.stopSound(player, new Identifier("suso:bow.charge"), null);
-            SoundUtil.stopSound(player, new Identifier("suso:bow.loop"), null);
+            SoundUtil.stopSound(player, Identifier.ofVanilla("item.crossbow.loading_middle"), null);
+            SoundUtil.stopSound(player, Identifier.of("suso", "bow.charge"), null);
+            SoundUtil.stopSound(player, Identifier.of("suso", "bow.loop"), null);
             info.isChargingBow = false;
         }
 
@@ -402,17 +399,17 @@ public class PrimaticaIngameHandler implements StateHandler {
         if(playerInfo.get(player.getUuid()) == null) playerInfo.put(player.getUuid(), new PrimaticaPlayerInfo(player));
 
         SoundUtil.stopSound(player, null, null);
-        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1b_main"), 1.0f, 1.0f, true, SoundCategory.RECORDS, false);
-        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1b_loweq"), 0.0f, 1.0f, true, SoundCategory.RECORDS, false);
-        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1b_underground"), 0.0f, 1.0f, true, SoundCategory.RECORDS, false);
-        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1b_undergroundloweq"), 0.0f, 1.0f, true, SoundCategory.RECORDS, false);
-        SoundUtil.playFadeSound(player, new Identifier("eniah:music.1b_skyline"), 0.0f, 1.0f, true, SoundCategory.RECORDS, false);
-        SoundUtil.playFadeSound(player, new Identifier("suso:falling"), 0.0f, 1.0f, true, SoundCategory.PLAYERS, false);
-        SoundUtil.playFadeSound(player, new Identifier("suso:heartbeat"), 0.0f, 1.0f, true, SoundCategory.PLAYERS, false);
-        SoundUtil.playFadeSound(player, new Identifier("suso:hologram"), 0.0f, 1.0f, true, SoundCategory.BLOCKS, false);
-        SoundUtil.playFadeSound(player, new Identifier("suso:gravity"), 0.0f, 1.0f, true, SoundCategory.PLAYERS, true);
+        SoundUtil.playFadeSound(player, Identifier.of("eniah", "music.1b_main"), 1.0f, 1.0f, true, SoundCategory.RECORDS, false);
+        SoundUtil.playFadeSound(player, Identifier.of("eniah", "music.1b_loweq"), 0.0f, 1.0f, true, SoundCategory.RECORDS, false);
+        SoundUtil.playFadeSound(player, Identifier.of("eniah", "music.1b_underground"), 0.0f, 1.0f, true, SoundCategory.RECORDS, false);
+        SoundUtil.playFadeSound(player, Identifier.of("eniah", "music.1b_undergroundloweq"), 0.0f, 1.0f, true, SoundCategory.RECORDS, false);
+        SoundUtil.playFadeSound(player, Identifier.of("eniah", "music.1b_skyline"), 0.0f, 1.0f, true, SoundCategory.RECORDS, false);
+        SoundUtil.playFadeSound(player, Identifier.of("suso", "falling"), 0.0f, 1.0f, true, SoundCategory.PLAYERS, false);
+        SoundUtil.playFadeSound(player, Identifier.of("suso", "heartbeat"), 0.0f, 1.0f, true, SoundCategory.PLAYERS, false);
+        SoundUtil.playFadeSound(player, Identifier.of("suso", "hologram"), 0.0f, 1.0f, true, SoundCategory.BLOCKS, false);
+        SoundUtil.playFadeSound(player, Identifier.of("suso", "gravity"), 0.0f, 1.0f, true, SoundCategory.PLAYERS, true);
 
-        ShaderUtil.setPostShader(player, new Identifier("suso:shaders/post/main.json"));
+        ShaderUtil.setPostShader(player, Identifier.of("suso", "shaders/post/main.json"));
         updateClientTimer(player);
 
         initPlayer(player, data);
@@ -421,7 +418,7 @@ public class PrimaticaIngameHandler implements StateHandler {
     @Override
     public void onPlayerRespawn(ServerPlayerEntity player, EventPlayerData data) {
         playerInfo.get(player.getUuid()).changePitch(1.0f, 0);
-        ShaderUtil.setPostShader(player, new Identifier("suso:shaders/post/main.json"));
+        ShaderUtil.setPostShader(player, Identifier.of("suso", "shaders/post/main.json"));
         initPlayer(player, data);
     }
 
@@ -434,20 +431,20 @@ public class PrimaticaIngameHandler implements StateHandler {
         PrimaticaPlayerInfo info = playerInfo.get(player.getUuid());
         info.changePitch(0.5f, 40);
 
-        SoundUtil.playSound(player, new Identifier("eniah:sfx.crash"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
+        SoundUtil.playSound(player, Identifier.of("eniah", "sfx.crash"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
 
-        ShaderUtil.setPostShader(player, new Identifier("suso:shaders/post/glitched.json"));
+        ShaderUtil.setPostShader(player, Identifier.of("suso", "shaders/post/glitched.json"));
 
         boolean displayed = false;
         DamageRecord src = player.getDamageTracker().getMostRecentDamage();
         if(src != null) {
             if(src.getAttacker() instanceof ServerPlayerEntity killer) {
-                HudUtil.broadcastFeedMessage(killer.getUuid(), new Identifier("minecraft:textures/item/iron_sword.png"), player.getUuid());
+                HudUtil.broadcastFeedMessage(killer.getUuid(), Identifier.ofVanilla("textures/item/iron_sword.png"), player.getUuid());
                 displayed = true;
             }
         }
         if(!displayed) {
-            HudUtil.broadcastFeedMessage(player.getUuid(), new Identifier("minecraft:textures/block/poppy.png"), EvtBaseConstants.NULL_UUID);
+            HudUtil.broadcastFeedMessage(player.getUuid(), Identifier.ofVanilla("textures/block/poppy.png"), EvtBaseConstants.NULL_UUID);
         }
 
         return true;
@@ -481,10 +478,10 @@ public class PrimaticaIngameHandler implements StateHandler {
             info.isChargingBow = true;
 
             if(stack.getNbt() != null && stack.getNbt().getInt("CustomModelData") == 1) {
-                SoundUtil.playSound(player, new Identifier("suso:bow.charge"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
-                SoundUtil.playFadeSound(player, new Identifier("suso:bow.loop"), 0.4f, 1.0f, true, SoundCategory.PLAYERS, true);
+                SoundUtil.playSound(player, Identifier.of("suso", "bow.charge"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
+                SoundUtil.playFadeSound(player, Identifier.of("suso", "bow.loop"), 0.4f, 1.0f, true, SoundCategory.PLAYERS, true);
             } else {
-                SoundUtil.playFadeSound(player,  new Identifier("minecraft:item.crossbow.loading_middle"), 1.0f, 1.0f, false, SoundCategory.PLAYERS, true);
+                SoundUtil.playFadeSound(player, Identifier.ofVanilla("item.crossbow.loading_middle"), 1.0f, 1.0f, false, SoundCategory.PLAYERS, true);
             }
         }
         return false;
@@ -514,7 +511,7 @@ public class PrimaticaIngameHandler implements StateHandler {
                         Vec3d posDelta = player.getPosDelta();
                         player.setVelocity(posDelta.x * 4.0, posDelta.y * -1.3, posDelta.z * 4.0);
                         getPlayerInfo(player.getUuid()).gunkBounce = true;
-                        SoundUtil.playFadeSound(player, new Identifier("minecraft:entity.slime.jump"), 1.0f, 1.0f, false, SoundCategory.BLOCKS, true);
+                        SoundUtil.playFadeSound(player, Identifier.ofVanilla("entity.slime.jump"), 1.0f, 1.0f, false, SoundCategory.BLOCKS, true);
                     } else player.setVelocity(0.0, 0.1, 0.0);
                     player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(player));
                 }
@@ -538,13 +535,13 @@ public class PrimaticaIngameHandler implements StateHandler {
 
     @Override
     public boolean onPlayerShoot(ServerPlayerEntity player, EventPlayerData data, ItemStack bow, int useTicks) {
-        SoundUtil.stopSound(player, new Identifier("minecraft:item.crossbow.loading_middle"), null);
+        SoundUtil.stopSound(player, Identifier.ofVanilla("item.crossbow.loading_middle"), null);
 
         if(bow.getNbt() == null || bow.getNbt().getInt("CustomModelData") != 1) return false;
 
         PrimaticaPlayerInfo info = playerInfo.get(player.getUuid());
-        SoundUtil.stopSound(player, new Identifier("suso:bow.charge"), null);
-        SoundUtil.stopSound(player, new Identifier("suso:bow.loop"), null);
+        SoundUtil.stopSound(player, Identifier.of("suso", "bow.charge"), null);
+        SoundUtil.stopSound(player, Identifier.of("suso", "bow.loop"), null);
         info.isChargingBow = false;
 
         if(useTicks < 20) return true;
@@ -585,7 +582,7 @@ public class PrimaticaIngameHandler implements StateHandler {
     public void onPlayerKill(ServerPlayerEntity player, Entity victim, DamageSource source) {
         if(victim instanceof ServerPlayerEntity v) {
             //TODO: Check what is going on with this code
-            SoundUtil.playSound(player, new Identifier("eniah:sfx.fall"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
+            SoundUtil.playSound(player, Identifier.of("eniah", "sfx.fall"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
             ServerPlayNetworking.send(player, HudDataPayload.ofKill(v));
         }
     }
@@ -611,7 +608,7 @@ public class PrimaticaIngameHandler implements StateHandler {
             InventoryUtil.clearPLayer(player);
             player.clearStatusEffects();
 
-            ShaderUtil.setPostShader(player, new Identifier("none"));
+            ShaderUtil.setPostShader(player, Identifier.of("none"));
             SoundUtil.stopSound(player, null, null);
         }
     }
