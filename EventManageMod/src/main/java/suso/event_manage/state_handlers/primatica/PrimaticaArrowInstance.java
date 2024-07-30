@@ -13,7 +13,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.explosion.Explosion;
+import net.minecraft.world.World;
 import suso.event_manage.state_handlers.TickableInstance;
 import suso.event_manage.util.MiscUtil;
 import suso.event_manage.util.ParticleUtil;
@@ -105,7 +105,7 @@ public class PrimaticaArrowInstance implements TickableInstance {
 
     public void explode() {
         Vec3d pos = position.subtract(direction.multiply(2.0));
-        world.createExplosion(owner, null, new PrimaticaExplosionBehavior(), pos.x, pos.y, pos.z, 3.0f, false, Explosion.DestructionType.DESTROY);
+        world.createExplosion(owner, null, new PrimaticaExplosionBehavior(), pos.x, pos.y, pos.z, 3.0f, false, World.ExplosionSourceType.TNT);
 
         Vec3d diff = owner.getPos().subtract(position);
         if(diff.length() < 5.0) {

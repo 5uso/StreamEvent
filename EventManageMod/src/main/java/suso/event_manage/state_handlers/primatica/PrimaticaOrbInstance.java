@@ -3,7 +3,6 @@ package suso.event_manage.state_handlers.primatica;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -117,7 +116,7 @@ public class PrimaticaOrbInstance implements TickableInstance {
             double distance = p.getPos().distanceTo(pos);
             if(distance < 10.0 && !handler.getPlayerInfo(p.getUuid()).withinEMPPrev) {
                 distance /= 10.0;
-                p.damage(DamageSource.explosion(player), (float)(1.0 - distance) * 4.0f + 4.0f);
+                p.damage(world.getDamageSources().explosion(player, player), (float)(1.0 - distance) * 4.0f + 4.0f);
             }
         });
     }

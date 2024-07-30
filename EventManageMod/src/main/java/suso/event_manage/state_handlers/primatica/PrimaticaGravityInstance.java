@@ -1,6 +1,5 @@
 package suso.event_manage.state_handlers.primatica;
 
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.projectile.thrown.SnowballEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -108,7 +107,7 @@ public class PrimaticaGravityInstance implements TickableInstance {
                     player.addVelocity(motion.x, motion.y, motion.z);
                     player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(player));
 
-                    player.damage(DamageSource.explosion(owner), (float)(1.0 - distance) * 4.0f + 4.0f);
+                    player.damage(world.getDamageSources().explosion(owner, owner), (float)(1.0 - distance) * 4.0f + 4.0f);
                 }
             }
         }

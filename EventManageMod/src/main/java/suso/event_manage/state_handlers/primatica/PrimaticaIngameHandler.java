@@ -438,7 +438,7 @@ public class PrimaticaIngameHandler implements StateHandler {
         boolean displayed = false;
         DamageRecord src = player.getDamageTracker().getMostRecentDamage();
         if(src != null) {
-            if(src.getAttacker() instanceof ServerPlayerEntity killer) {
+            if(src.damageSource().getAttacker() instanceof ServerPlayerEntity killer) {
                 HudUtil.broadcastFeedMessage(killer.getUuid(), Identifier.ofVanilla("textures/item/iron_sword.png"), player.getUuid());
                 displayed = true;
             }

@@ -66,7 +66,7 @@ public class PrimaticaEMPInstance implements TickableInstance {
         players.forEach(p -> {
             if(p.isTeamPlayer(team)) return;
             double distance = MiscUtil.distance(p.getBoundingBox(), position) / 3.0;
-            if(distance < 1.0) p.damage(DamageSource.sonicBoom(player), (float) (1.0 - distance) * 6.0f + 10.0f);
+            if(distance < 1.0) p.damage(world.getDamageSources().sonicBoom(player), (float) (1.0 - distance) * 6.0f + 10.0f);
         });
 
         positions.put(position, player);
