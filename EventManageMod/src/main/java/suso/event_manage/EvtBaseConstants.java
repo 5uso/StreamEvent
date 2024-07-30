@@ -1,11 +1,12 @@
 package suso.event_manage;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class EvtBaseConstants {
     public static final Identifier LOGIN_CHECK = new Identifier("suso:login_check");

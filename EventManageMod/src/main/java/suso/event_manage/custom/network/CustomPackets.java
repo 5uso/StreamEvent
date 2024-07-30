@@ -2,7 +2,6 @@ package suso.event_manage.custom.network;
 
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import suso.event_manage.EvtBaseConstants;
 import suso.event_manage.custom.network.payloads.*;
 import suso.event_manage.util.MiscUtil;
 

@@ -1,6 +1,5 @@
 package suso.event_manage.util;
 
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -8,11 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LightningEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayNetworkHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -21,7 +16,6 @@ import net.minecraft.world.World;
 import suso.event_manage.EventManager;
 import suso.event_manage.custom.network.packets.JumpInputPacket;
 import suso.event_manage.custom.network.payloads.EntityUpdatePayload;
-import suso.event_manage.custom.network.payloads.JumpInputPayload;
 
 public class MiscUtil {
     public static double distance(Box rect, Vec3d p) {

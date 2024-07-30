@@ -8,7 +8,6 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemPlacementContext;
@@ -35,7 +34,6 @@ import suso.event_manage.state_handlers.StateHandler;
 import suso.event_manage.state_handlers.idle.IdleHandler;
 import suso.event_manage.util.CommandUtil;
 import suso.event_manage.util.HudUtil;
-import suso.event_manage.util.MiscUtil;
 
 import java.util.List;
 import java.util.Set;
