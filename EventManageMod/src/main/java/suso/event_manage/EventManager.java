@@ -234,7 +234,5 @@ public class EventManager implements ModInitializer {
         ServerPlayerEvents.ALLOW_DEATH.register(this::onPlayerDeath);
 
         ServerEntityEvents.ENTITY_LOAD.register(this::onEntityLoad);
-
-        ServerPlayNetworking.registerGlobalReceiver(EvtBaseConstants.JUMP_INPUT, MiscUtil::handleJumpInput);
     }
 }

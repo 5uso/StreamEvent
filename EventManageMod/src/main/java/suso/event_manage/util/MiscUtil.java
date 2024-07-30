@@ -19,7 +19,9 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import suso.event_manage.EventManager;
+import suso.event_manage.custom.network.packets.JumpInputPacket;
 import suso.event_manage.custom.network.payloads.EntityUpdatePayload;
+import suso.event_manage.custom.network.payloads.JumpInputPayload;
 
 public class MiscUtil {
     public static double distance(Box rect, Vec3d p) {
@@ -29,8 +31,8 @@ public class MiscUtil {
         return Math.sqrt(dx*dx + dy*dy + dz*dz);
     }
 
-    public static void handleJumpInput(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-        player.setJumpPressed(buf.readBoolean());
+    public static void handleJumpInput(JumpInputPacket payload, ServerPlayNetworking.Context context) {
+        context.player().setJumpPressed(payload.pressed);
     }
 
     public static double vec3Angle(Vec3d a, Vec3d b) {

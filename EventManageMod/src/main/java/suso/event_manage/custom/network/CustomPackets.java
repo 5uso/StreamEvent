@@ -1,7 +1,10 @@
 package suso.event_manage.custom.network;
 
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import suso.event_manage.EvtBaseConstants;
 import suso.event_manage.custom.network.payloads.*;
+import suso.event_manage.util.MiscUtil;
 
 public class CustomPackets {
     public static void register() {
@@ -21,5 +24,8 @@ public class CustomPackets {
         // Misc packets
         PayloadTypeRegistry.playS2C().register(EntityUpdatePayload.ID, EntityUpdatePayload.CODEC);
         PayloadTypeRegistry.playS2C().register(HudDataPayload.ID, HudDataPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(JumpInputPayload.ID, JumpInputPayload.CODEC);
+
+        ServerPlayNetworking.registerGlobalReceiver(JumpInputPayload.ID, MiscUtil::handleJumpInput);
     }
 }
