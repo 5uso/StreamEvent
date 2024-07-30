@@ -20,5 +20,6 @@ public class CustomPackets {
 
         // Misc packets
         PayloadTypeRegistry.playS2C().register(EntityUpdatePayload.ID, EntityUpdatePayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(HudDataPayload.ID, HudDataPayload.CODEC);
     }
 }

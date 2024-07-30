@@ -42,6 +42,7 @@ import org.joml.Vector3f;
 import suso.event_manage.EventManager;
 import suso.event_manage.EvtBaseConstants;
 import suso.event_manage.ModCheck;
+import suso.event_manage.custom.network.payloads.HudDataPayload;
 import suso.event_manage.data.EventData;
 import suso.event_manage.data.EventPlayerData;
 import suso.event_manage.state_handlers.ScheduleInstance;
@@ -583,19 +584,10 @@ public class PrimaticaIngameHandler implements StateHandler {
     @Override
     public void onPlayerKill(ServerPlayerEntity player, Entity victim, DamageSource source) {
         if(victim instanceof ServerPlayerEntity v) {
-            //SoundUtil.playSound(player, new Identifier("eniah:sfx.fall"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
-            //HudUtil.sendKill(player, v);
+            //TODO: Check what is going on with this code
+            SoundUtil.playSound(player, new Identifier("eniah:sfx.fall"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
+            ServerPlayNetworking.send(player, HudDataPayload.ofKill(v));
         }
-
-        SoundUtil.playSound(player, new Identifier("eniah:sfx.fall"), SoundCategory.PLAYERS, player.getPos(), 1.0f, 1.0f);
-
-        PacketByteBuf p = PacketByteBufs.create();
-        p.writeInt(HudUtil.DataTypes.KILL.ordinal());
-
-        p.writeString(victim.getName().getString());
-        p.writeInt(victim.getScoreboardTeam() == null ? Formatting.WHITE.ordinal() : victim.getScoreboardTeam().getColor().ordinal());
-
-        ServerPlayNetworking.send(player, EvtBaseConstants.HUD_DATA, p);
     }
 
     @Override
