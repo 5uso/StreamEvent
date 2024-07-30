@@ -11,6 +11,7 @@
     "FormattingMixin",
     "MinecraftServerAccess",
     "MinecraftServerMixin",
+    "ParticleTypeMixin",
     "PlayerEntityMixin",
     "PlayerManagerAccess",
     "PlayerManagerMixin",

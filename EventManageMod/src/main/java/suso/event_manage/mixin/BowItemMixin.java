@@ -21,7 +21,7 @@ public class BowItemMixin {
     )
     private void onShootBow(ItemStack stack, World world, LivingEntity user, int remainingUseTicks, CallbackInfo ci) {
         if(user instanceof ServerPlayerEntity player) {
-            int useTicks = stack.getMaxUseTime() - remainingUseTicks;
+            int useTicks = stack.getMaxUseTime(user) - remainingUseTicks;
             if(EventManager.getInstance().onPlayerShoot(player, stack, useTicks)) ci.cancel();
         }
     }

@@ -6,9 +6,11 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -18,6 +20,8 @@ import suso.event_manage.injected_interfaces.ServerPlayerEntityExtended;
 
 @Mixin(ServerPlayerEntity.class)
 public abstract class ServerPlayerEntityMixin implements ServerPlayerEntityExtended {
+    @Shadow public abstract ServerWorld getServerWorld();
+
     @Inject(
             method = "dropItem",
             at = @At("HEAD"),
@@ -29,7 +33,7 @@ public abstract class ServerPlayerEntityMixin implements ServerPlayerEntityExten
         ((PlayerEntity)(Object) this).getInventory().insertStack(stack);
         ((PlayerEntity)(Object) this).currentScreenHandler.sendContentUpdates();
 
-        cir.setReturnValue(new ItemEntity(((Entity)(Object) this).world, 0.0, 0.0, 0.0, ItemStack.EMPTY));
+        cir.setReturnValue(new ItemEntity(this.getServerWorld(), 0.0, 0.0, 0.0, ItemStack.EMPTY));
         cir.cancel();
     }
 

@@ -49,7 +49,7 @@ public class PrimaticaEMPInstance implements TickableInstance {
 
         Identifier blockId = Identifier.of(PrimaticaInfo.getCorrespondingEmp(team == null ? 7 :team.getColor().getColorIndex()));
         world.setBlockState(pos, Registries.BLOCK.get(blockId).getDefaultState());
-        players.forEach(p -> ShaderUtil.setBlockColor(p, pos, (int)(player.world.getTime() % 24000)));
+        players.forEach(p -> ShaderUtil.setBlockColor(p, pos, (int)(player.getWorld().getTime() % 24000)));
 
         SoundUtil.playSound(players, Identifier.ofVanilla("entity.bee.sting"), SoundCategory.BLOCKS, position, 2.0f, 0.5f);
         SoundUtil.playSound(players, Identifier.ofVanilla("block.beacon.activate"), SoundCategory.BLOCKS, position, 2.0f, 2.0f);

@@ -29,7 +29,8 @@
   "custom": {
     "loom:injected_interfaces": {
       "net/minecraft/class_3222": ["suso/event_manage/injected_interfaces/ServerPlayerEntityExtended"],
-      "net/minecraft/class_1283": ["suso/event_manage/injected_interfaces/DamageTrackerExtended"]
+      "net/minecraft/class_1283": ["suso/event_manage/injected_interfaces/DamageTrackerExtended"],
+      "net/minecraft/class_2396": ["suso/event_manage/injected_interfaces/ParticleEffectMirror"]
     }
   }
 }

@@ -196,7 +196,8 @@ public class PrimaticaIngameHandler implements StateHandler {
 
         AbstractTeam team = player.getScoreboardTeam();
         Vector3f color = team == null ? new Vector3f().zero() : ParticleUtil.teamColor(team);
-        player.getServerWorld().spawnParticles(ParticleTypes.ENTITY_EFFECT, player.getX(), player.getY(), player.getZ(), 50, color.getX(), color.getY(), color.getZ(), 0.0);
+        player.getServerWorld().spawnParticles(ParticleTypes.ENTITY_EFFECT, player.getX(), player.getY(), player.getZ(), 50, color.x, color.y, color.z, 0.0);
+
 
         SoundUtil.playFadeSound(player, Identifier.ofVanilla("entity.elder_guardian.curse"), 0.5f, 0.5f, false, SoundCategory.PLAYERS, false);
         SoundUtil.playFadeSound(player, Identifier.ofVanilla("item.trident.thunder"), 1.0f, 2.0f, false, SoundCategory.PLAYERS, true);
@@ -230,10 +231,10 @@ public class PrimaticaIngameHandler implements StateHandler {
     }
 
     protected boolean useEMP(ServerPlayerEntity player) {
-        HitResult hit = player.raycast(4.0, player.server.getTickTime(), true);
+        HitResult hit = player.raycast(4.0, 1.0f, true);
         if(hit instanceof BlockHitResult bhit) {
             BlockPos pos = bhit.getBlockPos().add(bhit.getSide().getVector());
-            if(!player.world.getBlockState(pos).isAir()) return false;
+            if(!player.getServerWorld().getBlockState(pos).isAir()) return false;
             tickables.add(new PrimaticaEMPInstance(player, pos, this));
             setHasPowerup(player.getUuid(), false);
             return true;
@@ -295,7 +296,7 @@ public class PrimaticaIngameHandler implements StateHandler {
 
             InventoryUtil.replaceSlot(player, 2, ItemStack.fromNbt(blockNbt));
 
-            InventoryUtil.replaceSlot(player, 9, new ItemStack(Registries.ITEM.get(new Identifier("minecraft:arrow"))));
+            InventoryUtil.replaceSlot(player, 9, new ItemStack(Registries.ITEM.get(Identifier.ofVanilla("arrow"))));
 
             InventoryUtil.replaceSlot(player, 103, ItemStack.fromNbt(helmetNbt));
             InventoryUtil.replaceSlot(player, 102, ItemStack.fromNbt(chestplateNbt));
