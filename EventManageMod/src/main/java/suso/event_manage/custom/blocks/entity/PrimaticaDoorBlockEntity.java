@@ -6,6 +6,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 import suso.event_manage.custom.blocks.CustomBlocks;
@@ -20,16 +21,16 @@ public class PrimaticaDoorBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void writeNbt(NbtCompound nbt) {
+    public void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup wrapper) {
         nbt.putBoolean("open", open);
         nbt.putInt("color", color);
         nbt.putBoolean("diagonal", diagonal);
-        super.writeNbt(nbt);
+        super.writeNbt(nbt, wrapper);
     }
 
     @Override
-    public void readNbt(NbtCompound nbt) {
-        super.readNbt(nbt);
+    public void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup wrapper) {
+        super.readNbt(nbt, wrapper);
         open = nbt.getBoolean("open");
         color = nbt.getInt("color");
         diagonal = nbt.getBoolean("diagonal");
@@ -42,7 +43,7 @@ public class PrimaticaDoorBlockEntity extends BlockEntity {
     }
 
     @Override
-    public NbtCompound toInitialChunkDataNbt() {
-        return createNbt();
+    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup wrapper) {
+        return createNbt(wrapper);
     }
 }

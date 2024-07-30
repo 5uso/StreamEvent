@@ -1,5 +1,6 @@
 package suso.event_manage.custom.blocks;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
@@ -13,6 +14,8 @@ import org.jetbrains.annotations.Nullable;
 import suso.event_manage.custom.blocks.entity.PrimaticaDoorBlockEntity;
 
 public class PrimaticaDoorBlock extends BlockWithEntity {
+    public static final MapCodec<PrimaticaDoorBlock> CODEC = createCodec(PrimaticaDoorBlock::new);
+
     public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
 
     public PrimaticaDoorBlock(Settings settings) {
@@ -28,5 +31,10 @@ public class PrimaticaDoorBlock extends BlockWithEntity {
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(FACING);
+    }
+
+    @Override
+    protected MapCodec<PrimaticaDoorBlock> getCodec() {
+        return CODEC;
     }
 }

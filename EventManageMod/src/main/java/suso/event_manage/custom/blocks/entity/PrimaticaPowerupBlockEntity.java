@@ -6,6 +6,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 import suso.event_manage.custom.blocks.CustomBlocks;
@@ -20,15 +21,15 @@ public class PrimaticaPowerupBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void writeNbt(NbtCompound nbt) {
+    public void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup wrapper) {
         nbt.putBoolean("collected", collected);
         nbt.putByte("type", (byte) type.ordinal());
-        super.writeNbt(nbt);
+        super.writeNbt(nbt, wrapper);
     }
 
     @Override
-    public void readNbt(NbtCompound nbt) {
-        super.readNbt(nbt);
+    public void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup wrapper) {
+        super.readNbt(nbt, wrapper);
         collected = nbt.getBoolean("collected");
         type = PrimaticaInfo.Powerups.values()[nbt.getByte("type")];
     }
@@ -39,7 +40,7 @@ public class PrimaticaPowerupBlockEntity extends BlockEntity {
     }
 
     @Override
-    public NbtCompound toInitialChunkDataNbt() {
-        return createNbt();
+    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup wrapper) {
+        return createNbt(wrapper);
     }
 }

@@ -68,7 +68,7 @@ public class PrimaticaPowerupInstance implements TickableInstance {
                 BlockEntity be = world.getBlockEntity(blockPos);
                 if(be instanceof PrimaticaPowerupBlockEntity ppbe) {
                     NbtCompound collected = new NbtCompound();
-                    ppbe.writeNbt(collected);
+                    ppbe.writeNbt(collected, world.getRegistryManager());
                     collected.putBoolean("collected", true);
                     MiscUtil.setBlockEntityNBT(ppbe, collected);
                 }

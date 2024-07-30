@@ -1,9 +1,7 @@
 package suso.event_manage.custom.blocks;
 
-import net.minecraft.block.BlockEntityProvider;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
+import com.mojang.serialization.MapCodec;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
@@ -13,6 +11,8 @@ import org.jetbrains.annotations.Nullable;
 import suso.event_manage.custom.blocks.entity.GunkBlockEntity;
 
 public class GunkBlock extends BlockWithEntity implements BlockEntityProvider {
+    public static final MapCodec<GunkBlock> CODEC = createCodec(GunkBlock::new);
+
     public GunkBlock(Settings settings) {
         super(settings);
     }
@@ -30,5 +30,10 @@ public class GunkBlock extends BlockWithEntity implements BlockEntityProvider {
     @Nullable @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new GunkBlockEntity(pos, state);
+    }
+
+    @Override
+    protected MapCodec<GunkBlock> getCodec() {
+        return CODEC;
     }
 }

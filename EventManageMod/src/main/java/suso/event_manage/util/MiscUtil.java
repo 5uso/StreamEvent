@@ -52,7 +52,7 @@ public class MiscUtil {
         if(w == null) return;
 
         BlockState blockState = w.getBlockState(be.getPos());
-        be.readNbt(nbt);
+        be.read(nbt, w.getRegistryManager());
         be.markDirty();
         w.updateListeners(be.getPos(), blockState, blockState, 3);
     }
