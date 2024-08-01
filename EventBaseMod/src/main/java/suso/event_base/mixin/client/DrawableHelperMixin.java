@@ -2,8 +2,8 @@ package suso.event_base.mixin.client;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.render.Shader;
+import net.minecraft.client.gl.ShaderProgram;
+import net.minecraft.client.gui.DrawContext;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -11,7 +11,7 @@ import suso.event_base.custom.render.CustomRender;
 
 import java.util.function.Supplier;
 
-@Mixin(DrawableHelper.class) @Environment(EnvType.CLIENT)
+@Mixin(DrawContext.class) @Environment(EnvType.CLIENT)
 public class DrawableHelperMixin {
     @ModifyArg(
             method = "drawTexturedQuad",
@@ -20,7 +20,7 @@ public class DrawableHelperMixin {
                     target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShader(Ljava/util/function/Supplier;)V"
             )
     )
-    private static Supplier<Shader> replaceShader(Supplier<Shader> shaderSupplier) {
+    private static Supplier<ShaderProgram> replaceShader(Supplier<ShaderProgram> shaderSupplier) {
         return CustomRender.getCurrentDrawShader() == null ? shaderSupplier : CustomRender::getCurrentDrawShader;
     }
 
@@ -31,7 +31,7 @@ public class DrawableHelperMixin {
                     target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShader(Ljava/util/function/Supplier;)V"
             )
     )
-    private static Supplier<Shader> replaceFillShader(Supplier<Shader> shaderSupplier) {
+    private static Supplier<ShaderProgram> replaceFillShader(Supplier<ShaderProgram> shaderSupplier) {
         return CustomRender.getCurrentDrawShader() == null ? shaderSupplier : CustomRender::getCurrentDrawShader;
     }
 }

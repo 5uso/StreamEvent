@@ -4,8 +4,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import io.netty.buffer.ByteBuf;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.render.Shader;
+import net.minecraft.client.gl.ShaderProgram;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Formatting;
@@ -74,11 +74,11 @@ public class PrimaticaIngameHud implements StateHud {
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
 
-            Shader agilityShader = CustomRender.getAgilityShader();
+            ShaderProgram agilityShader = CustomRender.getAgilityShader();
             agilityShader.getUniformOrDefault("Progress").set(agilityProgress);
             CustomRender.setCurrentDrawShader(agilityShader);
 
-            DrawableHelper.fill(matrixStack, 0, 0, width, height, 0);
+            DrawContext.fill(matrixStack, 0, 0, width, height, 0);
 
             RenderSystem.disableBlend();
             CustomRender.setCurrentDrawShader(null);

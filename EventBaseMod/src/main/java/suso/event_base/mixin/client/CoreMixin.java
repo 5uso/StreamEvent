@@ -4,9 +4,9 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.GlUniform;
+import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.gl.Uniform;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.render.Shader;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Vec3f;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,7 +19,7 @@ import suso.event_base.client.shader.IGlUniformUtil;
 
 import java.util.Map;
 
-@Mixin(Shader.class) @Environment(EnvType.CLIENT)
+@Mixin(ShaderProgram.class) @Environment(EnvType.CLIENT)
 public abstract class CoreMixin {
     @Shadow public abstract Uniform getUniformOrDefault(String name);
 

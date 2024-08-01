@@ -3,7 +3,7 @@ package suso.event_base.custom.render.hud.elements;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import suso.event_base.util.MiscUtil;
@@ -48,9 +48,9 @@ public class ItemInfo implements HudRenderCallback {
         int w = (int)(540 * ratio);
         int h = (int)(140 * ratio);
 
-        DrawableHelper.fill(matrixStack, startx, starty, startx + w, starty + h, 0x7F000000);
+        DrawContext.fill(matrixStack, startx, starty, startx + w, starty + h, 0x7F000000);
 
         RenderSystem.setShaderTexture(0, current);
-        DrawableHelper.drawTexture(matrixStack, startx, starty, 0, 0, w, h, w, h);
+        DrawContext.drawTexture(matrixStack, startx, starty, 0, 0, w, h, w, h);
     }
 }

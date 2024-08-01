@@ -4,7 +4,7 @@ import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registry;
 import suso.event_base.custom.blocks.CustomBlocks;
 
 public class CustomItems {

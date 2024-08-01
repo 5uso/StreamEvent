@@ -23,6 +23,6 @@ public class KeyboardMixin {
     private void handleF4(GameRenderer instance) {
         if(InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_F3)) return;
 
-        instance.toggleShadersEnabled();
+        instance.togglePostProcessorEnabled();
     }
 }

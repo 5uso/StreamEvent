@@ -3,7 +3,7 @@ package suso.event_base.custom.render.hud.elements;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.PlayerSkinDrawer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
@@ -56,7 +56,7 @@ public class FeedMessage implements HudRenderCallback {
         if(timer > 5.8) x_offset = MiscUtil.smoothStep(0.0, 1.0, (timer - 5.8) / 0.2);
         matrixStack.translate(x_offset * 164.0 * hr, 0.0, 0.0);
 
-        DrawableHelper.fill(matrixStack, (int) ((singlePlayer ? -87.0 : -125.0) * hr), 0, 0, (int) (48.0 * hr), 0x7F000000);
+        DrawContext.fill(matrixStack, (int) ((singlePlayer ? -87.0 : -125.0) * hr), 0, 0, (int) (48.0 * hr), 0x7F000000);
         if(!singlePlayer) {
             RenderSystem.setShaderTexture(0, face1);
             PlayerSkinDrawer.draw(matrixStack, (int) (-119.0 * hr), (int) (8.0 * hr), (int) (32.0 * hr));
@@ -64,7 +64,7 @@ public class FeedMessage implements HudRenderCallback {
         RenderSystem.setShaderTexture(0, singlePlayer ? face1 : face2);
         PlayerSkinDrawer.draw(matrixStack, (int) (-38.0 * hr), (int) (8.0 * hr), (int) (32.0 * hr));
         RenderSystem.setShaderTexture(0, action);
-        DrawableHelper.drawTexture(matrixStack, (int) (-81.0 * hr), (int) (6.0 * hr), 0.0f, 0.0f, (int) (37.0 * hr), (int) (37.0 * hr), (int) (37.0 * hr), (int) (37.0 * hr));
+        DrawContext.drawTexture(matrixStack, (int) (-81.0 * hr), (int) (6.0 * hr), 0.0f, 0.0f, (int) (37.0 * hr), (int) (37.0 * hr), (int) (37.0 * hr), (int) (37.0 * hr));
 
         matrixStack.pop();
     }

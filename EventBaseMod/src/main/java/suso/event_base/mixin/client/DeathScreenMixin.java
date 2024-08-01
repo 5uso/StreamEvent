@@ -2,11 +2,10 @@ package suso.event_base.mixin.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.DeathScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.render.Shader;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -71,7 +70,7 @@ public abstract class DeathScreenMixin extends Screen {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         CustomRender.setCurrentDrawShader(CustomRender.getDeathShader());
-        DrawableHelper.fill(matrices, 0, 0, s.width, s.height, 0);
+        DrawContext.fill(matrices, 0, 0, s.width, s.height, 0);
         //s.fillGradient(matrices, 0, 0, s.width, s.height, 0x60500000, 0xA0803030);
         RenderSystem.disableBlend();
         CustomRender.setCurrentDrawShader(null);
@@ -79,14 +78,14 @@ public abstract class DeathScreenMixin extends Screen {
         matrices.push();
         matrices.translate(s.width / 2.0, s.height / 2.0, 0.0);
         matrices.scale(8.0f / guiScale, 8.0f / guiScale, 8.0f);
-        drawCenteredText(matrices, s.textRenderer, replacedTitle, 0, -400 / 8 / 4, 0x00FFFFFF);
+        drawCenteredTextWithShadow(matrices, s.textRenderer, replacedTitle, 0, -400 / 8 / 4, 0x00FFFFFF);
         matrices.pop();
 
         if (this.message != null) {
-            drawCenteredText(matrices, s.textRenderer, this.message, s.width / 2, 85, 0x00FFFFFF);
+            drawCenteredTextWithShadow(matrices, s.textRenderer, this.message, s.width / 2, 85, 0x00FFFFFF);
         }
 
-        drawCenteredText(matrices, s.textRenderer, this.scoreText, s.width / 2, 100, 0x00FFFFFF);
+        drawCenteredTextWithShadow(matrices, s.textRenderer, this.scoreText, s.width / 2, 100, 0x00FFFFFF);
         if (this.message != null && mouseY > 85) {
             Objects.requireNonNull(s.textRenderer);
             if (mouseY < 85 + 9) {

@@ -3,9 +3,9 @@ package suso.event_base.custom.render.hud.elements;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gl.ShaderProgram;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.PlayerSkinDrawer;
-import net.minecraft.client.render.Shader;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.Formatting;
@@ -71,19 +71,19 @@ public class PrimaticaScore implements HudRenderCallback {
         matrixStack.scale(0.1f, 0.1f, 1.0f);
         height *= 10;
 
-        DrawableHelper.fill(matrixStack, (int) (-33.0 / 1080.0 * height), (int) (16.0 / 1080.0 * height), (int) (33.0 / 1080.0 * height), (int) (76.0 / 1080.0 * height), 0x7F000000);
+        DrawContext.fill(matrixStack, (int) (-33.0 / 1080.0 * height), (int) (16.0 / 1080.0 * height), (int) (33.0 / 1080.0 * height), (int) (76.0 / 1080.0 * height), 0x7F000000);
 
         for(int i = 0; i <3; i++) {
             RenderSystem.setShaderTexture(0, skins.get(i));
             PlayerSkinDrawer.draw(matrixStack, (int) Math.round((-33 + 6 + 19 * i) * height / 1080.0), (int) (22.0 / 1080.0 * height), (int) (16.0 / 1080.0 * height));
         }
 
-        Shader scoreShader = CustomRender.getScoreShader();
+        ShaderProgram scoreShader = CustomRender.getScoreShader();
         scoreShader.getUniformOrDefault("Score").set(score);
         CustomRender.setCurrentDrawShader(scoreShader);
         RenderSystem.setShaderTexture(0, scoreTexture);
         RenderSystem.setShaderColor((teamColor.getColorValue() >> 16 & 0xFF) / 255.0f, (teamColor.getColorValue() >> 8 & 0xFF) / 255.0f, (teamColor.getColorValue() & 0xFF) / 255.0f, 1.0f);
-        DrawableHelper.drawTexture(matrixStack, (int) ((-33.0 + 14.0) / 1080.0 * height), (int) (41.0 / 1080.0 * height), 0.0f, 0.0f, (int) (38.0 / 1080.0 * height), (int) (32.0 / 1080.0 * height), (int) (38.0 / 1080.0 * height), (int) (32.0 / 1080.0 * height));
+        DrawContext.drawTexture(matrixStack, (int) ((-33.0 + 14.0) / 1080.0 * height), (int) (41.0 / 1080.0 * height), 0.0f, 0.0f, (int) (38.0 / 1080.0 * height), (int) (32.0 / 1080.0 * height), (int) (38.0 / 1080.0 * height), (int) (32.0 / 1080.0 * height));
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         CustomRender.setCurrentDrawShader(null);
         matrixStack.pop();

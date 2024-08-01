@@ -6,13 +6,13 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.color.block.BlockColors;
-import net.minecraft.client.gl.ShaderParseException;
+import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.Shader;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.InvalidHierarchicalFileException;
 import suso.event_base.client.shader.ShaderNetworking;
 import suso.event_base.custom.blocks.CustomBlocks;
 import suso.event_base.custom.render.hud.CustomHud;
@@ -24,14 +24,14 @@ import java.io.IOException;
 public class CustomRender {
     public static final CustomHud CUSTOM_HUD = new CustomHud();
 
-    private static Shader TIMER_SHADER;
-    private static Shader AGILITY_SHADER;
-    private static Shader SCORE_SHADER;
-    private static Shader KILL_SHADER;
-    private static Shader KILL_BORDER_SHADER;
-    private static Shader DEATH_SHADER;
+    private static ShaderProgram TIMER_SHADER;
+    private static ShaderProgram AGILITY_SHADER;
+    private static ShaderProgram SCORE_SHADER;
+    private static ShaderProgram KILL_SHADER;
+    private static ShaderProgram KILL_BORDER_SHADER;
+    private static ShaderProgram DEATH_SHADER;
 
-    private static Shader currentDrawShader;
+    private static ShaderProgram currentDrawShader;
 
     public static void setupRenderLayers() {
         BlockRenderLayerMap rl = BlockRenderLayerMap.INSTANCE;
@@ -69,12 +69,12 @@ public class CustomRender {
     public static void setupShaders(ResourceManager manager) {
         System.out.println("Loading custom shaders...");
         try {
-            TIMER_SHADER = new Shader(manager, "suso_timer", VertexFormats.POSITION_TEXTURE);
-            AGILITY_SHADER = new Shader(manager, "suso_agility", VertexFormats.POSITION_COLOR);
-            SCORE_SHADER = new Shader(manager, "suso_score", VertexFormats.POSITION_TEXTURE);
-            KILL_SHADER = new Shader(manager, "suso_kill", VertexFormats.POSITION_COLOR);
-            KILL_BORDER_SHADER = new Shader(manager, "suso_kill_border", VertexFormats.POSITION_COLOR);
-            DEATH_SHADER = new Shader(manager, "suso_death", VertexFormats.POSITION_COLOR);
+            TIMER_SHADER = new ShaderProgram(manager, "suso_timer", VertexFormats.POSITION_TEXTURE);
+            AGILITY_SHADER = new ShaderProgram(manager, "suso_agility", VertexFormats.POSITION_COLOR);
+            SCORE_SHADER = new ShaderProgram(manager, "suso_score", VertexFormats.POSITION_TEXTURE);
+            KILL_SHADER = new ShaderProgram(manager, "suso_kill", VertexFormats.POSITION_COLOR);
+            KILL_BORDER_SHADER = new ShaderProgram(manager, "suso_kill_border", VertexFormats.POSITION_COLOR);
+            DEATH_SHADER = new ShaderProgram(manager, "suso_death", VertexFormats.POSITION_COLOR);
         } catch (IOException e) {
             printShaderException(e);
         }
@@ -84,35 +84,35 @@ public class CustomRender {
         HudRenderCallback.EVENT.register(CUSTOM_HUD);
     }
 
-    public static Shader getCurrentDrawShader() {
+    public static ShaderProgram getCurrentDrawShader() {
         return currentDrawShader;
     }
 
-    public static void setCurrentDrawShader(Shader shader) {
+    public static void setCurrentDrawShader(ShaderProgram shader) {
         currentDrawShader = shader;
     }
 
-    public static Shader getTimerShader() {
+    public static ShaderProgram getTimerShader() {
         return TIMER_SHADER;
     }
 
-    public static Shader getAgilityShader() {
+    public static ShaderProgram getAgilityShader() {
         return AGILITY_SHADER;
     }
 
-    public static Shader getScoreShader() {
+    public static ShaderProgram getScoreShader() {
         return SCORE_SHADER;
     }
 
-    public static Shader getKillShader() {
+    public static ShaderProgram getKillShader() {
         return KILL_SHADER;
     }
 
-    public static Shader getKillBorderShader() {
+    public static ShaderProgram getKillBorderShader() {
         return KILL_BORDER_SHADER;
     }
 
-    public static Shader getDeathShader() {
+    public static ShaderProgram getDeathShader() {
         return DEATH_SHADER;
     }
 
@@ -120,7 +120,7 @@ public class CustomRender {
     private static void printShaderException(Exception exception) {
         MinecraftClient client = MinecraftClient.getInstance();
         Throwable throwable = exception;
-        while (!(throwable instanceof ShaderParseException)) {
+        while (!(throwable instanceof InvalidHierarchicalFileException)) {
             Throwable cause = throwable.getCause();
             if (cause != null) throwable = cause;
             else {

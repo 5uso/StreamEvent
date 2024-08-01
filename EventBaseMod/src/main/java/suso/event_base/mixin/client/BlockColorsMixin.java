@@ -4,9 +4,9 @@ import net.minecraft.block.*;
 import net.minecraft.block.enums.DoubleBlockHalf;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.color.world.BiomeColors;
-import net.minecraft.client.color.world.FoliageColors;
-import net.minecraft.client.color.world.GrassColors;
 import net.minecraft.state.property.Property;
+import net.minecraft.world.biome.FoliageColors;
+import net.minecraft.world.biome.GrassColors;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,7 +27,7 @@ public abstract class BlockColorsMixin {
         blockColors.registerColorProvider((state, world, pos, tintIndex) -> 0xFF000000 | (world != null && pos != null ? BiomeColors.getGrassColor(world, state.get(TallPlantBlock.HALF) == DoubleBlockHalf.UPPER ? pos.down() : pos) : -1), Blocks.LARGE_FERN, Blocks.TALL_GRASS);
         blockColors.registerColorProperty(TallPlantBlock.HALF, Blocks.LARGE_FERN, Blocks.TALL_GRASS);
 
-        blockColors.registerColorProvider((state, world, pos, tintIndex) ->  0xFF000000 | (world != null && pos != null ? BiomeColors.getGrassColor(world, pos) : GrassColors.getColor(0.5D, 1.0D)), Blocks.GRASS_BLOCK, Blocks.FERN, Blocks.GRASS, Blocks.POTTED_FERN);
+        blockColors.registerColorProvider((state, world, pos, tintIndex) ->  0xFF000000 | (world != null && pos != null ? BiomeColors.getGrassColor(world, pos) : GrassColors.getColor(0.5D, 1.0D)), Blocks.GRASS_BLOCK, Blocks.FERN, Blocks.SHORT_GRASS, Blocks.POTTED_FERN);
 
         blockColors.registerColorProvider((state, world, pos, tintIndex) -> 0xFF000000 |FoliageColors.getSpruceColor(), Blocks.SPRUCE_LEAVES);
 

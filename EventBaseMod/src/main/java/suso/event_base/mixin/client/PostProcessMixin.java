@@ -5,8 +5,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.GlUniform;
-import net.minecraft.client.gl.JsonEffectGlShader;
-import net.minecraft.client.gl.PostProcessShader;
+import net.minecraft.client.gl.JsonEffectShaderProgram;
+import net.minecraft.client.gl.PostEffectPass;
 import net.minecraft.client.gl.Uniform;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.GameRenderer;
@@ -22,9 +22,9 @@ import suso.event_base.client.shader.IGlUniformUtil;
 
 import java.util.Map;
 
-@Mixin(PostProcessShader.class) @Environment(EnvType.CLIENT)
+@Mixin(PostEffectPass.class) @Environment(EnvType.CLIENT)
 public class PostProcessMixin {
-    @Shadow @Final private JsonEffectGlShader program;
+    @Shadow @Final private JsonEffectShaderProgram program;
 
     @Inject(
             method = "render",

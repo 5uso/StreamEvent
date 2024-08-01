@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRe
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registry;
 
 public class CustomEntities {
     public static EntityType<PrimaticaOrbEntity> PRIMATICA_ORB;

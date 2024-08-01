@@ -31,7 +31,7 @@ public class WorldRendererMixin {
             at = @At("RETURN")
     )
     private void storeDepth(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci) {
-        if(!CustomUniformStore.overridingPost || !client.gameRenderer.shadersEnabled) return;
+        if(!CustomUniformStore.overridingPost || !client.gameRenderer.postProcessorEnabled) return;
 
         Framebuffer clientBuffer = client.getFramebuffer();
         if(CustomUniformStore.aux.textureHeight != clientBuffer.textureHeight || CustomUniformStore.aux.textureWidth != clientBuffer.textureWidth) CustomUniformStore.aux.resize(clientBuffer.textureWidth, clientBuffer.textureHeight, false);
@@ -65,7 +65,7 @@ public class WorldRendererMixin {
             return;
         }
 
-        BufferRenderer.drawWithShader(buffer);
+        BufferRenderer.drawWithGlobalProgram(buffer);
     }
 
     @Redirect(
@@ -85,6 +85,6 @@ public class WorldRendererMixin {
             return;
         }
 
-        BufferRenderer.drawWithShader(buffer);
+        BufferRenderer.drawWithGlobalProgram(buffer);
     }
 }

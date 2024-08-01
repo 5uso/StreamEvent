@@ -4,7 +4,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
-import net.minecraft.client.gl.ShaderEffect;
+import net.minecraft.client.gl.PostEffectProcessor;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -24,7 +24,7 @@ import suso.event_base.custom.render.CustomRender;
 @Mixin(GameRenderer.class) @Environment(EnvType.CLIENT)
 public abstract class GameRendererMixin {
     @Shadow protected abstract void loadShader(Identifier id);
-    @Shadow @Nullable private ShaderEffect shader;
+    @Shadow @Nullable private PostEffectProcessor shader;
 
     @Shadow @Final private MinecraftClient client;
 
