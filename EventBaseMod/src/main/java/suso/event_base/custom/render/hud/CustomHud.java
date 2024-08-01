@@ -8,6 +8,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import suso.event_base.EvtBaseConstants;
+import suso.event_base.custom.network.payloads.HudDataPayload;
 
 import java.util.Map;
 import java.util.UUID;
@@ -46,14 +47,13 @@ public class CustomHud implements HudRenderCallback {
         currentStateHud = hud;
     }
 
-    public void onHudData(ByteBuf msg) {
-        DataTypes type = DataTypes.values()[msg.readInt()];
-        switch(type) {
+    public void onHudData(HudDataPayload p) {
+        switch(p.type) {
             case STATE -> {
-                EvtBaseConstants.States state = EvtBaseConstants.States.values()[msg.readInt()];
+                EvtBaseConstants.States state = EvtBaseConstants.States.values()[p.buf.readInt()];
                 setCurrentStateHud(stateFactories.get(state).get());
             }
-            default -> currentStateHud.onHudMessage(type, msg);
+            default -> currentStateHud.onHudMessage(p);
         }
     }
 }

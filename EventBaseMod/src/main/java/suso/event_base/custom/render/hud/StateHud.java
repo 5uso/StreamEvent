@@ -1,8 +1,8 @@
 package suso.event_base.custom.render.hud;
 
-import io.netty.buffer.ByteBuf;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import suso.event_base.custom.network.payloads.HudDataPayload;
 
 public interface StateHud extends HudRenderCallback {
-    void onHudMessage(CustomHud.DataTypes type, ByteBuf msg);
+    void onHudMessage(HudDataPayload p);
 }

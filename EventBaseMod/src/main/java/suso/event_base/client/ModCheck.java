@@ -5,11 +5,13 @@ import io.netty.util.concurrent.GenericFutureListener;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientLoginNetworking;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientLoginNetworkHandler;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Util;
 import suso.event_base.EvtBaseConstants;
+import suso.event_base.custom.network.payloads.LoginCheckPayload;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -17,6 +19,8 @@ import java.util.function.Consumer;
 @Environment(EnvType.CLIENT)
 public class ModCheck {
     public static void registerPacketListeners() {
+        PayloadTypeRegistry.configurationS2C().register(LoginCheckPayload.ID, LoginCheckPayload.CODEC);
+
         ClientLoginNetworking.registerGlobalReceiver(EvtBaseConstants.LOGIN_CHECK, ModCheck::handleLoginQuery);
     }
 

@@ -1,7 +1,6 @@
 package suso.event_base.custom.render.hud;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import io.netty.buffer.ByteBuf;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.ShaderProgram;
@@ -10,6 +9,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.MathHelper;
+import suso.event_base.custom.network.payloads.HudDataPayload;
 import suso.event_base.custom.render.CustomRender;
 import suso.event_base.custom.render.hud.elements.*;
 
@@ -33,30 +33,30 @@ public class PrimaticaIngameHud implements StateHud {
     }
 
     @Override
-    public void onHudMessage(CustomHud.DataTypes type, ByteBuf msg) {
-        switch(type) {
-            case TIMER -> timer.msEnd = msg.readLong();
-            case FEED -> feed.addMessage(msg);
-            case AGILITY -> agility = msg.readBoolean();
+    public void onHudMessage(HudDataPayload p) {
+        switch(p.type) {
+            case TIMER -> timer.msEnd = p.buf.readLong();
+            case FEED -> feed.addMessage(p.buf);
+            case AGILITY -> agility = p.buf.readBoolean();
             case PRIMATICA_SCORE -> {
                 int[] scores = new int[12];
-                for(int i = 0; i < 12; i++) scores[i] = msg.readInt();
+                for(int i = 0; i < 12; i++) scores[i] = p.buf.readInt();
 
                 int[] ranks = new int[12];
-                for(int i = 0; i < 12; i++) ranks[i] = msg.readInt();
+                for(int i = 0; i < 12; i++) ranks[i] = p.buf.readInt();
 
                 scoreboard.setScores(scores, ranks);
             }
             case INFO -> {
-                boolean info_active = msg.readBoolean();
+                boolean info_active = p.buf.readBoolean();
                 if(info_active) {
-                    PacketByteBuf buf = PacketByteBufs.copy(msg);
+                    PacketByteBuf buf = PacketByteBufs.copy(p.buf);
                     info.show(buf.readIdentifier());
                 }
                 else info.hide();
             }
             case KILL -> {
-                PacketByteBuf buf = PacketByteBufs.copy(msg);
+                PacketByteBuf buf = PacketByteBufs.copy(p.buf);
                 killMessage.display(buf.readString(), Formatting.values()[buf.readInt()]);
             }
         }
