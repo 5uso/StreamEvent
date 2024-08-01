@@ -1,9 +1,9 @@
 package suso.event_base.custom.blocks.entity;
 
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib.model.GeoModel;
 
-public class PrimaticaDoorModel extends AnimatedGeoModel<PrimaticaDoorBlockEntity> {
+public class PrimaticaDoorModel extends GeoModel<PrimaticaDoorBlockEntity> {
     @Override
     public Identifier getModelResource(PrimaticaDoorBlockEntity object) {
         return Identifier.of("suso", object.isDiagonal() ? "geo/primatica_door_diag.geo.json" : "geo/primatica_door.geo.json");

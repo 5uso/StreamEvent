@@ -6,25 +6,21 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib3.core.AnimationState;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoBlockEntity;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.util.GeckoLibUtil;
 import suso.event_base.custom.blocks.CustomBlocks;
 
-public class PrimaticaPowerupBlockEntity extends BlockEntity implements IAnimatable {
+public class PrimaticaPowerupBlockEntity extends BlockEntity implements GeoBlockEntity {
     public enum Powerups {
         AGILITY, BRIDGE, GRAVITY, EMP, ARROW, GUNK
     }
 
-    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     private boolean spawned = false;
     private boolean collected = false;
@@ -35,24 +31,24 @@ public class PrimaticaPowerupBlockEntity extends BlockEntity implements IAnimata
     }
 
     @Override
-    public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, "controller", 0, event -> {
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "controller", 0, event -> {
             AnimationController<PrimaticaPowerupBlockEntity> controller = event.getController();
 
             if(!spawned) {
                 spawned = true;
-                controller.setAnimation(new AnimationBuilder().addAnimation("animation.primatica_powerup.spawn", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME));
+                controller.setAnimation(RawAnimation.begin().then("animation.primatica_powerup.spawn", Animation.LoopType.HOLD_ON_LAST_FRAME));
                 return PlayState.CONTINUE;
             }
 
             if(collected) {
-                controller.transitionLengthTicks = 2;
-                controller.setAnimation(new AnimationBuilder().addAnimation("animation.primatica_powerup.collect", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME));
+                controller = controller.transitionLength(2);
+                controller.setAnimation(RawAnimation.begin().then("animation.primatica_powerup.collect", Animation.LoopType.HOLD_ON_LAST_FRAME));
                 return PlayState.CONTINUE;
             }
 
-            if(controller.getAnimationState().equals(AnimationState.Stopped)) {
-                controller.setAnimation(new AnimationBuilder().addAnimation("animation.primatica_powerup.idle", ILoopType.EDefaultLoopTypes.LOOP));
+            if(controller.getAnimationState().equals(AnimationController.State.STOPPED)) {
+                controller.setAnimation(RawAnimation.begin().then("animation.primatica_powerup.idle", Animation.LoopType.LOOP));
                 return PlayState.CONTINUE;
             }
 
@@ -61,20 +57,20 @@ public class PrimaticaPowerupBlockEntity extends BlockEntity implements IAnimata
     }
 
     @Override
-    public AnimationFactory getFactory() {
-        return factory;
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return cache;
     }
 
     @Override
-    public void writeNbt(NbtCompound nbt) {
+    public void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup wrapper) {
         nbt.putBoolean("collected", collected);
         nbt.putByte("type", (byte) type.ordinal());
-        super.writeNbt(nbt);
+        super.writeNbt(nbt, wrapper);
     }
 
     @Override
-    public void readNbt(NbtCompound nbt) {
-        super.readNbt(nbt);
+    public void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup wrapper) {
+        super.readNbt(nbt, wrapper);
         collected = nbt.getBoolean("collected");
         type = Powerups.values()[nbt.getByte("type")];
     }
@@ -85,7 +81,7 @@ public class PrimaticaPowerupBlockEntity extends BlockEntity implements IAnimata
     }
 
     @Override
-    public NbtCompound toInitialChunkDataNbt() {
-        return createNbt();
+    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup wrapper) {
+        return createNbt(wrapper);
     }
 }

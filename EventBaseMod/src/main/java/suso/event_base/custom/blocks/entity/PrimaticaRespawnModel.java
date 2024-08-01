@@ -1,9 +1,9 @@
 package suso.event_base.custom.blocks.entity;
 
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib.model.GeoModel;
 
-public class PrimaticaRespawnModel extends AnimatedGeoModel<PrimaticaRespawnBlockEntity> {
+public class PrimaticaRespawnModel extends GeoModel<PrimaticaRespawnBlockEntity> {
     @Override
     public Identifier getModelResource(PrimaticaRespawnBlockEntity object) {
         return Identifier.of("suso", "geo/primatica_respawn.geo.json");

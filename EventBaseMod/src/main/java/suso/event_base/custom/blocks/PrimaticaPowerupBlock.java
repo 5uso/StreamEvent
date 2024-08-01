@@ -1,5 +1,6 @@
 package suso.event_base.custom.blocks;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import suso.event_base.custom.blocks.entity.PrimaticaPowerupBlockEntity;
 
 public class PrimaticaPowerupBlock extends BlockWithEntity {
+    public static final MapCodec<PrimaticaPowerupBlock> CODEC = createCodec(PrimaticaPowerupBlock::new);
     protected PrimaticaPowerupBlock(Settings settings) {
         super(settings);
     }
@@ -30,5 +32,10 @@ public class PrimaticaPowerupBlock extends BlockWithEntity {
     @SuppressWarnings("deprecation") @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return VoxelShapes.empty();
+    }
+
+    @Override
+    protected MapCodec<PrimaticaPowerupBlock> getCodec() {
+        return CODEC;
     }
 }
