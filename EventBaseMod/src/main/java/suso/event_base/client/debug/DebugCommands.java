@@ -20,8 +20,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.text.LiteralTextContent;
-import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import suso.event_base.EvtBaseConstants;
@@ -136,7 +135,7 @@ public class DebugCommands {
                 }
             }
 
-            context.getSource().sendError(MutableText.of(new LiteralTextContent("Nope")).formatted(Formatting.RED));
+            context.getSource().sendError(Text.literal("Nope").formatted(Formatting.RED));
             return 0;
         });
 
