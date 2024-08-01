@@ -6,6 +6,8 @@ import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.CustomModelDataComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
@@ -41,8 +43,7 @@ public class HeldItemRendererMixin {
         && renderingPlayer.isUsingItem()
         && renderingPlayer.getItemUseTimeLeft() > 0
         && renderingPlayer.getActiveHand() == renderingHand
-        && renderingStack.getNbt() != null
-        && renderingStack.getNbt().getInt("CustomModelData") == 1) {
+        && renderingStack.getOrDefault(DataComponentTypes.CUSTOM_MODEL_DATA, CustomModelDataComponent.DEFAULT).value() == 1) {
             return value * 10.0f;
         }
 
