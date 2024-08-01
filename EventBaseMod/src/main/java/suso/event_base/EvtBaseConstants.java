@@ -9,24 +9,6 @@ import java.util.Map;
 import java.util.UUID;
 
 public class EvtBaseConstants {
-    public static final Identifier PLAY_FADE_SOUND = new Identifier("suso:play_fade_sound");
-    public static final Identifier UPDATE_FADE_VOLUME = new Identifier("suso:update_fade_volume");
-    public static final Identifier UPDATE_FADE_PITCH = new Identifier("suso:update_fade_pitch");
-
-    public static final Identifier SET_SHADER_UNIFORM = new Identifier("suso:set_shader_uniform");
-    public static final Identifier SET_POST_SHADER = new Identifier("suso:set_post_shader");
-    public static final Identifier SET_BLOCK_COLOR = new Identifier("suso:set_block_color");
-
-    public static final Identifier FIREWORK_PARTICLE = new Identifier("suso:firework_particle");
-
-    public static final Identifier ENTITY_UPDATE = new Identifier("suso:entity_update");
-
-    public static final Identifier HUD_DATA = new Identifier("suso:hud_data");
-
-    public static final Identifier JUMP_INPUT = new Identifier("suso:jump_input");
-
-    public static final Identifier LOGIN_CHECK = new Identifier("suso:login_check");
-
     public static final boolean DEBUG = false;
 
     public enum States {
