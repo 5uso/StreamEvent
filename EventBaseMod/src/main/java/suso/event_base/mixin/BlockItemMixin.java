@@ -1,5 +1,8 @@
 package suso.event_base.mixin;
 
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.NbtComponent;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -13,13 +16,13 @@ public class BlockItemMixin {
             method = "place(Lnet/minecraft/item/ItemPlacementContext;)Lnet/minecraft/util/ActionResult;",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/item/ItemStack;decrement(I)V"
+                    target = "Lnet/minecraft/item/ItemStack;decrementUnlessCreative(ILnet/minecraft/entity/LivingEntity;)V"
             )
     )
-    private void dontDecrementIfInfinite(ItemStack instance, int amount) {
-        NbtCompound nbt = instance.getNbt();
-        if(nbt != null && nbt.getBoolean("infinite")) return;
+    private void dontDecrementIfInfinite(ItemStack instance, int amount, LivingEntity player) {
+        NbtCompound nbt = instance.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).getNbt();
+        if(nbt.getBoolean("infinite")) return;
 
-        instance.decrement(amount);
+        if(player == null || !player.isInCreativeMode()) instance.decrement(amount);
     }
 }
