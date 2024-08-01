@@ -1,17 +1,13 @@
 package suso.event_base.custom.entities;
 
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.molang.MolangParser;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
-import software.bernie.geckolib3.resource.GeckoLibCache;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.loading.math.MathParser;
+import software.bernie.geckolib.model.GeoModel;
 
-public class PrimaticaOrbModel extends AnimatedGeoModel<PrimaticaOrbEntity> {
+public class PrimaticaOrbModel extends GeoModel<PrimaticaOrbEntity> {
     @Override
     public Identifier getModelResource(PrimaticaOrbEntity object) {
         return Identifier.of("suso", "geo/primatica_orb.geo.json");
@@ -28,24 +24,22 @@ public class PrimaticaOrbModel extends AnimatedGeoModel<PrimaticaOrbEntity> {
     }
 
     @Override
-    public void setMolangQueries(IAnimatable animatable, double seekTime) {
-        super.setMolangQueries(animatable, seekTime);
+    public void applyMolangQueries(AnimationState<PrimaticaOrbEntity> animationState, double animTime) {
+        super.applyMolangQueries(animationState, animTime);
 
-        MolangParser parser = GeckoLibCache.getInstance().parser;
         MinecraftClient client = MinecraftClient.getInstance();
+        PrimaticaOrbEntity entity = animationState.getAnimatable();
 
-        if(animatable instanceof Entity entity) {
-            parser.setValue("query.face_camera_x", () -> {
-                Vec3d cameraPos = client.gameRenderer.getCamera().getPos();
-                Vec3d offset = cameraPos.subtract(entity.getPos());
-                return Math.toDegrees(Math.atan2(offset.z, offset.x)) - 90.0;
-            });
+        MathParser.setVariable("query.face_camera_x", () -> {
+            Vec3d cameraPos = client.gameRenderer.getCamera().getPos();
+            Vec3d offset = cameraPos.subtract(entity.getPos());
+            return Math.toDegrees(Math.atan2(offset.z, offset.x)) - 90.0;
+        });
 
-            parser.setValue("query.face_camera_y", () -> {
-                Vec3d cameraPos = client.gameRenderer.getCamera().getPos();
-                Vec3d offset = cameraPos.subtract(entity.getPos());
-                return -Math.toDegrees(Math.atan2(offset.y, offset.horizontalLength()));
-            });
-        }
+        MathParser.setVariable("query.face_camera_y", () -> {
+            Vec3d cameraPos = client.gameRenderer.getCamera().getPos();
+            Vec3d offset = cameraPos.subtract(entity.getPos());
+            return -Math.toDegrees(Math.atan2(offset.y, offset.horizontalLength()));
+        });
     }
 }

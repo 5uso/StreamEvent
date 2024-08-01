@@ -1,15 +1,13 @@
 package suso.event_base.custom.entities;
 
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib3.core.util.Color;
-import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
+import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import software.bernie.geckolib.util.Color;
 
 public class PrimaticaOrbRenderer extends GeoEntityRenderer<PrimaticaOrbEntity> {
     public PrimaticaOrbRenderer(EntityRendererFactory.Context renderManager) {
@@ -19,12 +17,12 @@ public class PrimaticaOrbRenderer extends GeoEntityRenderer<PrimaticaOrbEntity> 
     private static final int TRANSITION_DURATION = 300;
 
     @Override
-    public RenderLayer getRenderType(PrimaticaOrbEntity animatable, float partialTick, MatrixStack poseStack, @Nullable VertexConsumerProvider bufferSource, @Nullable VertexConsumer buffer, int packedLight, Identifier texture) {
+    public RenderLayer getRenderType(PrimaticaOrbEntity animatable, Identifier texture, @Nullable VertexConsumerProvider bufferSource, float partialTick) {
         return RenderLayer.getEntityTranslucent(getTextureLocation(animatable));
     }
 
     @Override
-    public Color getRenderColor(PrimaticaOrbEntity animatable, float partialTick, MatrixStack poseStack, @Nullable VertexConsumerProvider bufferSource, @Nullable VertexConsumer buffer, int packedLight) {
+    public Color getRenderColor(PrimaticaOrbEntity animatable, float partialTick, int packedLight) {
         Color current = Color.ofOpaque(animatable.getTeamColorValue());
         if(!animatable.transitioningColor && !animatable.previousColor.equals(current)) {
             animatable.transitionStartMs = Util.getMeasuringTimeMs();

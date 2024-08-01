@@ -3,27 +3,25 @@ package suso.event_base.custom.entities;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.data.DataTracker;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
+import net.minecraft.server.network.EntityTrackerEntry;
 import net.minecraft.util.Arm;
 import net.minecraft.world.World;
-import software.bernie.geckolib3.core.AnimationState;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.core.util.Color;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.util.Color;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.ArrayList;
 
-public class PrimaticaOrbEntity extends LivingEntity implements IAnimatable {
-    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+public class PrimaticaOrbEntity extends LivingEntity implements GeoEntity {
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     private boolean spawned = false;
 
@@ -31,15 +29,15 @@ public class PrimaticaOrbEntity extends LivingEntity implements IAnimatable {
     protected boolean transitioningColor = false;
     protected long transitionStartMs = 0;
 
-    public PrimaticaOrbEntity(EntityType<? extends LivingEntity> type, World world) {
+    public PrimaticaOrbEntity(EntityType<? extends PrimaticaOrbEntity> type, World world) {
         super(type, world);
         this.ignoreCameraFrustum = true;
         this.setSilent(true);
     }
 
     @Override
-    protected void initDataTracker() {
-        super.initDataTracker();
+    protected void initDataTracker(DataTracker.Builder builder) {
+        super.initDataTracker(builder);
     }
 
     @Override
@@ -70,23 +68,23 @@ public class PrimaticaOrbEntity extends LivingEntity implements IAnimatable {
     }
 
     @Override
-    public Packet<?> createSpawnPacket() {
-        return new EntitySpawnS2CPacket(this);
+    public Packet<ClientPlayPacketListener> createSpawnPacket(EntityTrackerEntry entityTrackerEntry) {
+        return new EntitySpawnS2CPacket(this, entityTrackerEntry);
     }
 
     @Override
-    public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, "controller", 0, event -> {
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "controller", 0, event -> {
             AnimationController<PrimaticaOrbEntity> controller = event.getController();
 
             if(!spawned) {
                 spawned = true;
-                controller.setAnimation(new AnimationBuilder().addAnimation("animation.primatica_orb.spawn", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME));
+                controller.setAnimation(RawAnimation.begin().then("animation.primatica_orb.spawn", Animation.LoopType.HOLD_ON_LAST_FRAME));
                 return PlayState.CONTINUE;
             }
 
-            if(controller.getAnimationState().equals(AnimationState.Stopped)) {
-                controller.setAnimation(new AnimationBuilder().addAnimation("animation.primatica_orb.idle", ILoopType.EDefaultLoopTypes.LOOP));
+            if(controller.getAnimationState().equals(AnimationController.State.STOPPED)) {
+                controller.setAnimation(RawAnimation.begin().then("animation.primatica_orb.idle", Animation.LoopType.LOOP));
                 return PlayState.CONTINUE;
             }
 
@@ -95,13 +93,13 @@ public class PrimaticaOrbEntity extends LivingEntity implements IAnimatable {
     }
 
     @Override
-    public AnimationFactory getFactory() {
-        return factory;
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return cache;
     }
 
     @Override
     public void tick() {
-        if(this.isDead() && !this.world.isClient) {
+        if(this.isDead() && !this.getWorld().isClient) {
             this.remove(RemovalReason.KILLED);
         }
     }
