@@ -6,7 +6,6 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.DeathScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -48,10 +47,10 @@ public abstract class DeathScreenMixin extends Screen {
         this.remove(this.buttons.get(1));
         this.buttons.clear();
 
-        theButton = new ButtonWidget(0, 0, 0, 0, Text.translatable(this.isHardcore ? "deathScreen.spectate" : "deathScreen.respawn"), (button) -> {
+        theButton = ButtonWidget.builder(Text.translatable(this.isHardcore ? "deathScreen.spectate" : "deathScreen.respawn"), (button) -> {
             this.client.player.requestRespawn();
             this.client.setScreen(null);
-        });
+        }).dimensions(0, 0, 0, 0).build();
         this.buttons.add(this.addDrawableChild(theButton));
 
         replacedTitle = Text.translatable(isHardcore ? "deathScreen.title.hardcore" : "deathScreen.title").formatted(Formatting.BOLD);
@@ -62,7 +61,7 @@ public abstract class DeathScreenMixin extends Screen {
             at = @At("HEAD"),
             cancellable = true
     )
-    private void replaceRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    private void replaceRender(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         Screen s = this;
         MinecraftClient client = MinecraftClient.getInstance();
         int guiScale = client.options.getGuiScale().getValue();
@@ -70,47 +69,47 @@ public abstract class DeathScreenMixin extends Screen {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         CustomRender.setCurrentDrawShader(CustomRender.getDeathShader());
-        DrawContext.fill(matrices, 0, 0, s.width, s.height, 0);
+        context.fill(0, 0, s.width, s.height, 0);
         //s.fillGradient(matrices, 0, 0, s.width, s.height, 0x60500000, 0xA0803030);
         RenderSystem.disableBlend();
         CustomRender.setCurrentDrawShader(null);
 
-        matrices.push();
-        matrices.translate(s.width / 2.0, s.height / 2.0, 0.0);
-        matrices.scale(8.0f / guiScale, 8.0f / guiScale, 8.0f);
-        drawCenteredTextWithShadow(matrices, s.textRenderer, replacedTitle, 0, -400 / 8 / 4, 0x00FFFFFF);
-        matrices.pop();
+        context.getMatrices().push();
+        context.getMatrices().translate(s.width / 2.0, s.height / 2.0, 0.0);
+        context.getMatrices().scale(8.0f / guiScale, 8.0f / guiScale, 8.0f);
+        context.drawCenteredTextWithShadow(s.textRenderer, replacedTitle, 0, -400 / 8 / 4, 0x00FFFFFF);
+        context.getMatrices().pop();
 
         if (this.message != null) {
-            drawCenteredTextWithShadow(matrices, s.textRenderer, this.message, s.width / 2, 85, 0x00FFFFFF);
+            context.drawCenteredTextWithShadow(s.textRenderer, this.message, s.width / 2, 85, 0x00FFFFFF);
         }
 
-        drawCenteredTextWithShadow(matrices, s.textRenderer, this.scoreText, s.width / 2, 100, 0x00FFFFFF);
+        context.drawCenteredTextWithShadow(s.textRenderer, this.scoreText, s.width / 2, 100, 0x00FFFFFF);
         if (this.message != null && mouseY > 85) {
             Objects.requireNonNull(s.textRenderer);
             if (mouseY < 85 + 9) {
                 Style style = this.getTextComponentUnderMouse(mouseX);
-                s.renderTextHoverEffect(matrices, style, mouseX, mouseY);
+                context.drawHoverEvent(this.textRenderer, style, mouseX, mouseY);
             }
         }
 
-        matrices.push();
-        matrices.translate(s.width / 2.0, s.height / 2.0, 0.0);
-        matrices.scale(4.0f / guiScale, 4.0f / guiScale, 4.0f);
+        context.getMatrices().push();
+        context.getMatrices().translate(s.width / 2.0, s.height / 2.0, 0.0);
+        context.getMatrices().scale(4.0f / guiScale, 4.0f / guiScale, 4.0f);
 
-        theButton.x = -50;
-        theButton.y = 0;
+        theButton.setX(-50);
+        theButton.setY(0);
         theButton.width = 100;
         theButton.height = 20;
 
-        super.render(matrices, (mouseX - s.width / 2) / 4 * guiScale, (mouseY - s.height / 2) / 4 * guiScale, delta);
+        super.render(context, (mouseX - s.width / 2) / 4 * guiScale, (mouseY - s.height / 2) / 4 * guiScale, delta);
 
-        theButton.x = width / 2 - 200 / guiScale;
-        theButton.y = height / 2;
+        theButton.setX(width / 2 - 200 / guiScale);
+        theButton.setY(height / 2);
         theButton.width = 100 * 4 / guiScale;
         theButton.height = 20 * 4 / guiScale;
 
-        matrices.pop();
+        context.getMatrices().pop();
 
         ci.cancel();
     }
