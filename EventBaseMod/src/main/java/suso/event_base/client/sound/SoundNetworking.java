@@ -3,13 +3,11 @@ package suso.event_base.client.sound;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.util.Identifier;
-import suso.event_base.EvtBaseConstants;
+import suso.event_base.custom.network.payloads.PlayFadeSoundPayload;
+import suso.event_base.custom.network.payloads.UpdateFadePitchPayload;
+import suso.event_base.custom.network.payloads.UpdateFadeVolumePayload;
 import suso.event_base.mixin.client.SoundManagerAccess;
 
 import java.util.LinkedList;
@@ -20,43 +18,43 @@ public class SoundNetworking {
     private static final Queue<FadeSoundInstance> buffered = new LinkedList<>();
 
     public static void registerPacketListeners() {
-        ClientPlayNetworking.registerGlobalReceiver(EvtBaseConstants.PLAY_FADE_SOUND, SoundNetworking::playFadeSoundHandler);
-        ClientPlayNetworking.registerGlobalReceiver(EvtBaseConstants.UPDATE_FADE_VOLUME, SoundNetworking::updateFadeVolumeHandler);
-        ClientPlayNetworking.registerGlobalReceiver(EvtBaseConstants.UPDATE_FADE_PITCH, SoundNetworking::updateFadePitchHandler);
+        PayloadTypeRegistry.playS2C().register(PlayFadeSoundPayload.ID, PlayFadeSoundPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(UpdateFadeVolumePayload.ID, UpdateFadeVolumePayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(UpdateFadePitchPayload.ID, UpdateFadePitchPayload.CODEC);
+
+        ClientPlayNetworking.registerGlobalReceiver(PlayFadeSoundPayload.ID, SoundNetworking::playFadeSoundHandler);
+        ClientPlayNetworking.registerGlobalReceiver(UpdateFadeVolumePayload.ID, SoundNetworking::updateFadeVolumeHandler);
+        ClientPlayNetworking.registerGlobalReceiver(UpdateFadePitchPayload.ID, SoundNetworking::updateFadePitchHandler);
     }
 
-    private static void playFadeSoundHandler(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-        Identifier id = buf.readIdentifier();
-        float startVolume = buf.readFloat();
-        float startPitch = buf.readFloat();
-        boolean loop = buf.readBoolean();
-        SoundCategory category = SoundCategory.values()[buf.readByte()];
+    private static void playFadeSoundHandler(PlayFadeSoundPayload p, ClientPlayNetworking.Context ctx) {
+        buffered.add(new FadeSoundInstance(p.id, p.startingVolume, p.startingPitch, p.loop, p.category));
+        if(!p.apply) return;
 
-        buffered.add(new FadeSoundInstance(id, startVolume, startPitch, loop, category));
-
-        boolean apply = buf.readBoolean();
-        if(apply) client.execute(() -> { while(!buffered.isEmpty()) client.getSoundManager().play(buffered.poll()); });
+        try(MinecraftClient client = ctx.client()) {
+            client.execute(() -> {
+                while(!buffered.isEmpty()) {
+                    client.getSoundManager().play(buffered.poll());
+                }
+            });
+        }
     }
 
-    private static void updateFadeVolumeHandler(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-        Identifier id = buf.readIdentifier();
-        float target = buf.readFloat();
-        int fadeLengthTicks = buf.readInt();
-
-        client.execute(() -> {
-            ISoundSystemUtil system = (ISoundSystemUtil) ((SoundManagerAccess) client.getSoundManager()).getSoundSystem();
-            system.sendFadeVolume(id, target, fadeLengthTicks);
-        });
+    private static void updateFadeVolumeHandler(UpdateFadeVolumePayload p, ClientPlayNetworking.Context ctx) {
+        try(MinecraftClient client = ctx.client()) {
+            client.execute(() -> {
+                ISoundSystemUtil system = (ISoundSystemUtil) ((SoundManagerAccess) client.getSoundManager()).getSoundSystem();
+                system.sendFadeVolume(p.id, p.targetVolume, p.fadeLengthTicks);
+            });
+        }
     }
 
-    private static void updateFadePitchHandler(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-        Identifier id = buf.readIdentifier();
-        float target = buf.readFloat();
-        int fadeLengthTicks = buf.readInt();
-
-        client.execute(() -> {
-            ISoundSystemUtil system = (ISoundSystemUtil) ((SoundManagerAccess) client.getSoundManager()).getSoundSystem();
-            system.sendFadePitch(id, target, fadeLengthTicks);
-        });
+    private static void updateFadePitchHandler(UpdateFadePitchPayload p, ClientPlayNetworking.Context ctx) {
+        try(MinecraftClient client = ctx.client()) {
+            client.execute(() -> {
+                ISoundSystemUtil system = (ISoundSystemUtil) ((SoundManagerAccess) client.getSoundManager()).getSoundSystem();
+                system.sendFadePitch(p.id, p.targetPitch, p.fadeLengthTicks);
+            });
+        }
     }
 }
