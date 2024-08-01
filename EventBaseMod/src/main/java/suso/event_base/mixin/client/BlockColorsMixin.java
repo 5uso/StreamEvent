@@ -29,9 +29,9 @@ public abstract class BlockColorsMixin {
 
         blockColors.registerColorProvider((state, world, pos, tintIndex) ->  0xFF000000 | (world != null && pos != null ? BiomeColors.getGrassColor(world, pos) : GrassColors.getColor(0.5D, 1.0D)), Blocks.GRASS_BLOCK, Blocks.FERN, Blocks.SHORT_GRASS, Blocks.POTTED_FERN);
 
-        blockColors.registerColorProvider((state, world, pos, tintIndex) -> 0xFF000000 |FoliageColors.getSpruceColor(), Blocks.SPRUCE_LEAVES);
+        blockColors.registerColorProvider((state, world, pos, tintIndex) -> 0xFF000000 | FoliageColors.getSpruceColor(), Blocks.SPRUCE_LEAVES);
 
-        blockColors.registerColorProvider((state, world, pos, tintIndex) -> 0xFF000000 |FoliageColors.getBirchColor(), Blocks.BIRCH_LEAVES);
+        blockColors.registerColorProvider((state, world, pos, tintIndex) -> 0xFF000000 | FoliageColors.getBirchColor(), Blocks.BIRCH_LEAVES);
 
         blockColors.registerColorProvider((state, world, pos, tintIndex) -> 0xFF000000 | (world != null && pos != null ? BiomeColors.getFoliageColor(world, pos) : FoliageColors.getDefaultColor()), Blocks.OAK_LEAVES, Blocks.JUNGLE_LEAVES, Blocks.ACACIA_LEAVES, Blocks.DARK_OAK_LEAVES, Blocks.VINE, Blocks.MANGROVE_LEAVES);
 
