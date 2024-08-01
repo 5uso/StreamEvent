@@ -13,7 +13,6 @@ import net.minecraft.command.argument.IdentifierArgumentType;
 import net.minecraft.command.argument.NbtElementArgumentType;
 import net.minecraft.command.suggestion.SuggestionProviders;
 import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtFloat;
 import net.minecraft.nbt.NbtInt;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.network.PacketByteBuf;
@@ -24,6 +23,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import suso.event_base.EvtBaseConstants;
+import suso.event_base.custom.network.payloads.*;
 
 public class DebugCommands {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
@@ -42,16 +42,14 @@ public class DebugCommands {
         RequiredArgumentBuilder<ServerCommandSource, Boolean> loopArgument = CommandManager.argument("loop", BoolArgumentType.bool());
 
         loopArgument.executes(context -> {
-            PacketByteBuf p = PacketByteBufs.create();
-
-            p.writeString(IdentifierArgumentType.getIdentifier(context, "sound").toString());
-            p.writeFloat(FloatArgumentType.getFloat(context, "volume"));
-            p.writeFloat(FloatArgumentType.getFloat(context, "pitch"));
-            p.writeBoolean(BoolArgumentType.getBool(context, "loop"));
-            p.writeByte(SoundCategory.RECORDS.ordinal());
-            p.writeBoolean(true);
-
-            ServerPlayNetworking.send(context.getSource().getPlayer(), EvtBaseConstants.PLAY_FADE_SOUND, p);
+            ServerPlayNetworking.send(context.getSource().getPlayer(), new PlayFadeSoundPayload(
+                    IdentifierArgumentType.getIdentifier(context, "sound"),
+                    FloatArgumentType.getFloat(context, "volume"),
+                    FloatArgumentType.getFloat(context, "pitch"),
+                    BoolArgumentType.getBool(context, "loop"),
+                    SoundCategory.RECORDS,
+                    true
+            ));
             return 1;
         });
 
@@ -68,13 +66,11 @@ public class DebugCommands {
         RequiredArgumentBuilder<ServerCommandSource, Integer> lengthArgument = CommandManager.argument("fadeLengthTicks", IntegerArgumentType.integer(0));
 
         lengthArgument.executes(context -> {
-            PacketByteBuf p = PacketByteBufs.create();
-
-            p.writeString(IdentifierArgumentType.getIdentifier(context, "sound").toString());
-            p.writeFloat(FloatArgumentType.getFloat(context, "volume"));
-            p.writeInt(IntegerArgumentType.getInteger(context, "fadeLengthTicks"));
-
-            ServerPlayNetworking.send(context.getSource().getPlayer(), EvtBaseConstants.UPDATE_FADE_VOLUME, p);
+            ServerPlayNetworking.send(context.getSource().getPlayer(), new UpdateFadeVolumePayload(
+                    IdentifierArgumentType.getIdentifier(context, "sound"),
+                    FloatArgumentType.getFloat(context, "volume"),
+                    IntegerArgumentType.getInteger(context, "fadeLengthTicks")
+            ));
             return 1;
         });
 
@@ -90,13 +86,11 @@ public class DebugCommands {
         RequiredArgumentBuilder<ServerCommandSource, Integer> lengthArgument = CommandManager.argument("fadeLengthTicks", IntegerArgumentType.integer(0));
 
         lengthArgument.executes(context -> {
-            PacketByteBuf p = PacketByteBufs.create();
-
-            p.writeString(IdentifierArgumentType.getIdentifier(context, "sound").toString());
-            p.writeFloat(FloatArgumentType.getFloat(context, "pitch"));
-            p.writeInt(IntegerArgumentType.getInteger(context, "fadeLengthTicks"));
-
-            ServerPlayNetworking.send(context.getSource().getPlayer(), EvtBaseConstants.UPDATE_FADE_PITCH, p);
+            ServerPlayNetworking.send(context.getSource().getPlayer(), new UpdateFadePitchPayload(
+                    IdentifierArgumentType.getIdentifier(context, "sound"),
+                    FloatArgumentType.getFloat(context, "pitch"),
+                    IntegerArgumentType.getInteger(context, "fadeLengthTicks")
+            ));
             return 1;
         });
 
@@ -119,18 +113,20 @@ public class DebugCommands {
             if(nbt.getType() == NbtElement.LIST_TYPE) {
                 NbtList l = (NbtList) nbt;
                 if(l.getHeldType() == NbtElement.FLOAT_TYPE) {
-                    p.writeBoolean(true);
-                    p.writeInt(l.size());
-                    for(NbtElement e : l) p.writeFloat(((NbtFloat) e).floatValue());
-                    ServerPlayNetworking.send(context.getSource().getPlayer(), EvtBaseConstants.SET_SHADER_UNIFORM, p);
+                    float[] floats = new float[l.size()];
+                    for(int i = 0; i < l.size(); i++) floats[i] = l.getFloat(i);
+                    ServerPlayNetworking.send(context.getSource().getPlayer(), new SetShaderUniformPayload(
+                            StringArgumentType.getString(context, "name"),
+                            floats
+                    ));
                     return 1;
                 }
 
                 if(l.getHeldType() == NbtElement.INT_TYPE) {
-                    p.writeBoolean(false);
-                    p.writeInt(l.size());
-                    for(NbtElement e : l) p.writeInt(((NbtInt) e).intValue());
-                    ServerPlayNetworking.send(context.getSource().getPlayer(), EvtBaseConstants.SET_SHADER_UNIFORM, p);
+                    ServerPlayNetworking.send(context.getSource().getPlayer(), new SetShaderUniformPayload(
+                            StringArgumentType.getString(context, "name"),
+                            l.stream().mapToInt(nbtElement -> ((NbtInt) nbtElement).intValue()).toArray()
+                    ));
                     return 1;
                 }
             }
@@ -148,11 +144,9 @@ public class DebugCommands {
         RequiredArgumentBuilder<ServerCommandSource, Identifier> shaderArgument = CommandManager.argument("shader", IdentifierArgumentType.identifier());
 
         shaderArgument.executes(context -> {
-            PacketByteBuf p = PacketByteBufs.create();
-
-            p.writeString(IdentifierArgumentType.getIdentifier(context, "shader").toString());
-
-            ServerPlayNetworking.send(context.getSource().getPlayer(), EvtBaseConstants.SET_POST_SHADER, p);
+            ServerPlayNetworking.send(context.getSource().getPlayer(), new SetPostShaderPayload(
+                    IdentifierArgumentType.getIdentifier(context, "shader")
+            ));
             return 1;
         });
 
