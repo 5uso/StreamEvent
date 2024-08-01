@@ -11,20 +11,20 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 @Mixin(Identifier.class) @Environment(EnvType.CLIENT)
 public abstract class IdentifierMixin {
     @ModifyVariable(
-            method = "<init>([Ljava/lang/String;)V",
+            method = "<init>(Ljava/lang/String;Ljava/lang/String;)V",
             at = @At("HEAD"),
-            ordinal = 0,
+            ordinal = 1,
             argsOnly = true
     )
-    private static String[] injectPathLang(String[] id) {
-        if(id[1].contains("/lang/")) {
-            String code = MinecraftClient.getInstance().getLanguageManager().getLanguage().getCode();
+    private static String injectPathLang(String path) {
+        if(path.contains("/lang/")) {
+            String code = MinecraftClient.getInstance().getLanguageManager().getLanguage();
             String effective = (code.startsWith("es"  ) || code.startsWith("gl_")
                              || code.startsWith("ca_" ) || code.startsWith("eu_")
                              || code.startsWith("ast_")) ? "es" : "en";
-            id[1] = id[1].replace("/lang/", effective);
+            path = path.replace("/lang/", effective);
         }
 
-        return id;
+        return path;
     }
 }
