@@ -26,7 +26,7 @@ public class SoundNetworking {
     }
 
     private static void playFadeSoundHandler(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-        Identifier id = new Identifier(buf.readString());
+        Identifier id = buf.readIdentifier();
         float startVolume = buf.readFloat();
         float startPitch = buf.readFloat();
         boolean loop = buf.readBoolean();
@@ -39,7 +39,7 @@ public class SoundNetworking {
     }
 
     private static void updateFadeVolumeHandler(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-        Identifier id = new Identifier(buf.readString());
+        Identifier id = buf.readIdentifier();
         float target = buf.readFloat();
         int fadeLengthTicks = buf.readInt();
 
@@ -50,7 +50,7 @@ public class SoundNetworking {
     }
 
     private static void updateFadePitchHandler(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-        Identifier id = new Identifier(buf.readString());
+        Identifier id = buf.readIdentifier();
         float target = buf.readFloat();
         int fadeLengthTicks = buf.readInt();
 

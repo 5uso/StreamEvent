@@ -42,7 +42,7 @@ public abstract class GameRendererMixin {
             at = @At("TAIL")
     )
     private void setCustomShader(ResourceManager manager, CallbackInfo ci) {
-        if(CustomUniformStore.overridingPost) this.loadShader(new Identifier(CustomUniformStore.getPostOverride()));
+        if(CustomUniformStore.overridingPost) this.loadShader(Identifier.of(CustomUniformStore.getPostOverride()));
     }
 
     @Inject(

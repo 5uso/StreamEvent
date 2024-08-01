@@ -14,17 +14,17 @@ import software.bernie.geckolib3.resource.GeckoLibCache;
 public class PrimaticaOrbModel extends AnimatedGeoModel<PrimaticaOrbEntity> {
     @Override
     public Identifier getModelResource(PrimaticaOrbEntity object) {
-        return new Identifier("suso:geo/primatica_orb.geo.json");
+        return Identifier.of("suso", "geo/primatica_orb.geo.json");
     }
 
     @Override
     public Identifier getTextureResource(PrimaticaOrbEntity object) {
-        return new Identifier("suso:textures/entity/primatica_orb.png");
+        return Identifier.of("suso", "textures/entity/primatica_orb.png");
     }
 
     @Override
     public Identifier getAnimationResource(PrimaticaOrbEntity animatable) {
-        return new Identifier("suso:animations/entity/primatica_orb.animation.json");
+        return Identifier.of("suso", "animations/entity/primatica_orb.animation.json");
     }
 
     @Override

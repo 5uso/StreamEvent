@@ -11,7 +11,7 @@ import suso.event_base.client.ModCheck;
 import suso.event_base.custom.render.CustomRender;
 
 public class Timer implements HudRenderCallback {
-    private static final Identifier timerTexture = new Identifier("suso:textures/hud/timer.png");
+    private static final Identifier timerTexture = Identifier.of("suso", "textures/hud/timer.png");
 
     public long msEnd = 0;
 

@@ -6,16 +6,16 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class PrimaticaDoorModel extends AnimatedGeoModel<PrimaticaDoorBlockEntity> {
     @Override
     public Identifier getModelResource(PrimaticaDoorBlockEntity object) {
-        return new Identifier(object.isDiagonal() ? "suso:geo/primatica_door_diag.geo.json" : "suso:geo/primatica_door.geo.json");
+        return Identifier.of("suso", object.isDiagonal() ? "geo/primatica_door_diag.geo.json" : "geo/primatica_door.geo.json");
     }
 
     @Override
     public Identifier getTextureResource(PrimaticaDoorBlockEntity object) {
-        return new Identifier("suso:textures/block/primatica_door.png");
+        return Identifier.of("suso", "textures/block/primatica_door.png");
     }
 
     @Override
     public Identifier getAnimationResource(PrimaticaDoorBlockEntity animatable) {
-        return new Identifier(animatable.isDiagonal() ? "suso:animations/block/primatica_door_diag.animation.json" : "suso:animations/block/primatica_door.animation.json");
+        return Identifier.of("suso", animatable.isDiagonal() ? "animations/block/primatica_door_diag.animation.json" : "animations/block/primatica_door.animation.json");
     }
 }

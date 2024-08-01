@@ -13,8 +13,8 @@ public class ItemInfo implements HudRenderCallback {
     private boolean active = false;
     private double progress = 0.0;
 
-    private Identifier current = new Identifier("minecraft:textures/empty.png");
-    private Identifier buffered = new Identifier("minecraft:textures/empty.png");
+    private Identifier current = Identifier.ofVanilla("textures/empty.png");
+    private Identifier buffered = Identifier.ofVanilla("textures/empty.png");
 
     public void hide() {
         active = false;

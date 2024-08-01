@@ -40,11 +40,11 @@ public class ShaderNetworking {
     }
 
     private static void setPostShaderHandler(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-        String name = buf.readString();
-        CustomUniformStore.setPostOverride(name);
+        Identifier id = buf.readIdentifier();
+        CustomUniformStore.setPostOverride(id.toString());
 
         if(CustomUniformStore.overridingPost) {
-            client.execute(() -> ((GameRendererAccess) client.gameRenderer).invokeLoadShader(new Identifier(name)));
+            client.execute(() -> ((GameRendererAccess) client.gameRenderer).invokeLoadShader(id));
             return;
         }
 

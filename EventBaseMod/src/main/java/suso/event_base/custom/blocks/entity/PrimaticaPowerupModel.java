@@ -13,26 +13,26 @@ import software.bernie.geckolib3.resource.GeckoLibCache;
 public class PrimaticaPowerupModel extends AnimatedGeoModel<PrimaticaPowerupBlockEntity> {
     @Override
     public Identifier getModelResource(PrimaticaPowerupBlockEntity object) {
-        return new Identifier("suso:geo/primatica_powerup.geo.json");
+        return Identifier.of("suso", "geo/primatica_powerup.geo.json");
     }
 
     @Override
     public Identifier getTextureResource(PrimaticaPowerupBlockEntity object) {
         String id = switch (object.type) {
-            case AGILITY -> "suso:textures/block/primatica_powerup/agility.png";
-            case EMP -> "suso:textures/block/primatica_powerup/emp.png";
-            case GUNK -> "suso:textures/block/primatica_powerup/gunk.png";
-            case ARROW -> "suso:textures/block/primatica_powerup/arrow.png";
-            case BRIDGE -> "suso:textures/block/primatica_powerup/bridge.png";
-            case GRAVITY -> "suso:textures/block/primatica_powerup/gravity.png";
+            case AGILITY -> "textures/block/primatica_powerup/agility.png";
+            case EMP -> "textures/block/primatica_powerup/emp.png";
+            case GUNK -> "textures/block/primatica_powerup/gunk.png";
+            case ARROW -> "textures/block/primatica_powerup/arrow.png";
+            case BRIDGE -> "textures/block/primatica_powerup/bridge.png";
+            case GRAVITY -> "textures/block/primatica_powerup/gravity.png";
         };
 
-        return new Identifier(id);
+        return Identifier.of("suso", id);
     }
 
     @Override
     public Identifier getAnimationResource(PrimaticaPowerupBlockEntity animatable) {
-        return new Identifier("suso:animations/block/primatica_powerup.animation.json");
+        return Identifier.of("suso", "animations/block/primatica_powerup.animation.json");
     }
 
     @Override

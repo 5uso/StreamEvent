@@ -25,7 +25,7 @@ public class FeedMessage implements HudRenderCallback {
         singlePlayer = player2.equals(EvtBaseConstants.NULL_UUID);
 
         Identifier tface1, tface2;
-        tface1 = tface2 = new Identifier("suso:textures/unknown_player.png");
+        tface1 = tface2 = Identifier.of("suso", "textures/unknown_player.png");
 
         MinecraftClient client = MinecraftClient.getInstance();
         if(client.world != null) {

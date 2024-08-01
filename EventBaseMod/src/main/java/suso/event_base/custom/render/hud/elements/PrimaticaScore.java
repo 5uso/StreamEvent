@@ -30,7 +30,7 @@ public class PrimaticaScore implements HudRenderCallback {
     private final List<Identifier> skins;
     private long lastUpdate;
 
-    private static final Identifier scoreTexture = new Identifier("suso:textures/hud/score.png");
+    private static final Identifier scoreTexture = Identifier.of("suso", "textures/hud/score.png");
 
     public PrimaticaScore(Formatting teamColor, int rank) {
         this.teamColor = teamColor;
@@ -110,7 +110,7 @@ public class PrimaticaScore implements HudRenderCallback {
             w.getPlayers().stream().filter(p -> p.isTeamPlayer(t)).limit(3).forEach(p -> skins.add(client.getSkinProvider().loadSkin(p.getGameProfile())));
         }
 
-        for(int i = skins.size(); i <3; i++) skins.add(new Identifier("suso:textures/unknown_player.png"));
+        for(int i = skins.size(); i <3; i++) skins.add(Identifier.of("suso", "textures/unknown_player.png"));
 
         lastUpdate = ModCheck.getTime();
     }
