@@ -98,8 +98,8 @@ public class EventManager implements ModInitializer {
         return handler.onPlayerPlacedBlock(player, data.getPlayerData(player), context);
     }
 
-    public boolean onPlayerLand(ServerPlayerEntity player, double heightDifference, BlockPos landingPos) {
-        return handler.onPlayerLand(player, data.getPlayerData(player), heightDifference, landingPos);
+    public boolean onPlayerLand(ServerPlayerEntity player, double xDifference, double heightDifference, double zDifference, BlockPos landingPos) {
+        return handler.onPlayerLand(player, data.getPlayerData(player), xDifference, heightDifference, zDifference, landingPos);
     }
 
     public void onPlayerJump(ServerPlayerEntity player, BlockPos jumpingPos) {

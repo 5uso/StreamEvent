@@ -501,7 +501,7 @@ public class PrimaticaIngameHandler implements StateHandler {
     }
 
     @Override
-    public boolean onPlayerLand(ServerPlayerEntity player, EventPlayerData data, double heightDifference, BlockPos landingPos) {
+    public boolean onPlayerLand(ServerPlayerEntity player, EventPlayerData data, double xDifference, double heightDifference, double zDifference, BlockPos landingPos) {
         if(player.fallDistance < 0.75) return false;
 
         BlockState landingBlock = player.getServerWorld().getBlockState(landingPos);

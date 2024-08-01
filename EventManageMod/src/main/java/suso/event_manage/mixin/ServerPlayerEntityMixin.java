@@ -42,11 +42,11 @@ public abstract class ServerPlayerEntityMixin implements ServerPlayerEntityExten
             at = @At("HEAD"),
             cancellable = true
     )
-    private void handleLand(double heightDifference, boolean onGround, CallbackInfo ci) {
+    private void handleLand(double xDifference, double heightDifference, double zDifference, boolean onGround, CallbackInfo ci) {
         if(((Entity)(Object) this).isRegionUnloaded() || !onGround || ((Entity)(Object) this).fallDistance <= 0.0) return;
 
         BlockPos blockPos = ((ServerPlayerEntity)(Object) this).getLandingPos();
-        if(EventManager.getInstance().onPlayerLand((ServerPlayerEntity)(Object) this, heightDifference, blockPos)) ci.cancel();
+        if(EventManager.getInstance().onPlayerLand((ServerPlayerEntity)(Object) this, xDifference, heightDifference, zDifference, blockPos)) ci.cancel();
     }
 
     @Inject(

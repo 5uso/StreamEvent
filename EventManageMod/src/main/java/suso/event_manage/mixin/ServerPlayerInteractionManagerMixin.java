@@ -7,6 +7,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.network.ServerPlayerInteractionManager;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ItemActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -28,7 +29,7 @@ public class ServerPlayerInteractionManagerMixin {
             ),
             locals = LocalCapture.CAPTURE_FAILSOFT
     )
-    private void onItemOnBlockInject0(ServerPlayerEntity player, World world, ItemStack stack, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> cir, BlockPos blockPos, BlockState blockState, boolean bl, boolean bl2, ItemStack itemStack, ActionResult actionResult2) {
+    private void onItemOnBlockInject0(ServerPlayerEntity player, World world, ItemStack stack, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> cir, BlockPos blockPos, BlockState blockState, boolean bl, boolean bl2, ItemStack itemStack, ItemActionResult itemActionResult) {
         onItemOnBlock(player, itemStack, hand, blockPos);
     }
 

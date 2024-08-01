@@ -30,7 +30,7 @@ public class BowItemMixin {
             method = "onStoppedUsing",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/entity/projectile/PersistentProjectileEntity;setVelocity(Lnet/minecraft/entity/Entity;FFFFF)V"
+                    target = "net/minecraft/item/BowItem.shootAll(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/util/Hand;Lnet/minecraft/item/ItemStack;Ljava/util/List;FFZLnet/minecraft/entity/LivingEntity;)V"
             ),
             index = 5
     )

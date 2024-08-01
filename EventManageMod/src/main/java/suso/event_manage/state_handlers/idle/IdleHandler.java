@@ -68,7 +68,7 @@ public class IdleHandler implements StateHandler {
     }
 
     @Override
-    public boolean onPlayerLand(ServerPlayerEntity player, EventPlayerData data, double heightDifference, BlockPos landingPos) {
+    public boolean onPlayerLand(ServerPlayerEntity player, EventPlayerData data, double xDifference, double heightDifference, double zDifference, BlockPos landingPos) {
         return false;
     }
 
