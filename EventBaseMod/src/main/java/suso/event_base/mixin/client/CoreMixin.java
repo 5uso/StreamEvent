@@ -6,9 +6,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.GlUniform;
 import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.gl.Uniform;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.Vec3f;
+import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -43,7 +41,7 @@ public abstract class CoreMixin {
 
         MinecraftClient client = MinecraftClient.getInstance();
         if(client.player != null) {
-            this.getUniformOrDefault("PlayerPos").set(new Vec3f((float) client.player.getX(), (float) client.player.getY(), (float) client.player.getZ()));
+            this.getUniformOrDefault("PlayerPos").set(new Vector3f((float) client.player.getX(), (float) client.player.getY(), (float) client.player.getZ()));
         }
     }
 }
