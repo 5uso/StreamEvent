@@ -16,6 +16,7 @@
     "PlayerManagerAccess",
     "PlayerManagerMixin",
     "RepairItemRecipeMixin",
+    "ServerLoginNetworkHandlerMixin",
     "ServerPlayerEntityMixin",
     "ServerPlayerInteractionManagerMixin",
     "ServerPlayNetworkHandlerMixin"
