@@ -13,7 +13,7 @@ public class FadeSoundInstance extends MovingSoundInstance {
     private final FadeInfo volumeFade, pitchFade;
 
     public FadeSoundInstance(Identifier id, float startVolume, float startPitch, boolean loop, SoundCategory category) {
-        super(new SoundEvent(id), category, Random.create(2711));
+        super(SoundEvent.of(id, 2711.0f), category, Random.create(2711));
 
         this.attenuationType = AttenuationType.NONE;
         this.relative = true;
