@@ -21,6 +21,7 @@
   "mixins": [
     "event_manage.mixins.json"
   ],
+  "accessWidener" : "event_manage.accesswidener",
   "depends": {
     "fabricloader": ">=0.14.9",
     "fabric": "*",
