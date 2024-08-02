@@ -17,7 +17,7 @@ public class KeyboardMixin {
             method = "onKey",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/render/GameRenderer;toggleShadersEnabled()V"
+                    target = "Lnet/minecraft/client/render/GameRenderer;togglePostProcessorEnabled()V"
             )
     )
     private void handleF4(GameRenderer instance) {

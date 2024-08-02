@@ -9,6 +9,7 @@ import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexFormats;
+import net.minecraft.resource.ResourceFactory;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -66,15 +67,15 @@ public class CustomRender {
         bc.registerColorProvider((state, world, pos, tintIndex) -> ShaderNetworking.colors.getOrDefault(pos, 0), CustomBlocks.GRAY_EMP, CustomBlocks.WHITE_EMP, CustomBlocks.PINK_EMP, CustomBlocks.PURPLE_EMP, CustomBlocks.BLUE_EMP, CustomBlocks.CYAN_EMP, CustomBlocks.LIGHT_BLUE_EMP, CustomBlocks.GREEN_EMP, CustomBlocks.LIME_EMP, CustomBlocks.YELLOW_EMP, CustomBlocks.ORANGE_EMP, CustomBlocks.RED_EMP);
     }
 
-    public static void setupShaders(ResourceManager manager) {
+    public static void setupShaders(ResourceFactory factory) {
         System.out.println("Loading custom shaders...");
         try {
-            TIMER_SHADER = new ShaderProgram(manager, "suso_timer", VertexFormats.POSITION_TEXTURE);
-            AGILITY_SHADER = new ShaderProgram(manager, "suso_agility", VertexFormats.POSITION_COLOR);
-            SCORE_SHADER = new ShaderProgram(manager, "suso_score", VertexFormats.POSITION_TEXTURE);
-            KILL_SHADER = new ShaderProgram(manager, "suso_kill", VertexFormats.POSITION_COLOR);
-            KILL_BORDER_SHADER = new ShaderProgram(manager, "suso_kill_border", VertexFormats.POSITION_COLOR);
-            DEATH_SHADER = new ShaderProgram(manager, "suso_death", VertexFormats.POSITION_COLOR);
+            TIMER_SHADER = new ShaderProgram(factory, "suso_timer", VertexFormats.POSITION_TEXTURE);
+            AGILITY_SHADER = new ShaderProgram(factory, "suso_agility", VertexFormats.POSITION_COLOR);
+            SCORE_SHADER = new ShaderProgram(factory, "suso_score", VertexFormats.POSITION_TEXTURE);
+            KILL_SHADER = new ShaderProgram(factory, "suso_kill", VertexFormats.POSITION_COLOR);
+            KILL_BORDER_SHADER = new ShaderProgram(factory, "suso_kill_border", VertexFormats.POSITION_COLOR);
+            DEATH_SHADER = new ShaderProgram(factory, "suso_death", VertexFormats.POSITION_COLOR);
         } catch (IOException e) {
             printShaderException(e);
         }

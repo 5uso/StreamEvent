@@ -8,8 +8,6 @@ import net.minecraft.client.gl.GlUniform;
 import net.minecraft.client.gl.JsonEffectShaderProgram;
 import net.minecraft.client.gl.PostEffectPass;
 import net.minecraft.client.gl.Uniform;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.client.render.GameRenderer;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -30,7 +28,7 @@ public class PostProcessMixin {
             method = "render",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gl/JsonEffectGlShader;enable()V"
+                    target = "Lnet/minecraft/client/gl/JsonEffectShaderProgram;enable()V"
             )
     )
     private void injectUniforms(float time, CallbackInfo ci) {
@@ -51,7 +49,8 @@ public class PostProcessMixin {
         this.program.getUniformByNameOrDummy("SysTime").set((int)ModCheck.getTime() % 0x80000000);
 
         MinecraftClient client = MinecraftClient.getInstance();
-        double fov = client.gameRenderer.getFov(client.gameRenderer.getCamera(), client.getTickDelta(), true);
+
+        double fov = client.gameRenderer.getFov(client.gameRenderer.getCamera(), client.getRenderTickCounter().getTickDelta(false), true);
         this.program.getUniformByNameOrDummy("FOV").set((float) fov);
     }
 }

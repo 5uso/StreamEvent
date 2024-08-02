@@ -13,3 +13,5 @@ accessible field net/minecraft/client/gui/screen/Screen textRenderer Lnet/minecr
 accessible field net/minecraft/client/gui/screen/Screen title Lnet/minecraft/text/Text;
 accessible field net/minecraft/client/gui/widget/ClickableWidget width I
 accessible field net/minecraft/client/gui/widget/ClickableWidget height I
+accessible field net/minecraft/client/gl/PostEffectProcessor mainTarget Lnet/minecraft/client/gl/Framebuffer;
+accessible field net/minecraft/client/render/GameRenderer postProcessorEnabled Z

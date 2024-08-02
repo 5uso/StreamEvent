@@ -7,5 +7,5 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(GameRenderer.class)
 public interface GameRendererAccess {
-    @Invoker("loadShader") void invokeLoadShader(Identifier id);
+    @Invoker("loadPostProcessor") void invokeLoadShader(Identifier id);
 }

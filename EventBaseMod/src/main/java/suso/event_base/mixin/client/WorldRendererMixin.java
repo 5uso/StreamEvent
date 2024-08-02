@@ -6,10 +6,9 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.render.*;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.util.math.Matrix4f;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL30;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,7 +29,7 @@ public class WorldRendererMixin {
             method = "render",
             at = @At("RETURN")
     )
-    private void storeDepth(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci) {
+    private void storeDepth(RenderTickCounter tickCounter, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, Matrix4f matrix4f2, CallbackInfo ci) {
         if(!CustomUniformStore.overridingPost || !client.gameRenderer.postProcessorEnabled) return;
 
         Framebuffer clientBuffer = client.getFramebuffer();
@@ -49,19 +48,19 @@ public class WorldRendererMixin {
     }
 
     @Redirect(
-            method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V",
+            method = "renderSky",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/render/BufferRenderer;drawWithShader(Lnet/minecraft/client/render/BufferBuilder$BuiltBuffer;)V",
+                    target = "Lnet/minecraft/client/render/BufferRenderer;drawWithGlobalProgram(Lnet/minecraft/client/render/BuiltBuffer;)V",
                     ordinal = 1
             )
     )
-    private void controlSunRender(BufferBuilder.BuiltBuffer buffer) {
+    private void controlSunRender(BuiltBuffer buffer) {
         if(this.world == null) return;
 
         float angle = this.world.getSkyAngle(0.0f) * 360.0F;
         if(angle > 120.0f && angle < 240.0f) {
-            buffer.release();
+            buffer.close();
             return;
         }
 
@@ -69,19 +68,19 @@ public class WorldRendererMixin {
     }
 
     @Redirect(
-            method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V",
+            method = "renderSky",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/render/BufferRenderer;drawWithShader(Lnet/minecraft/client/render/BufferBuilder$BuiltBuffer;)V",
+                    target = "Lnet/minecraft/client/render/BufferRenderer;drawWithGlobalProgram(Lnet/minecraft/client/render/BuiltBuffer;)V",
                     ordinal = 2
             )
     )
-    private void controlMoonRender(BufferBuilder.BuiltBuffer buffer) {
+    private void controlMoonRender(BuiltBuffer buffer) {
         if(this.world == null) return;
 
         float angle = this.world.getSkyAngle(0.0f) * 360.0F;
         if(angle > 300.0f || angle < 60.0f) {
-            buffer.release();
+            buffer.close();
             return;
         }
 
