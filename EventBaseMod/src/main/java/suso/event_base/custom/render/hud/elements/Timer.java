@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.util.Identifier;
 import suso.event_base.client.ModCheck;
 import suso.event_base.custom.render.CustomRender;
@@ -16,12 +16,12 @@ public class Timer implements HudRenderCallback {
     public long msEnd = 0;
 
     @Override
-    public void onHudRender(MatrixStack matrixStack, float tickDelta) {
+    public void onHudRender(DrawContext ctx, RenderTickCounter tickCounter) {
         MinecraftClient client = MinecraftClient.getInstance();
         int height = client.getWindow().getScaledHeight();
         int width = height * 738 / 155;
 
-        DrawContext.fill(matrixStack, -height/10, -height/10, width + height/10 + 2, height + height/5, 0x7F000000);
+        ctx.fill(-height/10, -height/10, width + height/10 + 2, height + height/5, 0x7F000000);
 
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
@@ -31,9 +31,7 @@ public class Timer implements HudRenderCallback {
         timerShader.getUniformOrDefault("Timer").set(displayedMs);
         CustomRender.setCurrentDrawShader(timerShader);
 
-        RenderSystem.setShaderTexture(0, timerTexture);
-
-        DrawContext.drawTexture(matrixStack, 0, 0, 0.0f, 0.0f, width, height, width, height);
+        ctx.drawTexture(timerTexture, 0, 0, 0.0f, 0.0f, width, height, width, height);
 
         RenderSystem.disableBlend();
         CustomRender.setCurrentDrawShader(null);

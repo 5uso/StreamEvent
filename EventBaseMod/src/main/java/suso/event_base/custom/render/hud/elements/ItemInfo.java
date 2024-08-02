@@ -1,10 +1,9 @@
 package suso.event_base.custom.render.hud.elements;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.util.Identifier;
 import suso.event_base.util.MiscUtil;
 
@@ -26,11 +25,11 @@ public class ItemInfo implements HudRenderCallback {
     }
 
     @Override
-    public void onHudRender(MatrixStack matrixStack, float tickDelta) {
+    public void onHudRender(DrawContext ctx, RenderTickCounter tickCounter) {
         MinecraftClient client = MinecraftClient.getInstance();
         int width = client.getWindow().getScaledWidth();
         int height = client.getWindow().getScaledHeight();
-        float lastFrame = client.getLastFrameDuration() * 50.0f;
+        float lastFrame = tickCounter.getLastFrameDuration() * 50.0f;
 
         if(progress <= 0.0) current = buffered;
 
@@ -48,9 +47,8 @@ public class ItemInfo implements HudRenderCallback {
         int w = (int)(540 * ratio);
         int h = (int)(140 * ratio);
 
-        DrawContext.fill(matrixStack, startx, starty, startx + w, starty + h, 0x7F000000);
+        ctx.fill(startx, starty, startx + w, starty + h, 0x7F000000);
 
-        RenderSystem.setShaderTexture(0, current);
-        DrawContext.drawTexture(matrixStack, startx, starty, 0, 0, w, h, w, h);
+        ctx.drawTexture(current, startx, starty, 0, 0, w, h, w, h);
     }
 }

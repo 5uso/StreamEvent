@@ -1,7 +1,8 @@
 package suso.event_base.custom.render.hud.elements;
 
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderTickCounter;
 import suso.event_base.EvtBaseConstants;
 
 public class PrimaticaScoreboard implements HudRenderCallback {
@@ -13,8 +14,8 @@ public class PrimaticaScoreboard implements HudRenderCallback {
     }
 
     @Override
-    public void onHudRender(MatrixStack matrixStack, float tickDelta) {
-        for(int i = 0; i < 12; i++) scores[i].onHudRender(matrixStack, tickDelta);
+    public void onHudRender(DrawContext ctx, RenderTickCounter tickCounter) {
+        for(int i = 0; i < 12; i++) scores[i].onHudRender(ctx, tickCounter);
     }
 
     public void setScores(int[] scores, int[] ranks) {

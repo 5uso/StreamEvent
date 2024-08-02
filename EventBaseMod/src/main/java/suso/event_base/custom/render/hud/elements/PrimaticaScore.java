@@ -6,7 +6,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.PlayerSkinDrawer;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
@@ -46,7 +46,7 @@ public class PrimaticaScore implements HudRenderCallback {
     }
 
     @Override
-    public void onHudRender(MatrixStack matrixStack, float tickDelta) {
+    public void onHudRender(DrawContext ctx, RenderTickCounter tickCounter) {
         if(teamColor.getColorValue() == null) return;
 
         if(ModCheck.getTime() - lastUpdate > 10000) updatePlayers();
@@ -54,39 +54,37 @@ public class PrimaticaScore implements HudRenderCallback {
         MinecraftClient client = MinecraftClient.getInstance();
         int width = client.getWindow().getScaledWidth();
         int height = client.getWindow().getScaledHeight();
-        float lastFrame = client.getLastFrameDuration() * 50.0f;
+        float lastFrame = tickCounter.getLastFrameDuration() * 50.0f;
 
-        matrixStack.push();
+        ctx.getMatrices().push();
 
         x += (targetx - x) * 0.01f * lastFrame;
 
         float targety = 0.05f + targetx < x ? (x - targetx) * 0.1f : 0.0f;
         y += (targety - y) * 0.01f * lastFrame;
 
-        matrixStack.translate(width / 2.0 - 451.0 / 1080.0 * height + x * 451.0 * 2.0 / 1080.0 * height, y * height, 0.0);
+        ctx.getMatrices().translate(width / 2.0 - 451.0 / 1080.0 * height + x * 451.0 * 2.0 / 1080.0 * height, y * height, 0.0);
         if(client.player != null && client.player.getTeamColorValue() == teamColor.getColorValue()) {
-            matrixStack.scale(1.5f, 1.5f, 1.0f);
-            matrixStack.translate(0.0, -12.0 / 1080.0 * height, 0.0);
+            ctx.getMatrices().scale(1.5f, 1.5f, 1.0f);
+            ctx.getMatrices().translate(0.0, -12.0 / 1080.0 * height, 0.0);
         }
-        matrixStack.scale(0.1f, 0.1f, 1.0f);
+        ctx.getMatrices().scale(0.1f, 0.1f, 1.0f);
         height *= 10;
 
-        DrawContext.fill(matrixStack, (int) (-33.0 / 1080.0 * height), (int) (16.0 / 1080.0 * height), (int) (33.0 / 1080.0 * height), (int) (76.0 / 1080.0 * height), 0x7F000000);
+        ctx.fill((int) (-33.0 / 1080.0 * height), (int) (16.0 / 1080.0 * height), (int) (33.0 / 1080.0 * height), (int) (76.0 / 1080.0 * height), 0x7F000000);
 
         for(int i = 0; i <3; i++) {
-            RenderSystem.setShaderTexture(0, skins.get(i));
-            PlayerSkinDrawer.draw(matrixStack, (int) Math.round((-33 + 6 + 19 * i) * height / 1080.0), (int) (22.0 / 1080.0 * height), (int) (16.0 / 1080.0 * height));
+            PlayerSkinDrawer.draw(ctx, skins.get(i), (int) Math.round((-33 + 6 + 19 * i) * height / 1080.0), (int) (22.0 / 1080.0 * height), (int) (16.0 / 1080.0 * height));
         }
 
         ShaderProgram scoreShader = CustomRender.getScoreShader();
         scoreShader.getUniformOrDefault("Score").set(score);
         CustomRender.setCurrentDrawShader(scoreShader);
-        RenderSystem.setShaderTexture(0, scoreTexture);
         RenderSystem.setShaderColor((teamColor.getColorValue() >> 16 & 0xFF) / 255.0f, (teamColor.getColorValue() >> 8 & 0xFF) / 255.0f, (teamColor.getColorValue() & 0xFF) / 255.0f, 1.0f);
-        DrawContext.drawTexture(matrixStack, (int) ((-33.0 + 14.0) / 1080.0 * height), (int) (41.0 / 1080.0 * height), 0.0f, 0.0f, (int) (38.0 / 1080.0 * height), (int) (32.0 / 1080.0 * height), (int) (38.0 / 1080.0 * height), (int) (32.0 / 1080.0 * height));
+        ctx.drawTexture(scoreTexture, (int) ((-33.0 + 14.0) / 1080.0 * height), (int) (41.0 / 1080.0 * height), 0.0f, 0.0f, (int) (38.0 / 1080.0 * height), (int) (32.0 / 1080.0 * height), (int) (38.0 / 1080.0 * height), (int) (32.0 / 1080.0 * height));
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         CustomRender.setCurrentDrawShader(null);
-        matrixStack.pop();
+        ctx.getMatrices().pop();
     }
 
     public void setScore(int score, int rank) {
@@ -107,7 +105,9 @@ public class PrimaticaScore implements HudRenderCallback {
         World w = client.world;
         if(w != null) {
             Team t = w.getScoreboard().getTeam(EvtBaseConstants.getTeamColor(teamColor.getColorIndex()));
-            w.getPlayers().stream().filter(p -> p.isTeamPlayer(t)).limit(3).forEach(p -> skins.add(client.getSkinProvider().loadSkin(p.getGameProfile())));
+            w.getPlayers().stream().filter(p -> p.isTeamPlayer(t)).limit(3).forEach(
+                    p -> skins.add(client.getSkinProvider().getSkinTextures(p.getGameProfile()).texture())
+            );
         }
 
         for(int i = skins.size(); i <3; i++) skins.add(Identifier.of("suso", "textures/unknown_player.png"));

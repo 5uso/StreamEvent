@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.MathHelper;
 import suso.event_base.custom.render.CustomRender;
@@ -24,11 +24,11 @@ public class KillMessage implements HudRenderCallback {
     }
 
     @Override
-    public void onHudRender(MatrixStack matrixStack, float tickDelta) {
+    public void onHudRender(DrawContext ctx, RenderTickCounter tickCounter) {
         MinecraftClient client = MinecraftClient.getInstance();
         int width = client.getWindow().getScaledWidth();
         int height = client.getWindow().getScaledHeight();
-        float lastFrame = client.getLastFrameDuration() * 50.0f;
+        float lastFrame = tickCounter.getLastFrameDuration() * 50.0f;
 
         if(progress < 1.0) {
             progress += 0.001 * lastFrame;
@@ -48,14 +48,14 @@ public class KillMessage implements HudRenderCallback {
             borderShader.getUniformOrDefault("Progress").set((float) progress);
             CustomRender.setCurrentDrawShader(borderShader);
 
-            DrawContext.fill(matrixStack, 0, 0, width, height, 0);
+            ctx.fill(0, 0, width, height, 0);
 
-            matrixStack.push();
+            ctx.getMatrices().push();
 
-            matrixStack.translate(width / 2.0, height * 5.0 / 9.0, 0.0);
+            ctx.getMatrices().translate(width / 2.0, height * 5.0 / 9.0, 0.0);
             float s = a_scale * 3.0f * height / 1080.0f;
-            matrixStack.scale(s, s, 1.0f);
-            DrawContext.drawCenteredTextWithShadow(matrixStack, client.textRenderer, displayedName, 0, 0, (alpha << 24) | displayedColor);
+            ctx.getMatrices().scale(s, s, 1.0f);
+            ctx.drawCenteredTextWithShadow(client.textRenderer, displayedName, 0, 0, (alpha << 24) | displayedColor);
 
             RenderSystem.setShaderColor((displayedColor >> 16 & 0xFF) / 255.0f, (displayedColor >> 8 & 0xFF) / 255.0f, (displayedColor & 0xFF) / 255.0f, 1.0f);
 
@@ -65,9 +65,9 @@ public class KillMessage implements HudRenderCallback {
 
             int text_width = client.textRenderer.getWidth(displayedName);
             int border_scale = 6;
-            DrawContext.fill(matrixStack, - (text_width / 2 + text_width * border_scale / 2), -5 * border_scale, text_width / 2 + text_width * border_scale / 2, 10 + 5 * border_scale, 0);
+            ctx.fill(-(text_width / 2 + text_width * border_scale / 2), -5 * border_scale, text_width / 2 + text_width * border_scale / 2, 10 + 5 * border_scale, 0);
 
-            matrixStack.pop();
+            ctx.getMatrices().pop();
             CustomRender.setCurrentDrawShader(null);
             RenderSystem.disableBlend();
         } else displayedName = "";

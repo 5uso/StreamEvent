@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.MathHelper;
@@ -63,11 +63,11 @@ public class PrimaticaIngameHud implements StateHud {
     }
 
     @Override
-    public void onHudRender(MatrixStack matrixStack, float tickDelta) {
+    public void onHudRender(DrawContext ctx, RenderTickCounter tickCounter) {
         MinecraftClient client = MinecraftClient.getInstance();
         int width = client.getWindow().getScaledWidth();
         int height = client.getWindow().getScaledHeight();
-        float lastFrame = client.getLastFrameDuration() * 50.0f;
+        float lastFrame = tickCounter.getLastFrameDuration() * 50.0f;
 
         agilityProgress = MathHelper.clamp(agilityProgress + lastFrame / 1000.0f * (agility ? 1.0f : -1.0f), 0.0f, 1.0f);
         if(agilityProgress > 0.0f) {
@@ -78,27 +78,27 @@ public class PrimaticaIngameHud implements StateHud {
             agilityShader.getUniformOrDefault("Progress").set(agilityProgress);
             CustomRender.setCurrentDrawShader(agilityShader);
 
-            DrawContext.fill(matrixStack, 0, 0, width, height, 0);
+            ctx.fill(0, 0, width, height, 0);
 
             RenderSystem.disableBlend();
             CustomRender.setCurrentDrawShader(null);
         }
 
-        matrixStack.push();
-        matrixStack.translate(width - height * (0.04 + 0.0426 * 738.0 / 155.0), height * 0.02, 0.0);
-        matrixStack.scale(0.0426f, 0.0426f, 1.0f);
-        timer.onHudRender(matrixStack, tickDelta);
-        matrixStack.pop();
+        ctx.getMatrices().push();
+        ctx.getMatrices().translate(width - height * (0.04 + 0.0426 * 738.0 / 155.0), height * 0.02, 0.0);
+        ctx.getMatrices().scale(0.0426f, 0.0426f, 1.0f);
+        timer.onHudRender(ctx, tickCounter);
+        ctx.getMatrices().pop();
 
-        matrixStack.push();
-        matrixStack.translate(width - height * 0.04 + 5.0 / 1080.0 * height, 101.0 / 1080.0 * height, 0.0);
-        feed.onHudRender(matrixStack, tickDelta);
-        matrixStack.pop();
+        ctx.getMatrices().push();
+        ctx.getMatrices().translate(width - height * 0.04 + 5.0 / 1080.0 * height, 101.0 / 1080.0 * height, 0.0);
+        feed.onHudRender(ctx, tickCounter);
+        ctx.getMatrices().pop();
 
-        scoreboard.onHudRender(matrixStack, tickDelta);
+        scoreboard.onHudRender(ctx, tickCounter);
 
-        info.onHudRender(matrixStack, tickDelta);
+        info.onHudRender(ctx, tickCounter);
 
-        killMessage.onHudRender(matrixStack, tickDelta);
+        killMessage.onHudRender(ctx, tickCounter);
     }
 }

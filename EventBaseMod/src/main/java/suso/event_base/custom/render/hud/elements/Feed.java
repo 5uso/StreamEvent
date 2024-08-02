@@ -4,7 +4,8 @@ import io.netty.buffer.ByteBuf;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 import suso.event_base.util.MiscUtil;
@@ -16,23 +17,23 @@ public class Feed implements HudRenderCallback {
     private final LinkedList<FeedMessage> messages = new LinkedList<>();
 
     @Override
-    public void onHudRender(MatrixStack matrixStack, float tickDelta) {
+    public void onHudRender(DrawContext ctx, RenderTickCounter tickCounter) {
         MinecraftClient client = MinecraftClient.getInstance();
         int height = client.getWindow().getScaledHeight();
 
-        matrixStack.push();
+        ctx.getMatrices().push();
         messages.removeIf(m -> {
-            m.onHudRender(matrixStack, tickDelta);
+            m.onHudRender(ctx, tickCounter);
             double y_offset = 54.0;
             double t = m.getTimer();
             if(t < 0.2) y_offset *= MiscUtil.smoothStep(0.0, 1.0, t / 0.2);
             if(t > 5.8) y_offset *= MiscUtil.smoothStep(1.0, 0.0, (t - 5.8) / 0.2);
 
-            matrixStack.translate(0.0, y_offset / 1080.0 * height, 0.0);
+            ctx.getMatrices().translate(0.0, y_offset / 1080.0 * height, 0.0);
 
             return t > 6.0;
         });
-        matrixStack.pop();
+        ctx.getMatrices().pop();
     }
 
     public void addMessage(ByteBuf msg) {

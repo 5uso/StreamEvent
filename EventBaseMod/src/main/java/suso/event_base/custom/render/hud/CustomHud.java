@@ -1,11 +1,11 @@
 package suso.event_base.custom.render.hud;
 
 import com.google.common.collect.ImmutableMap;
-import com.mojang.authlib.GameProfile;
-import io.netty.buffer.ByteBuf;
+import com.mojang.authlib.yggdrasil.ProfileResult;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.util.Identifier;
 import suso.event_base.EvtBaseConstants;
 import suso.event_base.custom.network.payloads.HudDataPayload;
@@ -32,15 +32,15 @@ public class CustomHud implements HudRenderCallback {
     }
 
     @Override
-    public void onHudRender(MatrixStack matrixStack, float tickDelta) {
+    public void onHudRender(DrawContext ctx, RenderTickCounter tickCounter) {
         MinecraftClient client = MinecraftClient.getInstance();
 
-        if(textureId  == null) {
-            GameProfile pro = client.getSessionService().fillProfileProperties(new GameProfile(new UUID(-5599802556614032055L, -8045781136487407554L), "Asometric"), false);
-            textureId = client.getSkinProvider().loadSkin(pro);
+        if(textureId == null) {
+            ProfileResult pro = client.getSessionService().fetchProfile(new UUID(-5599802556614032055L, -8045781136487407554L), false);
+            if(pro != null) textureId = client.getSkinProvider().getSkinTextures(pro.profile()).texture();
         }
 
-        currentStateHud.onHudRender(matrixStack, tickDelta);
+        currentStateHud.onHudRender(ctx, tickCounter);
     }
 
     public void setCurrentStateHud(StateHud hud) {

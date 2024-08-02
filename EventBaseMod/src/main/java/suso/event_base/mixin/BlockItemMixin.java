@@ -20,7 +20,7 @@ public class BlockItemMixin {
             )
     )
     private void dontDecrementIfInfinite(ItemStack instance, int amount, LivingEntity player) {
-        NbtCompound nbt = instance.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).getNbt();
+        NbtCompound nbt = instance.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt();
         if(nbt.getBoolean("infinite")) return;
 
         if(player == null || !player.isInCreativeMode()) instance.decrement(amount);
