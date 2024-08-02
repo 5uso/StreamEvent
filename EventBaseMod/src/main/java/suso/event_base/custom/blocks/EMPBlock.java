@@ -13,7 +13,7 @@ public class EMPBlock extends Block {
         super(settings);
     }
 
-    @SuppressWarnings("deprecation") @Override
+    @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return VoxelShapes.empty();
     }

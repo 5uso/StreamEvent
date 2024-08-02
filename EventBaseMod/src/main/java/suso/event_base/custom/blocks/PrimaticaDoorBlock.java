@@ -32,7 +32,7 @@ public class PrimaticaDoorBlock extends BlockWithEntity {
         return BlockRenderType.ENTITYBLOCK_ANIMATED;
     }
 
-    @SuppressWarnings("deprecation") @Override
+    @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return VoxelShapes.empty();
     }
