@@ -32,7 +32,7 @@ public class BowItemMixin {
                     value = "INVOKE",
                     target = "net/minecraft/item/BowItem.shootAll(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/util/Hand;Lnet/minecraft/item/ItemStack;Ljava/util/List;FFZLnet/minecraft/entity/LivingEntity;)V"
             ),
-            index = 5
+            index = 6
     )
     private float removeBowDivergence(float divergence) {
         return 0.0f;
