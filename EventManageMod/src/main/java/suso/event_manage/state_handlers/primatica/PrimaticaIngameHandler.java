@@ -20,6 +20,7 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.particle.DustParticleEffect;
+import net.minecraft.particle.EntityEffectParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.Registries;
@@ -199,7 +200,10 @@ public class PrimaticaIngameHandler implements StateHandler {
 
         AbstractTeam team = player.getScoreboardTeam();
         Vector3f color = team == null ? new Vector3f().zero() : ParticleUtil.teamColor(team);
-        player.getServerWorld().spawnParticles(ParticleTypes.ENTITY_EFFECT, player.getX(), player.getY(), player.getZ(), 50, color.x, color.y, color.z, 0.0);
+        player.getServerWorld().spawnParticles(
+                EntityEffectParticleEffect.create(ParticleTypes.ENTITY_EFFECT, color.x, color.y, color.z),
+                player.getX(), player.getY() + 0.7, player.getZ(), 50, 0.5, 0.5, 0.5, 0.0
+        );
 
 
         SoundUtil.playFadeSound(player, Identifier.ofVanilla("entity.elder_guardian.curse"), 0.5f, 0.5f, false, SoundCategory.PLAYERS, false);
