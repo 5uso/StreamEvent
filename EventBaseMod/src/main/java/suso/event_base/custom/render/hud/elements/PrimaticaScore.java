@@ -79,11 +79,21 @@ public class PrimaticaScore implements HudRenderCallback {
 
         ShaderProgram scoreShader = CustomRender.getScoreShader();
         scoreShader.getUniformOrDefault("Score").set(score);
-        CustomRender.setCurrentDrawShader(scoreShader);
-        RenderSystem.setShaderColor((teamColor.getColorValue() >> 16 & 0xFF) / 255.0f, (teamColor.getColorValue() >> 8 & 0xFF) / 255.0f, (teamColor.getColorValue() & 0xFF) / 255.0f, 1.0f);
-        ctx.drawTexture(scoreTexture, (int) ((-33.0 + 14.0) / 1080.0 * height), (int) (41.0 / 1080.0 * height), 0.0f, 0.0f, (int) (38.0 / 1080.0 * height), (int) (32.0 / 1080.0 * height), (int) (38.0 / 1080.0 * height), (int) (32.0 / 1080.0 * height));
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        CustomRender.setCurrentDrawShader(null);
+        final int capture_height = height;
+        CustomRender.withShader(scoreShader, () -> {
+            RenderSystem.setShaderColor((teamColor.getColorValue() >> 16 & 0xFF) / 255.0f, (teamColor.getColorValue() >> 8 & 0xFF) / 255.0f, (teamColor.getColorValue() & 0xFF) / 255.0f, 1.0f);
+            ctx.drawTexture(scoreTexture,
+                    (int) ((-33.0 + 14.0) / 1080.0 * capture_height),
+                    (int) (41.0 / 1080.0 * capture_height),
+                    0.0f,
+                    0.0f,
+                    (int) (38.0 / 1080.0 * capture_height),
+                    (int) (32.0 / 1080.0 * capture_height),
+                    (int) (38.0 / 1080.0 * capture_height),
+                    (int) (32.0 / 1080.0 * capture_height)
+            );
+            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+        });
         ctx.getMatrices().pop();
     }
 

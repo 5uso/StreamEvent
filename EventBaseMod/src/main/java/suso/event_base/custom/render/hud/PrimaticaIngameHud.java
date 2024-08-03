@@ -76,12 +76,9 @@ public class PrimaticaIngameHud implements StateHud {
 
             ShaderProgram agilityShader = CustomRender.getAgilityShader();
             agilityShader.getUniformOrDefault("Progress").set(agilityProgress);
-            CustomRender.setCurrentDrawShader(agilityShader);
 
-            ctx.fill(0, 0, width, height, 0);
-
+            CustomRender.withShader(agilityShader, () -> ctx.fill(0, 0, width, height, 0));
             RenderSystem.disableBlend();
-            CustomRender.setCurrentDrawShader(null);
         }
 
         ctx.getMatrices().push();

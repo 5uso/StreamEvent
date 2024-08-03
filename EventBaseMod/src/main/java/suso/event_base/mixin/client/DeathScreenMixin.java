@@ -48,6 +48,7 @@ public abstract class DeathScreenMixin extends Screen {
         this.buttons.clear();
 
         theButton = ButtonWidget.builder(Text.translatable(this.isHardcore ? "deathScreen.spectate" : "deathScreen.respawn"), (button) -> {
+            if(this.client == null || this.client.player == null) return;
             this.client.player.requestRespawn();
             this.client.setScreen(null);
         }).dimensions(0, 0, 0, 0).build();
@@ -68,10 +69,10 @@ public abstract class DeathScreenMixin extends Screen {
 
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-        CustomRender.setCurrentDrawShader(CustomRender.getDeathShader());
-        context.fill(0, 0, s.width, s.height, 0);
-        RenderSystem.disableBlend();
-        CustomRender.setCurrentDrawShader(null);
+        CustomRender.withShader(CustomRender.getDeathShader(), () -> {
+            context.fill(0, 0, s.width, s.height, 0);
+            RenderSystem.disableBlend();
+        });
 
         context.getMatrices().push();
         context.getMatrices().translate(s.width / 2.0, s.height / 2.0, 0.0);

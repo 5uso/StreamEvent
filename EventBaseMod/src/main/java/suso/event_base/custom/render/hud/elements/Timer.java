@@ -29,11 +29,8 @@ public class Timer implements HudRenderCallback {
         ShaderProgram timerShader = CustomRender.getTimerShader();
         int displayedMs = (int)(Math.max(0, msEnd - ModCheck.getTime()));
         timerShader.getUniformOrDefault("Timer").set(displayedMs);
-        CustomRender.setCurrentDrawShader(timerShader);
 
-        ctx.drawTexture(timerTexture, 0, 0, 0.0f, 0.0f, width, height, width, height);
-
+        CustomRender.withShader(timerShader, () -> ctx.drawTexture(timerTexture, 0, 0, 0.0f, 0.0f, width, height, width, height));
         RenderSystem.disableBlend();
-        CustomRender.setCurrentDrawShader(null);
     }
 }

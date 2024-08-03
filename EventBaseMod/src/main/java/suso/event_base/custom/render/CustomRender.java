@@ -89,7 +89,7 @@ public class CustomRender {
         return currentDrawShader;
     }
 
-    public static void setCurrentDrawShader(ShaderProgram shader) {
+    private static void setCurrentDrawShader(ShaderProgram shader) {
         currentDrawShader = shader;
     }
 
@@ -134,5 +134,11 @@ public class CustomRender {
         String translationKey = "debug.reload_shaders.error";
         ((KeyboardInvoker) client.keyboard).invokeDebugError(translationKey);
         client.inGameHud.getChatHud().addMessage(Text.literal(throwable.getMessage()).formatted(Formatting.GRAY));
+    }
+
+    public static void withShader(ShaderProgram shader, Runnable lambda) {
+        setCurrentDrawShader(shader);
+        lambda.run();
+        setCurrentDrawShader(null);
     }
 }

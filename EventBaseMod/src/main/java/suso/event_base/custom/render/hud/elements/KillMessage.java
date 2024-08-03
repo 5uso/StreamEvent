@@ -46,9 +46,7 @@ public class KillMessage implements HudRenderCallback {
 
             ShaderProgram borderShader = CustomRender.getKillBorderShader();
             borderShader.getUniformOrDefault("Progress").set((float) progress);
-            CustomRender.setCurrentDrawShader(borderShader);
-
-            ctx.fill(0, 0, width, height, 0);
+            CustomRender.withShader(borderShader, () -> ctx.fill(0, 0, width, height, 0));
 
             ctx.getMatrices().push();
 
@@ -61,14 +59,13 @@ public class KillMessage implements HudRenderCallback {
 
             ShaderProgram killShader = CustomRender.getKillShader();
             killShader.getUniformOrDefault("Progress").set((float) progress);
-            CustomRender.setCurrentDrawShader(killShader);
-
-            int text_width = client.textRenderer.getWidth(displayedName);
-            int border_scale = 6;
-            ctx.fill(-(text_width / 2 + text_width * border_scale / 2), -5 * border_scale, text_width / 2 + text_width * border_scale / 2, 10 + 5 * border_scale, 0);
+            CustomRender.withShader(killShader, () -> {
+                int text_width = client.textRenderer.getWidth(displayedName);
+                int border_scale = 6;
+                ctx.fill(-(text_width / 2 + text_width * border_scale / 2), -5 * border_scale, text_width / 2 + text_width * border_scale / 2, 10 + 5 * border_scale, 0);
+            });
 
             ctx.getMatrices().pop();
-            CustomRender.setCurrentDrawShader(null);
             RenderSystem.disableBlend();
         } else displayedName = "";
     }
