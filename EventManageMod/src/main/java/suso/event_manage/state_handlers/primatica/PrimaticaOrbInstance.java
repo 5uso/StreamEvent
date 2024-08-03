@@ -1,13 +1,12 @@
 package suso.event_manage.state_handlers.primatica;
 
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.component.type.FireworkExplosionComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
@@ -101,12 +100,14 @@ public class PrimaticaOrbInstance implements TickableInstance {
         world.spawnParticles(new DustParticleEffect(ParticleUtil.teamColor(team), 2.0f), player.getX(), player.getY() + 0.3, player.getZ(), 15, 0.5, 0.5, 0.5, 2.0);
         world.spawnParticles(new ItemStackParticleEffect(ParticleTypes.ITEM, new ItemStack(Registries.ITEM.get(Identifier.of(PrimaticaInfo.getCorrespondingBlock(team.getColor().getColorIndex()))))), pos.x, pos.y + 0.3, pos.z, 70, 0.0, 0.0, 0.0, 0.6);
 
-        try {
-            NbtCompound firework = StringNbtReader.parse("{explosions:[{shape:'large_ball',colors:[I;" + team.getColor().getColorValue() + "]}]}");
-            ParticleUtil.fireworkParticle(players, pos.x, pos.y + 0.3, pos.z, 0.0, 0.0, 0.0, firework);
-        } catch (CommandSyntaxException | NullPointerException e) {
-            e.printStackTrace();
-        }
+        Integer color = team.getColor().getColorValue();
+        ParticleUtil.fireworkParticle(players, pos.x, pos.y + 0.3, pos.z, 0.0, 0.0, 0.0, List.of(
+                new FireworkExplosionComponent(
+                        FireworkExplosionComponent.Type.LARGE_BALL,
+                        IntList.of(color == null ? 0 : color),
+                        IntList.of(), false, false
+                )
+        ));
 
         SoundUtil.playSound(player, Identifier.ofVanilla("entity.player.levelup"), SoundCategory.PLAYERS, pos, 1.0f, 2.0f);
         SoundUtil.playSound(players, Identifier.ofVanilla("item.totem.use"), SoundCategory.NEUTRAL, pos, 0.5f, 2.0f);

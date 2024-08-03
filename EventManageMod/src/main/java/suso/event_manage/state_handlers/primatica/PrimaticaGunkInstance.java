@@ -1,13 +1,13 @@
 package suso.event_manage.state_handlers.primatica;
 
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.component.type.FireworkExplosionComponent;
 import net.minecraft.entity.projectile.thrown.SnowballEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtInt;
-import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
@@ -99,12 +99,14 @@ public class PrimaticaGunkInstance implements TickableInstance {
         SoundUtil.playSound(players, Identifier.ofVanilla("entity.slime.squish"), SoundCategory.PLAYERS, entity.getPos(), 2.2f, 0.5f);
         world.spawnParticles(new DustParticleEffect(ParticleUtil.teamColor(team), 0.5f), entity.prevX, entity.prevY, entity.prevZ, 100, 1.5, 0.05, 1.5, 0.0);
 
-        try {
-            NbtCompound firework = StringNbtReader.parse("{explosions:[{shape:'star',colors:[I;" + team.getColor().getColorValue() + "]}]}");
-            ParticleUtil.fireworkParticle(players, entity.getX(), entity.getY(), entity.getZ(), 0.0, 0.0, 0.0, firework);
-        } catch (CommandSyntaxException | NullPointerException e) {
-            e.printStackTrace();
-        }
+        Integer color = team.getColor().getColorValue();
+        ParticleUtil.fireworkParticle(players, entity.getX(), entity.getY(), entity.getZ(), 0.0, 0.0, 0.0, List.of(
+                new FireworkExplosionComponent(
+                        FireworkExplosionComponent.Type.STAR,
+                        IntList.of(color == null ? 0 : color),
+                        IntList.of(), false, false
+                )
+        ));
 
         return true;
     }

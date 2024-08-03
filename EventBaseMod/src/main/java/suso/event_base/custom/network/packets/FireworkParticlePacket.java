@@ -2,7 +2,6 @@ package suso.event_base.custom.network.packets;
 
 
 import net.minecraft.component.type.FireworkExplosionComponent;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 
 import java.util.ArrayList;

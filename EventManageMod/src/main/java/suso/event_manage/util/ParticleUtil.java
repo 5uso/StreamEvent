@@ -1,6 +1,7 @@
 package suso.event_manage.util;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.component.type.FireworkExplosionComponent;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.s2c.play.ParticleS2CPacket;
 import net.minecraft.particle.ParticleEffect;
@@ -31,7 +32,7 @@ public class ParticleUtil {
         for(ServerPlayerEntity player : EventManager.getInstance().getServer().getOverworld().getPlayers()) player.networkHandler.sendPacket(p);
     }
 
-    public static void fireworkParticle(List<ServerPlayerEntity> players, double x, double y, double z, double vx, double vy, double vz, NbtCompound firework) {
-        players.forEach(player -> ServerPlayNetworking.send(player, new FireworkParticlePayload(x, y, z, vx, vy, vz, firework)));
+    public static void fireworkParticle(List<ServerPlayerEntity> players, double x, double y, double z, double vx, double vy, double vz, List<FireworkExplosionComponent> fireworks) {
+        players.forEach(player -> ServerPlayNetworking.send(player, new FireworkParticlePayload(x, y, z, vx, vy, vz, fireworks)));
     }
 }

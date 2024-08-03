@@ -1,6 +1,8 @@
 package suso.event_manage.state_handlers.primatica;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import it.unimi.dsi.fastutil.ints.IntList;
+import net.minecraft.component.type.FireworkExplosionComponent;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
@@ -114,12 +116,14 @@ public class PrimaticaArrowInstance implements TickableInstance {
             owner.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(owner));
         }
 
-        try {
-            NbtCompound firework = StringNbtReader.parse("{explosions:[{shape:'burst',has_trail:true,colors:[I;" + team.getColor().getColorValue() + "],fade_colors:[I;16777215]}]}");
-            ParticleUtil.fireworkParticle(world.getPlayers(), pos.x, pos.y, pos.z, -direction.x, -direction.y, -direction.z, firework);
-        } catch (CommandSyntaxException | NullPointerException e) {
-            e.printStackTrace();
-        }
+        Integer color = team.getColor().getColorValue();
+        ParticleUtil.fireworkParticle(world.getPlayers(), pos.x, pos.y, pos.z, -direction.x, -direction.y, -direction.z, List.of(
+                new FireworkExplosionComponent(
+                        FireworkExplosionComponent.Type.BURST,
+                        IntList.of(color == null ? 0 : color),
+                        IntList.of(16777215), true, false
+                )
+        ));
     }
 
     private double empDistance() {
