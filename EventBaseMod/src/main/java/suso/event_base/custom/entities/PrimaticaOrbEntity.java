@@ -21,13 +21,15 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import java.util.ArrayList;
 
 public class PrimaticaOrbEntity extends LivingEntity implements GeoEntity {
-    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-
-    private boolean spawned = false;
-
     protected Color previousColor = Color.WHITE;
     protected boolean transitioningColor = false;
     protected long transitionStartMs = 0;
+
+    private static final RawAnimation SPAWN_ANIM = RawAnimation.begin()
+            .thenPlay("animation.primatica_orb.spawn")
+            .thenLoop("animation.primatica_orb.idle");
+
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public PrimaticaOrbEntity(EntityType<? extends PrimaticaOrbEntity> type, World world) {
         super(type, world);
@@ -77,15 +79,8 @@ public class PrimaticaOrbEntity extends LivingEntity implements GeoEntity {
         controllers.add(new AnimationController<>(this, "controller", 0, event -> {
             AnimationController<PrimaticaOrbEntity> controller = event.getController();
 
-            if(!spawned) {
-                spawned = true;
-                controller.setAnimation(RawAnimation.begin().then("animation.primatica_orb.spawn", Animation.LoopType.HOLD_ON_LAST_FRAME));
-                return PlayState.CONTINUE;
-            }
-
-            if(controller.getAnimationState().equals(AnimationController.State.STOPPED)) {
-                controller.setAnimation(RawAnimation.begin().then("animation.primatica_orb.idle", Animation.LoopType.LOOP));
-                return PlayState.CONTINUE;
+            if(controller.getCurrentAnimation() == null) {
+                controller.setAnimation(SPAWN_ANIM);
             }
 
             return PlayState.CONTINUE;

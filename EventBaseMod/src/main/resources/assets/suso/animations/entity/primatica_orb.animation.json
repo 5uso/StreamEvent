@@ -52,7 +52,6 @@
 			}
 		},
 		"animation.primatica_orb.spawn": {
-			"loop": "hold_on_last_frame",
 			"animation_length": 0.68,
 			"bones": {
 				"cube": {

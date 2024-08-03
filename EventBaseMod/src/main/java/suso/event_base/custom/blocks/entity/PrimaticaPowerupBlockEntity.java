@@ -20,11 +20,17 @@ public class PrimaticaPowerupBlockEntity extends BlockEntity implements GeoBlock
         AGILITY, BRIDGE, GRAVITY, EMP, ARROW, GUNK
     }
 
-    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-
-    private boolean spawned = false;
     private boolean collected = false;
+
     public Powerups type = Powerups.AGILITY;
+
+    private static final RawAnimation SPAWN_ANIM = RawAnimation.begin()
+            .thenPlay("animation.primatica_powerup.spawn")
+            .thenLoop("animation.primatica_powerup.idle");
+    private static final RawAnimation COLLECT_ANIM = RawAnimation.begin()
+            .thenPlayAndHold("animation.primatica_powerup.collect");
+
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public PrimaticaPowerupBlockEntity(BlockPos pos, BlockState state) {
         super(CustomBlocks.PRIMATICA_POWERUP_ENTITY, pos, state);
@@ -35,21 +41,13 @@ public class PrimaticaPowerupBlockEntity extends BlockEntity implements GeoBlock
         controllers.add(new AnimationController<>(this, "controller", 0, event -> {
             AnimationController<PrimaticaPowerupBlockEntity> controller = event.getController();
 
-            if(!spawned) {
-                spawned = true;
-                controller.setAnimation(RawAnimation.begin().then("animation.primatica_powerup.spawn", Animation.LoopType.HOLD_ON_LAST_FRAME));
-                return PlayState.CONTINUE;
+            if(controller.getCurrentAnimation() == null) {
+                controller.setAnimation(SPAWN_ANIM);
             }
 
             if(collected) {
                 controller = controller.transitionLength(2);
-                controller.setAnimation(RawAnimation.begin().then("animation.primatica_powerup.collect", Animation.LoopType.HOLD_ON_LAST_FRAME));
-                return PlayState.CONTINUE;
-            }
-
-            if(controller.getAnimationState().equals(AnimationController.State.STOPPED)) {
-                controller.setAnimation(RawAnimation.begin().then("animation.primatica_powerup.idle", Animation.LoopType.LOOP));
-                return PlayState.CONTINUE;
+                controller.setAnimation(COLLECT_ANIM);
             }
 
             return PlayState.CONTINUE;

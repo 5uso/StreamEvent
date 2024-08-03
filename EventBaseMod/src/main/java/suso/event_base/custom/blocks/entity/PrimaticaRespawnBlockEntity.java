@@ -17,8 +17,21 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import suso.event_base.custom.blocks.CustomBlocks;
 
 public class PrimaticaRespawnBlockEntity extends BlockEntity implements GeoBlockEntity {
+    private boolean view_open = false;
+
     private boolean open = false;
     private Color color = Color.ofOpaque(0xFFFFFF);
+
+    private static final RawAnimation CLOSED_ANIM = RawAnimation.begin()
+            .thenLoop("animation.primatica_respawn.closed");
+    private static final RawAnimation OPEN_ANIM = RawAnimation.begin()
+            .thenLoop("animation.primatica_respawn.open");
+    private static final RawAnimation CLOSING_ANIM = RawAnimation.begin()
+            .thenPlay("animation.primatica_respawn.closing")
+            .thenLoop("animation.primatica_respawn.closed");
+    private static final RawAnimation OPENING_ANIM = RawAnimation.begin()
+            .thenPlay("animation.primatica_respawn.opening")
+            .thenLoop("animation.primatica_respawn.open");
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
@@ -36,26 +49,13 @@ public class PrimaticaRespawnBlockEntity extends BlockEntity implements GeoBlock
             AnimationController<PrimaticaRespawnBlockEntity> controller = event.getController();
 
             if(controller.getCurrentAnimation() == null) {
-                controller.setAnimation(RawAnimation.begin().then("animation.primatica_respawn.closed", Animation.LoopType.LOOP));
-                return PlayState.CONTINUE;
+                controller.setAnimation(open ? OPEN_ANIM : CLOSED_ANIM);
+                view_open = open;
             }
 
-            if(controller.getAnimationState().equals(AnimationController.State.STOPPED)) {
-                if(controller.getCurrentRawAnimation().getAnimationStages().getFirst().animationName().equals("animation.primatica_respawn.closing"))
-                    controller.setAnimation(RawAnimation.begin().then("animation.primatica_respawn.closed", Animation.LoopType.LOOP));
-                else if(controller.getCurrentRawAnimation().getAnimationStages().getFirst().animationName().equals("animation.primatica_respawn.opening"))
-                    controller.setAnimation(RawAnimation.begin().then("animation.primatica_respawn.open", Animation.LoopType.LOOP));
-                return PlayState.CONTINUE;
-            }
-
-            if(open && controller.getCurrentRawAnimation().getAnimationStages().getFirst().animationName().equals("animation.primatica_respawn.closed")) {
-                controller.setAnimation(RawAnimation.begin().then("animation.primatica_respawn.opening", Animation.LoopType.HOLD_ON_LAST_FRAME));
-                return PlayState.CONTINUE;
-            }
-
-            if(!open && controller.getCurrentRawAnimation().getAnimationStages().getFirst().animationName().equals("animation.primatica_respawn.open")) {
-                controller.setAnimation(RawAnimation.begin().then("animation.primatica_respawn.closing", Animation.LoopType.HOLD_ON_LAST_FRAME));
-                return PlayState.CONTINUE;
+            if(view_open != open) {
+                controller.setAnimation(open ? OPENING_ANIM : CLOSING_ANIM);
+                view_open = open;
             }
 
             return PlayState.CONTINUE;

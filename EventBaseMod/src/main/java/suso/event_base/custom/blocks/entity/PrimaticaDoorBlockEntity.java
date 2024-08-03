@@ -17,9 +17,22 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import suso.event_base.custom.blocks.CustomBlocks;
 
 public class PrimaticaDoorBlockEntity extends BlockEntity implements GeoBlockEntity {
+    private boolean view_open = false;
+
     private boolean open = false;
     private Color color = Color.ofOpaque(0xFFFFFF);
     private boolean diagonal = false;
+
+    private static final RawAnimation CLOSED_ANIM = RawAnimation.begin()
+            .thenLoop("animation.primatica_door.closed");
+    private static final RawAnimation OPEN_ANIM = RawAnimation.begin()
+            .thenLoop("animation.primatica_door.open");
+    private static final RawAnimation CLOSING_ANIM = RawAnimation.begin()
+            .thenPlay("animation.primatica_door.closing")
+            .thenLoop("animation.primatica_door.closed");
+    private static final RawAnimation OPENING_ANIM = RawAnimation.begin()
+            .thenPlay("animation.primatica_door.opening")
+            .thenLoop("animation.primatica_door.open");
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
@@ -41,26 +54,13 @@ public class PrimaticaDoorBlockEntity extends BlockEntity implements GeoBlockEnt
             AnimationController<PrimaticaDoorBlockEntity> controller = event.getController();
 
             if(controller.getCurrentAnimation() == null) {
-                controller.setAnimation(RawAnimation.begin().then("animation.primatica_door.closed", Animation.LoopType.LOOP));
-                return PlayState.CONTINUE;
+                controller.setAnimation(open ? OPEN_ANIM : CLOSED_ANIM);
+                view_open = open;
             }
 
-            if(controller.getAnimationState().equals(AnimationController.State.STOPPED)) {
-                if(controller.getCurrentRawAnimation().getAnimationStages().getFirst().animationName().equals("animation.primatica_door.closing"))
-                    controller.setAnimation(RawAnimation.begin().then("animation.primatica_door.closed", Animation.LoopType.LOOP));
-                else if(controller.getCurrentRawAnimation().getAnimationStages().getFirst().animationName().equals("animation.primatica_door.opening"))
-                    controller.setAnimation(RawAnimation.begin().then("animation.primatica_door.open", Animation.LoopType.LOOP));
-                return PlayState.CONTINUE;
-            }
-
-            if(open && controller.getCurrentRawAnimation().getAnimationStages().getFirst().animationName().equals("animation.primatica_door.closed")) {
-                controller.setAnimation(RawAnimation.begin().then("animation.primatica_door.opening", Animation.LoopType.HOLD_ON_LAST_FRAME));
-                return PlayState.CONTINUE;
-            }
-
-            if(!open && controller.getCurrentRawAnimation().getAnimationStages().getFirst().animationName().equals("animation.primatica_door.open")) {
-                controller.setAnimation(RawAnimation.begin().then("animation.primatica_door.closing", Animation.LoopType.HOLD_ON_LAST_FRAME));
-                return PlayState.CONTINUE;
+            if(view_open != open) {
+                controller.setAnimation(open ? OPENING_ANIM : CLOSING_ANIM);
+                view_open = open;
             }
 
             return PlayState.CONTINUE;

@@ -2,7 +2,6 @@
 	"format_version": "1.8.0",
 	"animations": {
 		"animation.primatica_powerup.spawn": {
-			"loop": "hold_on_last_frame",
 			"animation_length": 1,
 			"bones": {
 				"base": {
