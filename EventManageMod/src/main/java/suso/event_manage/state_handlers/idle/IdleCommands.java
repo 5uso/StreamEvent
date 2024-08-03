@@ -30,6 +30,8 @@ public class IdleCommands implements StateCommands {
     // /primatica
     private static final LiteralArgumentBuilder<ServerCommandSource> PRIMATICA_CMD = LiteralArgumentBuilder.literal("primatica");
     static {
+        PRIMATICA_CMD.requires(src -> src.hasPermissionLevel(2));
+
         PRIMATICA_CMD.executes(context -> {
             EventManager.getInstance().setStateHandler(new PrimaticaIngameHandler(5 * 60 * 1000));
             context.getSource().sendFeedback(() -> Text.literal("Starting primatica!"), true);

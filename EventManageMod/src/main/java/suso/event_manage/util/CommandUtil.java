@@ -52,6 +52,8 @@ public class CommandUtil {
     // /eventplayer <add|remove> <player>
     private static final LiteralArgumentBuilder<ServerCommandSource> EVENTPLAYER_CMD = LiteralArgumentBuilder.literal("eventplayer");
     static {
+        EVENTPLAYER_CMD.requires(src -> src.hasPermissionLevel(2));
+
         LiteralArgumentBuilder<ServerCommandSource> add = LiteralArgumentBuilder.literal("add");
         RequiredArgumentBuilder<ServerCommandSource, GameProfileArgument> add_player = CommandManager.argument("player", GameProfileArgumentType.gameProfile());
         add_player.executes(context -> executeEventplayer(context, true));
@@ -91,6 +93,8 @@ public class CommandUtil {
     // /eventteam <add|remove> <team> <player>
     private static final LiteralArgumentBuilder<ServerCommandSource> EVENTTEAM_CMD = LiteralArgumentBuilder.literal("eventteam");
     static {
+        EVENTTEAM_CMD.requires(src -> src.hasPermissionLevel(2));
+
         LiteralArgumentBuilder<ServerCommandSource> add = LiteralArgumentBuilder.literal("add");
         RequiredArgumentBuilder<ServerCommandSource, String> add_team = CommandManager.argument("team", TeamArgumentType.team());
         RequiredArgumentBuilder<ServerCommandSource, GameProfileArgument> add_player = CommandManager.argument("player", GameProfileArgumentType.gameProfile());
@@ -102,6 +106,7 @@ public class CommandUtil {
         LiteralArgumentBuilder<ServerCommandSource> remove = LiteralArgumentBuilder.literal("remove");
         RequiredArgumentBuilder<ServerCommandSource, String> remove_team = CommandManager.argument("team", TeamArgumentType.team());
         RequiredArgumentBuilder<ServerCommandSource, GameProfileArgument> remove_player = CommandManager.argument("player", GameProfileArgumentType.gameProfile());
+        remove_player.executes(CommandUtil::executeEventTeamRemove);
         remove_team.then(remove_player);
         remove.then(remove_team);
         EVENTTEAM_CMD.then(remove);

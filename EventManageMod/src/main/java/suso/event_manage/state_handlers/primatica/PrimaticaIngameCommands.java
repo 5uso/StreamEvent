@@ -12,8 +12,6 @@ import suso.event_manage.EventManager;
 import suso.event_manage.state_handlers.StateCommands;
 import suso.event_manage.util.CommandUtil;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Random;
 
 public class PrimaticaIngameCommands implements StateCommands {
@@ -38,6 +36,8 @@ public class PrimaticaIngameCommands implements StateCommands {
     // /addtime
     private static final LiteralArgumentBuilder<ServerCommandSource> ADDTIME_CMD = LiteralArgumentBuilder.literal("addtime");
     static {
+        ADDTIME_CMD.requires(src -> src.hasPermissionLevel(2));
+
         RequiredArgumentBuilder<ServerCommandSource, Long> time = CommandManager.argument("time", LongArgumentType.longArg());
         time.executes(context -> {
             if(EventManager.getInstance().getStateHandler() instanceof PrimaticaIngameHandler h) {
@@ -53,6 +53,8 @@ public class PrimaticaIngameCommands implements StateCommands {
     // /randomscores
     private static final LiteralArgumentBuilder<ServerCommandSource> RANDOMSCORES_CMD = LiteralArgumentBuilder.literal("randomscores");
     static {
+        RANDOMSCORES_CMD.requires(src -> src.hasPermissionLevel(2));
+
         RANDOMSCORES_CMD.executes(context -> {
             if(EventManager.getInstance().getStateHandler() instanceof PrimaticaIngameHandler h) {
                 h.resetScores();
