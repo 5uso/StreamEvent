@@ -4,6 +4,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.fabricmc.fabric.impl.client.indigo.renderer.helper.ColorHelper;
+import net.fabricmc.fabric.impl.client.indigo.renderer.mesh.MutableQuadViewImpl;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.gl.ShaderProgram;
@@ -14,6 +16,7 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.InvalidHierarchicalFileException;
+import net.minecraft.util.math.BlockPos;
 import suso.event_base.client.shader.ShaderNetworking;
 import suso.event_base.custom.blocks.CustomBlocks;
 import suso.event_base.custom.render.hud.CustomHud;
@@ -64,7 +67,14 @@ public class CustomRender {
     }
 
     public static void setupCustomColors(BlockColors bc) {
-        bc.registerColorProvider((state, world, pos, tintIndex) -> ShaderNetworking.colors.getOrDefault(pos, 0), CustomBlocks.GRAY_EMP, CustomBlocks.WHITE_EMP, CustomBlocks.PINK_EMP, CustomBlocks.PURPLE_EMP, CustomBlocks.BLUE_EMP, CustomBlocks.CYAN_EMP, CustomBlocks.LIGHT_BLUE_EMP, CustomBlocks.GREEN_EMP, CustomBlocks.LIME_EMP, CustomBlocks.YELLOW_EMP, CustomBlocks.ORANGE_EMP, CustomBlocks.RED_EMP);
+        //bc.registerColorProvider((state, world, pos, tintIndex) -> ShaderNetworking.colors.getOrDefault(pos, 0), CustomBlocks.GRAY_EMP, CustomBlocks.WHITE_EMP, CustomBlocks.PINK_EMP, CustomBlocks.PURPLE_EMP, CustomBlocks.BLUE_EMP, CustomBlocks.CYAN_EMP, CustomBlocks.LIGHT_BLUE_EMP, CustomBlocks.GREEN_EMP, CustomBlocks.LIME_EMP, CustomBlocks.YELLOW_EMP, CustomBlocks.ORANGE_EMP, CustomBlocks.RED_EMP);
+    }
+
+    public static boolean colorizeQuad(BlockPos pos, MutableQuadViewImpl quad) {
+        if(!ShaderNetworking.colors.containsKey(pos)) return false;
+        int color = ShaderNetworking.colors.get(pos);
+        for (int i = 0; i < 4; i++) quad.color(i, color);
+        return true;
     }
 
     public static void setupShaders(ResourceFactory factory) {

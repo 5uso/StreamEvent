@@ -17,6 +17,7 @@
     "client.GlUniformUtilImpl",
     "client.HeldItemRendererMixin",
     "client.IdentifierMixin",
+    "client.InGameHudMixin",
     "client.KeyboardInputMixin",
     "client.KeyboardInvoker",
     "client.KeyboardMixin",
@@ -27,8 +28,8 @@
     "client.SoundSystemMixin",
     "client.SoundSystemUtilImpl",
     "client.WorldRendererMixin",
-    "client.fabric.BlockRenderInfoMixin",
-    "client.InGameHudMixin"
+    "client.fabric.AbstractBlockRenderContextMixin",
+    "client.fabric.BlockRenderInfoMixin"
   ],
   "injectors": {
     "defaultRequire": 1
