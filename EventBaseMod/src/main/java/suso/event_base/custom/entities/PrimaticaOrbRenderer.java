@@ -45,4 +45,9 @@ public class PrimaticaOrbRenderer extends GeoEntityRenderer<PrimaticaOrbEntity> 
 
         return current;
     }
+
+    @Override
+    public boolean hasLabel(PrimaticaOrbEntity entity) {
+        return false;
+    }
 }
