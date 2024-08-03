@@ -70,7 +70,6 @@ public abstract class DeathScreenMixin extends Screen {
         RenderSystem.defaultBlendFunc();
         CustomRender.setCurrentDrawShader(CustomRender.getDeathShader());
         context.fill(0, 0, s.width, s.height, 0);
-        //s.fillGradient(matrices, 0, 0, s.width, s.height, 0x60500000, 0xA0803030);
         RenderSystem.disableBlend();
         CustomRender.setCurrentDrawShader(null);
 
@@ -102,7 +101,7 @@ public abstract class DeathScreenMixin extends Screen {
         theButton.width = 100;
         theButton.height = 20;
 
-        super.render(context, (mouseX - s.width / 2) / 4 * guiScale, (mouseY - s.height / 2) / 4 * guiScale, delta);
+        theButton.render(context, (mouseX - s.width / 2) / 4 * guiScale, (mouseY - s.height / 2) / 4 * guiScale, delta);
 
         theButton.setX(width / 2 - 200 / guiScale);
         theButton.setY(height / 2);
