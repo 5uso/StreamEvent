@@ -31,30 +31,25 @@ public class SoundNetworking {
         buffered.add(new FadeSoundInstance(p.id, p.startingVolume, p.startingPitch, p.loop, p.category));
         if(!p.apply) return;
 
-        try(MinecraftClient client = ctx.client()) {
-            client.execute(() -> {
-                while(!buffered.isEmpty()) {
-                    client.getSoundManager().play(buffered.poll());
-                }
-            });
-        }
+        MinecraftClient client = ctx.client();
+        client.execute(() -> {
+            while(!buffered.isEmpty()) client.getSoundManager().play(buffered.poll());
+        });
     }
 
     private static void updateFadeVolumeHandler(UpdateFadeVolumePayload p, ClientPlayNetworking.Context ctx) {
-        try(MinecraftClient client = ctx.client()) {
-            client.execute(() -> {
-                ISoundSystemUtil system = (ISoundSystemUtil) ((SoundManagerAccess) client.getSoundManager()).getSoundSystem();
-                system.sendFadeVolume(p.id, p.targetVolume, p.fadeLengthTicks);
-            });
-        }
+        MinecraftClient client = ctx.client();
+        client.execute(() -> {
+            ISoundSystemUtil system = (ISoundSystemUtil) ((SoundManagerAccess) client.getSoundManager()).getSoundSystem();
+            system.sendFadeVolume(p.id, p.targetVolume, p.fadeLengthTicks);
+        });
     }
 
     private static void updateFadePitchHandler(UpdateFadePitchPayload p, ClientPlayNetworking.Context ctx) {
-        try(MinecraftClient client = ctx.client()) {
-            client.execute(() -> {
-                ISoundSystemUtil system = (ISoundSystemUtil) ((SoundManagerAccess) client.getSoundManager()).getSoundSystem();
-                system.sendFadePitch(p.id, p.targetPitch, p.fadeLengthTicks);
-            });
-        }
+        MinecraftClient client = ctx.client();
+        client.execute(() -> {
+            ISoundSystemUtil system = (ISoundSystemUtil) ((SoundManagerAccess) client.getSoundManager()).getSoundSystem();
+            system.sendFadePitch(p.id, p.targetPitch, p.fadeLengthTicks);
+        });
     }
 }

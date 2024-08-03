@@ -9,7 +9,6 @@ import net.minecraft.util.math.BlockPos;
 import suso.event_base.custom.network.payloads.SetBlockColorPayload;
 import suso.event_base.custom.network.payloads.SetPostShaderPayload;
 import suso.event_base.custom.network.payloads.SetShaderUniformPayload;
-import suso.event_base.mixin.client.GameRendererAccess;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,25 +26,18 @@ public class ShaderNetworking {
     }
 
     private static void setShaderUniformHandler(SetShaderUniformPayload p, ClientPlayNetworking.Context ctx) {
-        try(MinecraftClient client = ctx.client()) {
-            client.execute(p.floating ?
-                    () -> CustomUniformStore.setUniform(p.name, p.valuesFloat) :
-                    () -> CustomUniformStore.setUniform(p.name, p.valuesInt)
-            );
-        }
+        MinecraftClient client = ctx.client();
+        client.execute(p.floating ?
+                () -> CustomUniformStore.setUniform(p.name, p.valuesFloat) :
+                () -> CustomUniformStore.setUniform(p.name, p.valuesInt)
+        );
     }
 
     private static void setPostShaderHandler(SetPostShaderPayload p, ClientPlayNetworking.Context ctx) {
         CustomUniformStore.setPostOverride(p.id.toString());
 
-        try(MinecraftClient client = ctx.client()) {
-            if (CustomUniformStore.overridingPost) {
-                client.execute(() -> ((GameRendererAccess) client.gameRenderer).invokeLoadShader(p.id));
-                return;
-            }
-
-            client.execute(() -> client.gameRenderer.onCameraEntitySet(client.getCameraEntity()));
-        }
+        MinecraftClient client = ctx.client();
+        client.execute(() -> client.gameRenderer.onCameraEntitySet(client.getCameraEntity()));
     }
 
     public static final Map<BlockPos, Integer> colors = new HashMap<>();

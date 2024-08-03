@@ -24,21 +24,18 @@ public class MiscNetworking {
     }
 
     private static void fireworkParticleHandler(FireworkParticlePayload p, ClientPlayNetworking.Context ctx) {
-        try(MinecraftClient client = ctx.client()) {
-            client.execute(() -> client.particleManager.addParticle(
-                    new FireworksSparkParticle.FireworkParticle(client.world, p.x, p.y, p.z, p.vx, p.vy, p.vz, client.particleManager, p.fireworks)
-            ));
-        }
+        MinecraftClient client = ctx.client();
+        client.execute(() -> client.particleManager.addParticle(
+                new FireworksSparkParticle.FireworkParticle(client.world, p.x, p.y, p.z, p.vx, p.vy, p.vz, client.particleManager, p.fireworks)
+        ));
     }
 
     private static void entityUpdateHandler(EntityUpdatePayload p, ClientPlayNetworking.Context ctx) {
-        try(MinecraftClient client = ctx.client()) {
-            client.execute(() -> {
-                if (client.world != null && client.world.getEntityById(p.entityId) instanceof EventUpdatable e) {
-                    e.customUpdate(p.nbt);
-                }
-            });
-        }
+        MinecraftClient client = ctx.client();
+        client.execute(() -> {
+            if (client.world != null && client.world.getEntityById(p.entityId) instanceof EventUpdatable e)
+                e.customUpdate(p.nbt);
+        });
     }
 
     private static void hudDataHandler(HudDataPayload p, ClientPlayNetworking.Context ctx) {
