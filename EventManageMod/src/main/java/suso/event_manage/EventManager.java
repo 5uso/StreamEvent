@@ -188,6 +188,21 @@ public class EventManager implements ModInitializer {
         rules.get(GameRules.FORGIVE_DEAD_PLAYERS).set(true, server);
         rules.get(GameRules.UNIVERSAL_ANGER).set(false, server);
         rules.get(GameRules.PLAYERS_SLEEPING_PERCENTAGE).set(100, server);
+        rules.get(GameRules.PROJECTILES_CAN_BREAK_BLOCKS).set(false, server);
+        rules.get(GameRules.MAX_COMMAND_FORK_COUNT).set(65536, server);
+        rules.get(GameRules.COMMAND_MODIFICATION_BLOCK_LIMIT).set(32768, server);
+        rules.get(GameRules.PLAYERS_NETHER_PORTAL_DEFAULT_DELAY).set(2147483647, server);
+        rules.get(GameRules.PLAYERS_NETHER_PORTAL_CREATIVE_DELAY).set(2147483647, server);
+        rules.get(GameRules.BLOCK_EXPLOSION_DROP_DECAY).set(false, server);
+        rules.get(GameRules.MOB_EXPLOSION_DROP_DECAY).set(false, server);
+        rules.get(GameRules.TNT_EXPLOSION_DROP_DECAY).set(false, server);
+        rules.get(GameRules.SNOW_ACCUMULATION_HEIGHT).set(0, server);
+        rules.get(GameRules.WATER_SOURCE_CONVERSION).set(true, server);
+        rules.get(GameRules.LAVA_SOURCE_CONVERSION).set(false, server);
+        rules.get(GameRules.GLOBAL_SOUND_EVENTS).set(true, server);
+        rules.get(GameRules.DO_VINES_SPREAD).set(false, server);
+        rules.get(GameRules.ENDER_PEARLS_VANISH_ON_DEATH).set(false, server);
+        rules.get(GameRules.SPAWN_CHUNK_RADIUS).set(2, server);
     }
 
     public boolean isEventPlayer(ServerPlayerEntity player) {
