@@ -148,7 +148,10 @@ public class CustomRender {
 
     public static void withShader(ShaderProgram shader, Runnable lambda) {
         setCurrentDrawShader(shader);
-        lambda.run();
-        setCurrentDrawShader(null);
+        try {
+            lambda.run();
+        } finally {
+            setCurrentDrawShader(null);
+        }
     }
 }
