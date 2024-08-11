@@ -7,18 +7,18 @@ import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.renderer.GeoBlockRenderer;
 import software.bernie.geckolib.util.Color;
 
-public class PrimaticaDoorRenderer  extends GeoBlockRenderer<PrimaticaDoorBlockEntity> {
+public class PrimaticaDoorRenderer  extends GeoBlockRenderer<PrimaticaDoorBlockEntityClient> {
     public PrimaticaDoorRenderer() {
         super(new PrimaticaDoorModel());
     }
 
     @Override
-    public RenderLayer getRenderType(PrimaticaDoorBlockEntity animatable, Identifier texture, @Nullable VertexConsumerProvider bufferSource, float partialTick) {
+    public RenderLayer getRenderType(PrimaticaDoorBlockEntityClient animatable, Identifier texture, @Nullable VertexConsumerProvider bufferSource, float partialTick) {
         return RenderLayer.getEntityTranslucent(getTextureLocation(animatable));
     }
 
     @Override
-    public Color getRenderColor(PrimaticaDoorBlockEntity animatable, float partialTick, int packedLight) {
-        return animatable.getColor();
+    public Color getRenderColor(PrimaticaDoorBlockEntityClient animatable, float partialTick, int packedLight) {
+        return new Color(animatable.getColor());
     }
 }

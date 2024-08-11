@@ -1,7 +1,8 @@
-package suso.event_manage.custom.blocks.entity;
+package suso.event_common.custom.blocks.entity;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
@@ -9,15 +10,20 @@ import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
-import suso.event_manage.custom.blocks.CustomBlocks;
 
 public class PrimaticaDoorBlockEntity extends BlockEntity {
-    private boolean open = false;
-    private int color = 0xFFFFFFFF;
-    private boolean diagonal = false;
+    public static BlockEntityType<PrimaticaDoorBlockEntity> TYPE;
+
+    protected boolean open = false;
+    protected int color = 0xFFFFFFFF;
+    protected boolean diagonal = false;
+
+    public PrimaticaDoorBlockEntity(BlockEntityType<? extends PrimaticaDoorBlockEntity> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
+    }
 
     public PrimaticaDoorBlockEntity(BlockPos pos, BlockState state) {
-        super(CustomBlocks.PRIMATICA_DOOR_ENTITY, pos, state);
+        this(TYPE, pos, state);
     }
 
     @Override
@@ -45,5 +51,13 @@ public class PrimaticaDoorBlockEntity extends BlockEntity {
     @Override
     public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup wrapper) {
         return createNbt(wrapper);
+    }
+
+    public boolean isDiagonal() {
+        return diagonal;
+    }
+
+    public int getColor() {
+        return color;
     }
 }

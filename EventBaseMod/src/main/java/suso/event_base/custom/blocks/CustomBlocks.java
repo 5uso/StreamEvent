@@ -8,11 +8,11 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.DyeColor;
 import suso.event_base.custom.blocks.entity.*;
 import suso.event_common.custom.blocks.EMPBlock;
 import suso.event_common.custom.blocks.OtherBlockSettings;
+import suso.event_common.custom.blocks.PrimaticaDoorBlock;
 
 public class CustomBlocks {
     public static Block GRAY_HOLOBLOCK, WHITE_HOLOBLOCK, PINK_HOLOBLOCK, PURPLE_HOLOBLOCK, BLUE_HOLOBLOCK, CYAN_HOLOBLOCK, LIGHT_BLUE_HOLOBLOCK, GREEN_HOLOBLOCK, LIME_HOLOBLOCK, YELLOW_HOLOBLOCK, ORANGE_HOLOBLOCK, RED_HOLOBLOCK;
@@ -25,7 +25,6 @@ public class CustomBlocks {
     public static Block PRIMATICA_RESPAWN;
     public static BlockEntityType<PrimaticaRespawnBlockEntity> PRIMATICA_RESPAWN_ENTITY;
     public static Block PRIMATICA_DOOR;
-    public static BlockEntityType<PrimaticaDoorBlockEntity> PRIMATICA_DOOR_ENTITY;
 
     private static Block register(String id, Block block, boolean registerItem) {
         if(registerItem) {
@@ -92,8 +91,8 @@ public class CustomBlocks {
         PRIMATICA_RESPAWN = register("suso:primatica_respawn", new PrimaticaRespawnBlock(AbstractBlock.Settings.create().strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()), false);
         PRIMATICA_RESPAWN_ENTITY = register("suso:primatica_respawn_entity", BlockEntityType.Builder.create(PrimaticaRespawnBlockEntity::new, PRIMATICA_RESPAWN).build());
         BlockEntityRendererFactories.register(PRIMATICA_RESPAWN_ENTITY, ctx -> new PrimaticaRespawnRenderer());
-        PRIMATICA_DOOR = register("suso:primatica_door", new PrimaticaDoorBlock(AbstractBlock.Settings.create().strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()), false);
-        PRIMATICA_DOOR_ENTITY = register("suso:primatica_door_entity", BlockEntityType.Builder.create(PrimaticaDoorBlockEntity::new, PRIMATICA_DOOR).build());
-        BlockEntityRendererFactories.register(PRIMATICA_DOOR_ENTITY, ctx -> new PrimaticaDoorRenderer());
+        PRIMATICA_DOOR = register("suso:primatica_door", new PrimaticaDoorBlock(PrimaticaDoorBlockEntityClient::new), false);
+        PrimaticaDoorBlockEntityClient.TYPE = register("suso:primatica_door_entity", BlockEntityType.Builder.create(PrimaticaDoorBlockEntityClient::new, PRIMATICA_DOOR).build());
+        BlockEntityRendererFactories.register(PrimaticaDoorBlockEntityClient.TYPE, ctx -> new PrimaticaDoorRenderer());
     }
 }
