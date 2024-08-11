@@ -7,38 +7,39 @@ import net.minecraft.util.math.Vec3d;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.loading.math.MathParser;
 import software.bernie.geckolib.model.GeoModel;
+import suso.event_common.custom.blocks.entity.PrimaticaPowerupBlockEntity;
 
-public class PrimaticaPowerupModel extends GeoModel<PrimaticaPowerupBlockEntity> {
+public class PrimaticaPowerupModel extends GeoModel<PrimaticaPowerupBlockEntityClient> {
     @Override
-    public Identifier getModelResource(PrimaticaPowerupBlockEntity object) {
+    public Identifier getModelResource(PrimaticaPowerupBlockEntityClient object) {
         return Identifier.of("suso", "geo/primatica_powerup.geo.json");
     }
 
     @Override
-    public Identifier getTextureResource(PrimaticaPowerupBlockEntity object) {
-        String id = switch (object.type) {
-            case AGILITY -> "textures/block/primatica_powerup/agility.png";
-            case EMP -> "textures/block/primatica_powerup/emp.png";
-            case GUNK -> "textures/block/primatica_powerup/gunk.png";
-            case ARROW -> "textures/block/primatica_powerup/arrow.png";
-            case BRIDGE -> "textures/block/primatica_powerup/bridge.png";
-            case GRAVITY -> "textures/block/primatica_powerup/gravity.png";
+    public Identifier getTextureResource(PrimaticaPowerupBlockEntityClient object) {
+        String id = switch (object.getPowerupType()) {
+            case PrimaticaPowerupBlockEntity.Powerups.AGILITY -> "textures/block/primatica_powerup/agility.png";
+            case PrimaticaPowerupBlockEntity.Powerups.EMP -> "textures/block/primatica_powerup/emp.png";
+            case PrimaticaPowerupBlockEntity.Powerups.GUNK -> "textures/block/primatica_powerup/gunk.png";
+            case PrimaticaPowerupBlockEntity.Powerups.ARROW -> "textures/block/primatica_powerup/arrow.png";
+            case PrimaticaPowerupBlockEntity.Powerups.BRIDGE -> "textures/block/primatica_powerup/bridge.png";
+            case PrimaticaPowerupBlockEntity.Powerups.GRAVITY -> "textures/block/primatica_powerup/gravity.png";
         };
 
         return Identifier.of("suso", id);
     }
 
     @Override
-    public Identifier getAnimationResource(PrimaticaPowerupBlockEntity animatable) {
+    public Identifier getAnimationResource(PrimaticaPowerupBlockEntityClient animatable) {
         return Identifier.of("suso", "animations/block/primatica_powerup.animation.json");
     }
 
     @Override
-    public void applyMolangQueries(AnimationState<PrimaticaPowerupBlockEntity> animationState, double animTime) {
+    public void applyMolangQueries(AnimationState<PrimaticaPowerupBlockEntityClient> animationState, double animTime) {
         super.applyMolangQueries(animationState, animTime);
 
         MinecraftClient client = MinecraftClient.getInstance();
-        PrimaticaPowerupBlockEntity blockEntity = animationState.getAnimatable();
+        PrimaticaPowerupBlockEntityClient blockEntity = animationState.getAnimatable();
 
         MathParser.setVariable("query.face_camera_x", () -> {
             Vec3d cameraPos = client.gameRenderer.getCamera().getPos();

@@ -1,7 +1,8 @@
-package suso.event_manage.custom.blocks.entity;
+package suso.event_common.custom.blocks.entity;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
@@ -9,15 +10,23 @@ import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
-import suso.event_manage.custom.blocks.CustomBlocks;
-import suso.event_manage.state_handlers.primatica.PrimaticaInfo;
 
 public class PrimaticaPowerupBlockEntity extends BlockEntity {
-    private boolean collected = false;
-    private PrimaticaInfo.Powerups type = PrimaticaInfo.Powerups.AGILITY;
+    public enum Powerups {
+        AGILITY, BRIDGE, GRAVITY, EMP, ARROW, GUNK
+    }
+
+    public static BlockEntityType<PrimaticaPowerupBlockEntity> TYPE;
+
+    protected boolean collected = false;
+    protected Powerups type = Powerups.AGILITY;
+
+    public PrimaticaPowerupBlockEntity(BlockEntityType<? extends PrimaticaPowerupBlockEntity> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
+    }
 
     public PrimaticaPowerupBlockEntity(BlockPos pos, BlockState state) {
-        super(CustomBlocks.PRIMATICA_POWERUP_ENTITY, pos, state);
+        this(TYPE, pos, state);
     }
 
     @Override
@@ -31,7 +40,11 @@ public class PrimaticaPowerupBlockEntity extends BlockEntity {
     public void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup wrapper) {
         super.readNbt(nbt, wrapper);
         collected = nbt.getBoolean("collected");
-        type = PrimaticaInfo.Powerups.values()[nbt.getByte("type")];
+        type = Powerups.values()[nbt.getByte("type")];
+    }
+
+    public Powerups getPowerupType() {
+        return type;
     }
 
     @Nullable @Override

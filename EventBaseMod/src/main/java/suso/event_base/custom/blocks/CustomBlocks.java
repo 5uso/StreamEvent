@@ -13,6 +13,7 @@ import suso.event_base.custom.blocks.entity.*;
 import suso.event_common.custom.blocks.EMPBlock;
 import suso.event_common.custom.blocks.OtherBlockSettings;
 import suso.event_common.custom.blocks.PrimaticaDoorBlock;
+import suso.event_common.custom.blocks.PrimaticaPowerupBlock;
 
 public class CustomBlocks {
     public static Block GRAY_HOLOBLOCK, WHITE_HOLOBLOCK, PINK_HOLOBLOCK, PURPLE_HOLOBLOCK, BLUE_HOLOBLOCK, CYAN_HOLOBLOCK, LIGHT_BLUE_HOLOBLOCK, GREEN_HOLOBLOCK, LIME_HOLOBLOCK, YELLOW_HOLOBLOCK, ORANGE_HOLOBLOCK, RED_HOLOBLOCK;
@@ -21,7 +22,7 @@ public class CustomBlocks {
     public static BlockEntityType<GunkBlockEntityClient> GUNK_ENTITY;
 
     public static Block PRIMATICA_POWERUP;
-    public static BlockEntityType<PrimaticaPowerupBlockEntity> PRIMATICA_POWERUP_ENTITY;
+    public static BlockEntityType<PrimaticaPowerupBlockEntityClient> PRIMATICA_POWERUP_ENTITY;
     public static Block PRIMATICA_RESPAWN;
     public static BlockEntityType<PrimaticaRespawnBlockEntity> PRIMATICA_RESPAWN_ENTITY;
     public static Block PRIMATICA_DOOR;
@@ -85,8 +86,8 @@ public class CustomBlocks {
 
         GUNK_ENTITY = register("suso:gunk_entity", BlockEntityType.Builder.create(GunkBlockEntityClient::new, GRAY_GUNK, WHITE_GUNK, PINK_GUNK, PURPLE_GUNK, BLUE_GUNK, CYAN_GUNK, LIGHT_BLUE_GUNK, GREEN_GUNK, LIME_GUNK, YELLOW_GUNK, ORANGE_GUNK, RED_GUNK).build());
 
-        PRIMATICA_POWERUP = register("suso:primatica_powerup", new PrimaticaPowerupBlock(AbstractBlock.Settings.create().strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()), false);
-        PRIMATICA_POWERUP_ENTITY = register("suso:primatica_powerup_entity", BlockEntityType.Builder.create(PrimaticaPowerupBlockEntity::new, PRIMATICA_POWERUP).build());
+        PRIMATICA_POWERUP = register("suso:primatica_powerup", new PrimaticaPowerupBlock(PrimaticaPowerupBlockEntityClient::new), false);
+        PrimaticaPowerupBlockEntityClient.TYPE = register("suso:primatica_powerup_entity", BlockEntityType.Builder.create(PrimaticaPowerupBlockEntityClient::new, PRIMATICA_POWERUP).build());
         BlockEntityRendererFactories.register(PRIMATICA_POWERUP_ENTITY, ctx -> new PrimaticaPowerupRenderer());
         PRIMATICA_RESPAWN = register("suso:primatica_respawn", new PrimaticaRespawnBlock(AbstractBlock.Settings.create().strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()), false);
         PRIMATICA_RESPAWN_ENTITY = register("suso:primatica_respawn_entity", BlockEntityType.Builder.create(PrimaticaRespawnBlockEntity::new, PRIMATICA_RESPAWN).build());

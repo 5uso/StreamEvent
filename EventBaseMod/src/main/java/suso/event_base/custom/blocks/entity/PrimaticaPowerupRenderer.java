@@ -6,13 +6,13 @@ import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.renderer.GeoBlockRenderer;
 
-public class PrimaticaPowerupRenderer extends GeoBlockRenderer<PrimaticaPowerupBlockEntity> {
+public class PrimaticaPowerupRenderer extends GeoBlockRenderer<PrimaticaPowerupBlockEntityClient> {
     public PrimaticaPowerupRenderer() {
         super(new PrimaticaPowerupModel());
     }
 
     @Override
-    public RenderLayer getRenderType(PrimaticaPowerupBlockEntity animatable, Identifier texture, @Nullable VertexConsumerProvider bufferSource, float partialTick) {
+    public RenderLayer getRenderType(PrimaticaPowerupBlockEntityClient animatable, Identifier texture, @Nullable VertexConsumerProvider bufferSource, float partialTick) {
         return RenderLayer.getEntityTranslucent(getTextureLocation(animatable));
     }
 }
