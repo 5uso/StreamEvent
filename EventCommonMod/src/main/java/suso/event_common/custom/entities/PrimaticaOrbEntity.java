@@ -13,7 +13,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class PrimaticaOrbEntity extends Entity {
-    public static EntityTypeSettings TYPE_SETTINGS = EntityTypeSettings.create(SpawnGroup.MISC)
+    public static final EntityTypeSettings TYPE_SETTINGS = EntityTypeSettings.create(SpawnGroup.MISC)
             .dimensions(1.0f, 1.0f)
             .disableSaving();
     public static EntityType<PrimaticaOrbEntity> TYPE;
