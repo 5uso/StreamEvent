@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.entity.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import suso.event_common.custom.entities.PrimaticaOrbEntity;
 
 public class CustomEntities {
     private static <T extends Entity> EntityType<T> register(String id, EntityType<T> entity) {
@@ -11,7 +12,7 @@ public class CustomEntities {
     }
 
     public static void register() {
-        PrimaticaOrbEntityClient.TYPE = register("suso:primatica_orb", EntityType.Builder.create(PrimaticaOrbEntityClient::new, SpawnGroup.MISC).dimensions(1.0f, 1.0f).disableSaving().build());
+        PrimaticaOrbEntityClient.TYPE = register("suso:primatica_orb", PrimaticaOrbEntity.TYPE_SETTINGS.build(PrimaticaOrbEntityClient::new));
         EntityRendererRegistry.register(PrimaticaOrbEntityClient.TYPE, PrimaticaOrbRenderer::new);
     }
 }
