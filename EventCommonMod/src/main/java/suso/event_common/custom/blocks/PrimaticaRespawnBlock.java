@@ -1,26 +1,41 @@
-package suso.event_base.custom.blocks;
+package suso.event_common.custom.blocks;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.ShapeContext;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import org.jetbrains.annotations.Nullable;
-import suso.event_base.custom.blocks.entity.PrimaticaRespawnBlockEntity;
+import suso.event_common.custom.blocks.entity.PrimaticaRespawnBlockEntity;
 
 public class PrimaticaRespawnBlock extends BlockWithEntity {
+    public static final Settings SETTINGS = AbstractBlock.Settings.create()
+            .strength(-1.0F, 3600000.0F)
+            .dropsNothing()
+            .nonOpaque()
+            .noCollision();
+
     public static final MapCodec<PrimaticaRespawnBlock> CODEC = createCodec(PrimaticaRespawnBlock::new);
-    protected PrimaticaRespawnBlock(Settings settings) {
+
+    private final BlockEntityType.BlockEntityFactory<? extends PrimaticaRespawnBlockEntity> blockEntityFactory;
+
+    public PrimaticaRespawnBlock(Settings settings, BlockEntityType.BlockEntityFactory<? extends PrimaticaRespawnBlockEntity> factory) {
         super(settings);
+        this.blockEntityFactory = factory;
     }
 
-    @Nullable
-    @Override
+    private PrimaticaRespawnBlock(Settings settings) {
+        this(settings, PrimaticaRespawnBlockEntity::new);
+    }
+
+    public PrimaticaRespawnBlock(BlockEntityType.BlockEntityFactory<? extends PrimaticaRespawnBlockEntity> factory) {
+        this(SETTINGS, factory);
+    }
+
+    @Nullable @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new PrimaticaRespawnBlockEntity(pos, state);
     }

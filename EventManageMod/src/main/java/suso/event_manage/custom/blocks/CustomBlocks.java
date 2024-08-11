@@ -11,14 +11,11 @@ import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.DyeColor;
-import suso.event_common.custom.blocks.EMPBlock;
-import suso.event_common.custom.blocks.OtherBlockSettings;
-import suso.event_common.custom.blocks.PrimaticaDoorBlock;
-import suso.event_common.custom.blocks.PrimaticaPowerupBlock;
+import suso.event_common.custom.blocks.*;
 import suso.event_common.custom.blocks.entity.PrimaticaDoorBlockEntity;
 import suso.event_common.custom.blocks.entity.PrimaticaPowerupBlockEntity;
+import suso.event_common.custom.blocks.entity.PrimaticaRespawnBlockEntity;
 import suso.event_manage.custom.blocks.entity.GunkBlockEntity;
-import suso.event_manage.custom.blocks.entity.PrimaticaRespawnBlockEntity;
 
 public class CustomBlocks {
     public static Block GRAY_HOLOBLOCK, WHITE_HOLOBLOCK, PINK_HOLOBLOCK, PURPLE_HOLOBLOCK, BLUE_HOLOBLOCK, CYAN_HOLOBLOCK, LIGHT_BLUE_HOLOBLOCK, GREEN_HOLOBLOCK, LIME_HOLOBLOCK, YELLOW_HOLOBLOCK, ORANGE_HOLOBLOCK, RED_HOLOBLOCK;
@@ -28,7 +25,6 @@ public class CustomBlocks {
 
     public static Block PRIMATICA_POWERUP;
     public static Block PRIMATICA_RESPAWN;
-    public static BlockEntityType<PrimaticaRespawnBlockEntity> PRIMATICA_RESPAWN_ENTITY;
     public static Block PRIMATICA_DOOR;
 
     private static Block register(String id, Block block, boolean registerItem) {
@@ -92,8 +88,8 @@ public class CustomBlocks {
 
         PRIMATICA_POWERUP = register("suso:primatica_powerup", new PrimaticaPowerupBlock(PrimaticaPowerupBlockEntity::new), false);
         PrimaticaPowerupBlockEntity.TYPE = register("suso:primatica_powerup_entity", BlockEntityType.Builder.create(PrimaticaPowerupBlockEntity::new, PRIMATICA_POWERUP).build());
-        PRIMATICA_RESPAWN = register("suso:primatica_respawn", new PrimaticaRespawnBlock(AbstractBlock.Settings.create().strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()), false);
-        PRIMATICA_RESPAWN_ENTITY = register("suso:primatica_respawn_entity", BlockEntityType.Builder.create(PrimaticaRespawnBlockEntity::new, PRIMATICA_RESPAWN).build());
+        PRIMATICA_RESPAWN = register("suso:primatica_respawn", new PrimaticaRespawnBlock(PrimaticaRespawnBlockEntity::new), false);
+        PrimaticaRespawnBlockEntity.TYPE = register("suso:primatica_respawn_entity", BlockEntityType.Builder.create(PrimaticaRespawnBlockEntity::new, PRIMATICA_RESPAWN).build());
         PRIMATICA_DOOR = register("suso:primatica_door", new PrimaticaDoorBlock(PrimaticaDoorBlockEntity::new), false);
         PrimaticaDoorBlockEntity.TYPE = register("suso:primatica_door_entity", BlockEntityType.Builder.create(PrimaticaDoorBlockEntity::new, PRIMATICA_DOOR).build());
     }
