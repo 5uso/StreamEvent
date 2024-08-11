@@ -12,12 +12,13 @@ import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.DyeColor;
 import suso.event_base.custom.blocks.entity.*;
 import suso.event_common.custom.blocks.EMPBlock;
+import suso.event_common.custom.blocks.OtherBlockSettings;
 
 public class CustomBlocks {
     public static Block GRAY_HOLOBLOCK, WHITE_HOLOBLOCK, PINK_HOLOBLOCK, PURPLE_HOLOBLOCK, BLUE_HOLOBLOCK, CYAN_HOLOBLOCK, LIGHT_BLUE_HOLOBLOCK, GREEN_HOLOBLOCK, LIME_HOLOBLOCK, YELLOW_HOLOBLOCK, ORANGE_HOLOBLOCK, RED_HOLOBLOCK;
     public static Block GRAY_EMP, WHITE_EMP, PINK_EMP, PURPLE_EMP, BLUE_EMP, CYAN_EMP, LIGHT_BLUE_EMP, GREEN_EMP, LIME_EMP, YELLOW_EMP, ORANGE_EMP, RED_EMP;
     public static Block GRAY_GUNK, WHITE_GUNK, PINK_GUNK, PURPLE_GUNK, BLUE_GUNK, CYAN_GUNK, LIGHT_BLUE_GUNK, GREEN_GUNK, LIME_GUNK, YELLOW_GUNK, ORANGE_GUNK, RED_GUNK;
-    public static BlockEntityType<GunkBlockEntity> GUNK_ENTITY;
+    public static BlockEntityType<GunkBlockEntityClient> GUNK_ENTITY;
 
     public static Block PRIMATICA_POWERUP;
     public static BlockEntityType<PrimaticaPowerupBlockEntity> PRIMATICA_POWERUP_ENTITY;
@@ -70,20 +71,20 @@ public class CustomBlocks {
         ORANGE_EMP = register("suso:orange_emp", new EMPBlock(), false);
         RED_EMP = register("suso:red_emp", new EMPBlock(), false);
 
-        GRAY_GUNK = register("suso:gray_gunk", new Block(AbstractBlock.Settings.create().mapColor(MapColor.GRAY).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)), false);
-        WHITE_GUNK = register("suso:white_gunk", new Block(AbstractBlock.Settings.create().mapColor(MapColor.WHITE).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)), false);
-        PINK_GUNK = register("suso:pink_gunk", new Block(AbstractBlock.Settings.create().mapColor(MapColor.PINK).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)), false);
-        PURPLE_GUNK = register("suso:purple_gunk", new Block(AbstractBlock.Settings.create().mapColor(MapColor.PURPLE).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)), false);
-        BLUE_GUNK = register("suso:blue_gunk", new Block(AbstractBlock.Settings.create().mapColor(MapColor.BLUE).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)), false);
-        CYAN_GUNK = register("suso:cyan_gunk", new Block(AbstractBlock.Settings.create().mapColor(MapColor.CYAN).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)), false);
-        LIGHT_BLUE_GUNK = register("suso:light_blue_gunk", new Block(AbstractBlock.Settings.create().mapColor(MapColor.LIGHT_BLUE).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)), false);
-        GREEN_GUNK = register("suso:green_gunk", new Block(AbstractBlock.Settings.create().mapColor(MapColor.GREEN).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)), false);
-        LIME_GUNK = register("suso:lime_gunk", new Block(AbstractBlock.Settings.create().mapColor(MapColor.LIME).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)), false);
-        YELLOW_GUNK = register("suso:yellow_gunk", new Block(AbstractBlock.Settings.create().mapColor(MapColor.YELLOW).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)), false);
-        ORANGE_GUNK = register("suso:orange_gunk", new Block(AbstractBlock.Settings.create().mapColor(MapColor.ORANGE).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)), false);
-        RED_GUNK = register("suso:red_gunk", new Block(AbstractBlock.Settings.create().mapColor(MapColor.RED).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)), false);
+        GRAY_GUNK = register("suso:gray_gunk", new Block(OtherBlockSettings.gunk(MapColor.GRAY)), false);
+        WHITE_GUNK = register("suso:white_gunk", new Block(OtherBlockSettings.gunk(MapColor.WHITE)), false);
+        PINK_GUNK = register("suso:pink_gunk", new Block(OtherBlockSettings.gunk(MapColor.PINK)), false);
+        PURPLE_GUNK = register("suso:purple_gunk", new Block(OtherBlockSettings.gunk(MapColor.PURPLE)), false);
+        BLUE_GUNK = register("suso:blue_gunk", new Block(OtherBlockSettings.gunk(MapColor.BLUE)), false);
+        CYAN_GUNK = register("suso:cyan_gunk", new Block(OtherBlockSettings.gunk(MapColor.CYAN)), false);
+        LIGHT_BLUE_GUNK = register("suso:light_blue_gunk", new Block(OtherBlockSettings.gunk(MapColor.LIGHT_BLUE)), false);
+        GREEN_GUNK = register("suso:green_gunk", new Block(OtherBlockSettings.gunk(MapColor.GREEN)), false);
+        LIME_GUNK = register("suso:lime_gunk", new Block(OtherBlockSettings.gunk(MapColor.LIME)), false);
+        YELLOW_GUNK = register("suso:yellow_gunk", new Block(OtherBlockSettings.gunk(MapColor.YELLOW)), false);
+        ORANGE_GUNK = register("suso:orange_gunk", new Block(OtherBlockSettings.gunk(MapColor.ORANGE)), false);
+        RED_GUNK = register("suso:red_gunk", new Block(OtherBlockSettings.gunk(MapColor.RED)), false);
 
-        GUNK_ENTITY = register("suso:gunk_entity", BlockEntityType.Builder.create(GunkBlockEntity::new, GRAY_GUNK, WHITE_GUNK, PINK_GUNK, PURPLE_GUNK, BLUE_GUNK, CYAN_GUNK, LIGHT_BLUE_GUNK, GREEN_GUNK, LIME_GUNK, YELLOW_GUNK, ORANGE_GUNK, RED_GUNK).build());
+        GUNK_ENTITY = register("suso:gunk_entity", BlockEntityType.Builder.create(GunkBlockEntityClient::new, GRAY_GUNK, WHITE_GUNK, PINK_GUNK, PURPLE_GUNK, BLUE_GUNK, CYAN_GUNK, LIGHT_BLUE_GUNK, GREEN_GUNK, LIME_GUNK, YELLOW_GUNK, ORANGE_GUNK, RED_GUNK).build());
 
         PRIMATICA_POWERUP = register("suso:primatica_powerup", new PrimaticaPowerupBlock(AbstractBlock.Settings.create().strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()), false);
         PRIMATICA_POWERUP_ENTITY = register("suso:primatica_powerup_entity", BlockEntityType.Builder.create(PrimaticaPowerupBlockEntity::new, PRIMATICA_POWERUP).build());

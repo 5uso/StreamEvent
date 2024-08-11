@@ -5,8 +5,8 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
 import suso.event_base.custom.blocks.CustomBlocks;
 
-public class GunkBlockEntity extends BlockEntity {
-    public GunkBlockEntity(BlockPos pos, BlockState state) {
+public class GunkBlockEntityClient extends BlockEntity {
+    public GunkBlockEntityClient(BlockPos pos, BlockState state) {
         super(CustomBlocks.GUNK_ENTITY, pos, state);
     }
 }
