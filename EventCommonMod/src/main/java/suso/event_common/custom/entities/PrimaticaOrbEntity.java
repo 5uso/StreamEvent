@@ -1,7 +1,8 @@
-package suso.event_manage.custom.entities;
+package suso.event_common.custom.entities;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
@@ -12,12 +13,15 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class PrimaticaOrbEntity extends Entity {
-    public PrimaticaOrbEntity(EntityType<?> type, World world) {
+    public static EntityType<PrimaticaOrbEntity> TYPE;
+
+    public PrimaticaOrbEntity(EntityType<? extends PrimaticaOrbEntity> type, World world) {
         super(type, world);
+        this.intersectionChecked = true;
     }
 
     public PrimaticaOrbEntity(World world, Vec3d pos) {
-        super(CustomEntities.PRIMATICA_ORB, world);
+        this(TYPE, world);
         this.setPosition(pos);
     }
 

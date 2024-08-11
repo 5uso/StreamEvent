@@ -7,28 +7,28 @@ import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.loading.math.MathParser;
 import software.bernie.geckolib.model.GeoModel;
 
-public class PrimaticaOrbModel extends GeoModel<PrimaticaOrbEntity> {
+public class PrimaticaOrbModel extends GeoModel<PrimaticaOrbEntityClient> {
     @Override
-    public Identifier getModelResource(PrimaticaOrbEntity object) {
+    public Identifier getModelResource(PrimaticaOrbEntityClient object) {
         return Identifier.of("suso", "geo/primatica_orb.geo.json");
     }
 
     @Override
-    public Identifier getTextureResource(PrimaticaOrbEntity object) {
+    public Identifier getTextureResource(PrimaticaOrbEntityClient object) {
         return Identifier.of("suso", "textures/entity/primatica_orb.png");
     }
 
     @Override
-    public Identifier getAnimationResource(PrimaticaOrbEntity animatable) {
+    public Identifier getAnimationResource(PrimaticaOrbEntityClient animatable) {
         return Identifier.of("suso", "animations/entity/primatica_orb.animation.json");
     }
 
     @Override
-    public void applyMolangQueries(AnimationState<PrimaticaOrbEntity> animationState, double animTime) {
+    public void applyMolangQueries(AnimationState<PrimaticaOrbEntityClient> animationState, double animTime) {
         super.applyMolangQueries(animationState, animTime);
 
         MinecraftClient client = MinecraftClient.getInstance();
-        PrimaticaOrbEntity entity = animationState.getAnimatable();
+        PrimaticaOrbEntityClient entity = animationState.getAnimatable();
 
         MathParser.setVariable("query.face_camera_x", () -> {
             Vec3d cameraPos = client.gameRenderer.getCamera().getPos();

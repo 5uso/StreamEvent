@@ -22,7 +22,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Vector3f;
-import suso.event_manage.custom.entities.PrimaticaOrbEntity;
+import suso.event_common.custom.entities.PrimaticaOrbEntity;
 import suso.event_manage.state_handlers.TickableInstance;
 import suso.event_manage.util.MiscUtil;
 import suso.event_manage.util.ParticleUtil;

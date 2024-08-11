@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import software.bernie.geckolib.util.Color;
 
-public class PrimaticaOrbRenderer extends GeoEntityRenderer<PrimaticaOrbEntity> {
+public class PrimaticaOrbRenderer extends GeoEntityRenderer<PrimaticaOrbEntityClient> {
     public PrimaticaOrbRenderer(EntityRendererFactory.Context renderManager) {
         super(renderManager, new PrimaticaOrbModel());
     }
@@ -17,12 +17,12 @@ public class PrimaticaOrbRenderer extends GeoEntityRenderer<PrimaticaOrbEntity> 
     private static final int TRANSITION_DURATION = 300;
 
     @Override
-    public RenderLayer getRenderType(PrimaticaOrbEntity animatable, Identifier texture, @Nullable VertexConsumerProvider bufferSource, float partialTick) {
+    public RenderLayer getRenderType(PrimaticaOrbEntityClient animatable, Identifier texture, @Nullable VertexConsumerProvider bufferSource, float partialTick) {
         return RenderLayer.getEntityTranslucent(getTextureLocation(animatable));
     }
 
     @Override
-    public Color getRenderColor(PrimaticaOrbEntity animatable, float partialTick, int packedLight) {
+    public Color getRenderColor(PrimaticaOrbEntityClient animatable, float partialTick, int packedLight) {
         Color current = Color.ofOpaque(animatable.getTeamColorValue());
         if(!animatable.transitioningColor && !animatable.previousColor.equals(current)) {
             animatable.transitionStartMs = Util.getMeasuringTimeMs();
@@ -47,7 +47,7 @@ public class PrimaticaOrbRenderer extends GeoEntityRenderer<PrimaticaOrbEntity> 
     }
 
     @Override
-    public boolean hasLabel(PrimaticaOrbEntity entity) {
+    public boolean hasLabel(PrimaticaOrbEntityClient entity) {
         return false;
     }
 }
