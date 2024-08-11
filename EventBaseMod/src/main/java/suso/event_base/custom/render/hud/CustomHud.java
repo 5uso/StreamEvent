@@ -8,7 +8,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.util.Identifier;
 import suso.event_base.EvtBaseConstants;
-import suso.event_base.custom.network.payloads.HudDataPayload;
+import suso.event_common.custom.network.payloads.HudDataPayload;
 
 import java.util.Map;
 import java.util.UUID;

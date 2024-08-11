@@ -5,9 +5,9 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.client.MinecraftClient;
-import suso.event_base.custom.network.payloads.PlayFadeSoundPayload;
-import suso.event_base.custom.network.payloads.UpdateFadePitchPayload;
-import suso.event_base.custom.network.payloads.UpdateFadeVolumePayload;
+import suso.event_common.custom.network.payloads.PlayFadeSoundPayload;
+import suso.event_common.custom.network.payloads.UpdateFadePitchPayload;
+import suso.event_common.custom.network.payloads.UpdateFadeVolumePayload;
 import suso.event_base.mixin.client.SoundManagerAccess;
 
 import java.util.LinkedList;

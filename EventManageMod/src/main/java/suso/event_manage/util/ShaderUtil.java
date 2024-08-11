@@ -4,9 +4,9 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import suso.event_manage.custom.network.payloads.SetBlockColorPayload;
-import suso.event_manage.custom.network.payloads.SetPostShaderPayload;
-import suso.event_manage.custom.network.payloads.SetShaderUniformPayload;
+import suso.event_common.custom.network.payloads.SetBlockColorPayload;
+import suso.event_common.custom.network.payloads.SetPostShaderPayload;
+import suso.event_common.custom.network.payloads.SetShaderUniformPayload;
 
 public class ShaderUtil {
     public static void setShaderUniform(ServerPlayerEntity player, String name, float... values) {

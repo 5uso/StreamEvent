@@ -43,7 +43,7 @@ import org.joml.Vector3f;
 import suso.event_manage.EventManager;
 import suso.event_manage.EvtBaseConstants;
 import suso.event_manage.ModCheck;
-import suso.event_manage.custom.network.payloads.HudDataPayload;
+import suso.event_common.custom.network.payloads.HudDataPayload;
 import suso.event_manage.data.EventData;
 import suso.event_manage.data.EventPlayerData;
 import suso.event_manage.state_handlers.ScheduleInstance;

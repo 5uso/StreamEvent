@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import suso.event_base.custom.network.payloads.JumpInputPayload;
+import suso.event_common.custom.network.payloads.JumpInputPayload;
 
 @Mixin(KeyboardInput.class) @Environment(EnvType.CLIENT)
 public class KeyboardInputMixin {

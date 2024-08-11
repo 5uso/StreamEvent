@@ -9,7 +9,7 @@ import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.MathHelper;
-import suso.event_base.custom.network.payloads.HudDataPayload;
+import suso.event_common.custom.network.payloads.HudDataPayload;
 import suso.event_base.custom.render.CustomRender;
 import suso.event_base.custom.render.hud.elements.*;
 

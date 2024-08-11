@@ -5,10 +5,10 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.particle.FireworksSparkParticle;
 import suso.event_base.custom.entities.EventUpdatable;
-import suso.event_base.custom.network.payloads.EntityUpdatePayload;
-import suso.event_base.custom.network.payloads.FireworkParticlePayload;
-import suso.event_base.custom.network.payloads.HudDataPayload;
-import suso.event_base.custom.network.payloads.JumpInputPayload;
+import suso.event_common.custom.network.payloads.EntityUpdatePayload;
+import suso.event_common.custom.network.payloads.FireworkParticlePayload;
+import suso.event_common.custom.network.payloads.HudDataPayload;
+import suso.event_common.custom.network.payloads.JumpInputPayload;
 import suso.event_base.custom.render.CustomRender;
 
 public class MiscNetworking {

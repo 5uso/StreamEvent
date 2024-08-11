@@ -14,8 +14,8 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import suso.event_manage.EventManager;
-import suso.event_manage.custom.network.packets.JumpInputPacket;
-import suso.event_manage.custom.network.payloads.EntityUpdatePayload;
+import suso.event_common.custom.network.packets.JumpInputPacket;
+import suso.event_common.custom.network.payloads.EntityUpdatePayload;
 
 public class MiscUtil {
     public static double distance(Box rect, Vec3d p) {

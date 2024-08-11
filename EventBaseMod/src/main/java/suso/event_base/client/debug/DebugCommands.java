@@ -22,7 +22,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-import suso.event_base.custom.network.payloads.*;
+import suso.event_common.custom.network.payloads.*;
 
 public class DebugCommands {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {

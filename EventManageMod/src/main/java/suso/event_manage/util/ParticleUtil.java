@@ -2,14 +2,13 @@ package suso.event_manage.util;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.component.type.FireworkExplosionComponent;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.s2c.play.ParticleS2CPacket;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.joml.Vector3f;
 import suso.event_manage.EventManager;
-import suso.event_manage.custom.network.payloads.FireworkParticlePayload;
+import suso.event_common.custom.network.payloads.FireworkParticlePayload;
 
 import java.awt.*;
 import java.util.List;

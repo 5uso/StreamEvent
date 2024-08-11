@@ -9,9 +9,9 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
-import suso.event_manage.custom.network.payloads.PlayFadeSoundPayload;
-import suso.event_manage.custom.network.payloads.UpdateFadePitchPayload;
-import suso.event_manage.custom.network.payloads.UpdateFadeVolumePayload;
+import suso.event_common.custom.network.payloads.PlayFadeSoundPayload;
+import suso.event_common.custom.network.payloads.UpdateFadePitchPayload;
+import suso.event_common.custom.network.payloads.UpdateFadeVolumePayload;
 
 import java.util.List;
 import java.util.Random;

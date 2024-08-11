@@ -9,7 +9,7 @@ import net.minecraft.server.network.ServerLoginNetworkHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Util;
-import suso.event_manage.custom.network.payloads.LoginCheckPayload;
+import suso.event_common.custom.network.payloads.LoginCheckPayload;
 
 public class ModCheck {
     public static void handleConnection(ServerLoginNetworkHandler handler, MinecraftServer server, LoginPacketSender sender, ServerLoginNetworking.LoginSynchronizer synchronizer) {

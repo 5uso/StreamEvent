@@ -2,13 +2,9 @@ package suso.event_manage.custom.network;
 
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginConnectionEvents;
-import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.network.packet.LoginPackets;
-import net.minecraft.network.packet.PacketType;
-import net.minecraft.server.network.ServerLoginNetworkHandler;
 import suso.event_manage.ModCheck;
-import suso.event_manage.custom.network.payloads.*;
+import suso.event_common.custom.network.payloads.*;
 import suso.event_manage.util.MiscUtil;
 
 public class CustomPackets {

@@ -10,7 +10,7 @@ import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import suso.event_manage.EventManager;
 import suso.event_manage.EvtBaseConstants;
-import suso.event_manage.custom.network.payloads.HudDataPayload;
+import suso.event_common.custom.network.payloads.HudDataPayload;
 import suso.event_manage.state_handlers.primatica.PrimaticaScore;
 
 import java.util.UUID;
@@ -29,7 +29,7 @@ public class HudUtil {
     }
 
     public static void setPrimaticaScore(ServerPlayerEntity player, PrimaticaScore score) {
-        ServerPlayNetworking.send(player, HudDataPayload.ofPrimaticaScore(score));
+        ServerPlayNetworking.send(player, HudDataPayload.ofPrimaticaScore(score.getScores(), score.getRanks()));
     }
 
     public static void broadcastFeedMessage(UUID player1, Identifier texture, @Nullable UUID player2) {

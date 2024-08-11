@@ -6,9 +6,9 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.BlockPos;
-import suso.event_base.custom.network.payloads.SetBlockColorPayload;
-import suso.event_base.custom.network.payloads.SetPostShaderPayload;
-import suso.event_base.custom.network.payloads.SetShaderUniformPayload;
+import suso.event_common.custom.network.payloads.SetBlockColorPayload;
+import suso.event_common.custom.network.payloads.SetPostShaderPayload;
+import suso.event_common.custom.network.payloads.SetShaderUniformPayload;
 
 import java.util.HashMap;
 import java.util.Map;
