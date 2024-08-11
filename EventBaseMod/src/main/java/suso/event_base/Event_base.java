@@ -6,11 +6,12 @@ import suso.event_base.client.debug.DebugCommands;
 import suso.event_base.custom.blocks.CustomBlocks;
 import suso.event_base.custom.entities.CustomEntities;
 import suso.event_base.custom.items.CustomItems;
+import suso.event_common.EventConstants;
 
 public class Event_base implements ModInitializer {
     @Override
     public void onInitialize() {
-        if(EvtBaseConstants.DEBUG) {
+        if(EventConstants.DEBUG) {
             CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> DebugCommands.register(dispatcher));
         }
 

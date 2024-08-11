@@ -7,8 +7,8 @@ import net.minecraft.client.gui.PlayerSkinDrawer;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
-import suso.event_base.EvtBaseConstants;
 import suso.event_base.util.MiscUtil;
+import suso.event_common.EventConstants;
 
 import java.util.UUID;
 
@@ -21,7 +21,7 @@ public class FeedMessage implements HudRenderCallback {
     private float timer = 0.0f;
 
     public FeedMessage(UUID player1, Identifier actionTexture, UUID player2) {
-        singlePlayer = player2.equals(EvtBaseConstants.NULL_UUID);
+        singlePlayer = player2.equals(EventConstants.NULL_UUID);
 
         Identifier tface1, tface2;
         tface1 = tface2 = Identifier.of("suso", "textures/unknown_player.png");

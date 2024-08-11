@@ -1,7 +1,7 @@
 package suso.event_manage.state_handlers.primatica;
 
 import net.minecraft.scoreboard.AbstractTeam;
-import suso.event_manage.EvtBaseConstants;
+import suso.event_common.EventConstants;
 
 public class PrimaticaScore {
     private final int[] scores = new int[12];
@@ -13,7 +13,7 @@ public class PrimaticaScore {
     }
 
     public void score(AbstractTeam team, int amount) {
-        int team_idx = EvtBaseConstants.teamIndexes.get(team.getColor().getColorIndex());
+        int team_idx = EventConstants.teamIndexes.get(team.getColor().getColorIndex());
         int our_score = (scores[team_idx] += amount);
 
         for(int curr_rank = ranks[team_idx] - 1; curr_rank >= 0; curr_rank--) {
@@ -29,7 +29,7 @@ public class PrimaticaScore {
     }
 
     public int getScore(AbstractTeam team) {
-        return scores[EvtBaseConstants.teamIndexes.get(team.getColor().getColorIndex())];
+        return scores[EventConstants.teamIndexes.get(team.getColor().getColorIndex())];
     }
 
     public int[] getScores() {

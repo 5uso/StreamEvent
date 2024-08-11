@@ -4,7 +4,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.util.math.Vec3d;
-import suso.event_manage.EvtBaseConstants;
+import suso.event_common.EventConstants;
 import suso.event_manage.util.RndSet;
 
 import java.util.Arrays;
@@ -180,14 +180,14 @@ public class PrimaticaInfo {
 
 
     public static String getCorrespondingGunk(int colorIndex) {
-        return "suso:" + EvtBaseConstants.getTeamColor(colorIndex) + "_gunk";
+        return "suso:" + EventConstants.getTeamColor(colorIndex) + "_gunk";
     }
 
     public static String getCorrespondingBlock(int colorIndex) {
-        return "suso:" + EvtBaseConstants.getTeamColor(colorIndex) + "_holoblock";
+        return "suso:" + EventConstants.getTeamColor(colorIndex) + "_holoblock";
     }
 
     public static String getCorrespondingEmp(int colorIndex) {
-        return "suso:" + EvtBaseConstants.getTeamColor(colorIndex) + "_emp";
+        return "suso:" + EventConstants.getTeamColor(colorIndex) + "_emp";
     }
 }

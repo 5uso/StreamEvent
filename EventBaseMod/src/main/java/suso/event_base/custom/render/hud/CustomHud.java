@@ -7,21 +7,17 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.util.Identifier;
-import suso.event_base.EvtBaseConstants;
 import suso.event_common.custom.network.payloads.HudDataPayload;
+import suso.event_common.EventConstants;
 
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
 
 public class CustomHud implements HudRenderCallback {
-    public enum DataTypes {
-        STATE, TIMER, FEED, AGILITY, PRIMATICA_SCORE, INFO, KILL
-    }
-
-    private static final Map<EvtBaseConstants.States, Supplier<StateHud>> stateFactories = ImmutableMap.<EvtBaseConstants.States, Supplier<StateHud>>builder()
-            .put(EvtBaseConstants.States.IDLE, IdleHud::new)
-            .put(EvtBaseConstants.States.PRIMATICA_INGAME, PrimaticaIngameHud::new)
+    private static final Map<EventConstants.States, Supplier<StateHud>> stateFactories = ImmutableMap.<EventConstants.States, Supplier<StateHud>>builder()
+            .put(EventConstants.States.IDLE, IdleHud::new)
+            .put(EventConstants.States.PRIMATICA_INGAME, PrimaticaIngameHud::new)
             .build();
 
     private StateHud currentStateHud;
@@ -50,7 +46,7 @@ public class CustomHud implements HudRenderCallback {
     public void onHudData(HudDataPayload p) {
         switch(p.type) {
             case STATE -> {
-                EvtBaseConstants.States state = EvtBaseConstants.States.values()[p.buf.readInt()];
+                EventConstants.States state = EventConstants.States.values()[p.buf.readInt()];
                 setCurrentStateHud(stateFactories.get(state).get());
             }
             default -> currentStateHud.onHudMessage(p);

@@ -1,4 +1,4 @@
-package suso.event_manage;
+package suso.event_common;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.util.Formatting;
@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class EvtBaseConstants {
+public class EventConstants {
+    public static final boolean DEBUG = false;
+
     public enum States {
         IDLE, PRIMATICA_INGAME
     }

@@ -9,8 +9,8 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameMode;
+import suso.event_common.EventConstants;
 import suso.event_manage.EventManager;
-import suso.event_manage.EvtBaseConstants;
 import suso.event_manage.data.EventPlayerData;
 import suso.event_manage.state_handlers.StateHandler;
 import suso.event_manage.state_handlers.StateCommands;
@@ -108,7 +108,7 @@ public class IdleHandler implements StateHandler {
     }
 
     @Override
-    public EvtBaseConstants.States getState() {
-       return EvtBaseConstants.States.IDLE;
+    public EventConstants.States getState() {
+       return EventConstants.States.IDLE;
     }
 }

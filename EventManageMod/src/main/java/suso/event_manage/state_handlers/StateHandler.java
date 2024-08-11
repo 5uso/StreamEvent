@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import suso.event_manage.EvtBaseConstants;
+import suso.event_common.EventConstants;
 import suso.event_manage.data.EventPlayerData;
 
 public interface StateHandler {
@@ -27,5 +27,5 @@ public interface StateHandler {
     void cleanup();
     boolean canDropItems(ServerPlayerEntity player, EventPlayerData data);
     StateCommands getStateCommands();
-    EvtBaseConstants.States getState();
+    EventConstants.States getState();
 }

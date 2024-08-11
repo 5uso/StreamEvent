@@ -1,22 +1,19 @@
 package suso.event_manage.util;
 
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import suso.event_manage.EventManager;
-import suso.event_manage.EvtBaseConstants;
+import suso.event_common.EventConstants;
 import suso.event_common.custom.network.payloads.HudDataPayload;
 import suso.event_manage.state_handlers.primatica.PrimaticaScore;
 
 import java.util.UUID;
 
 public class HudUtil {
-    public static void setState(ServerPlayerEntity player, EvtBaseConstants.States state) {
+    public static void setState(ServerPlayerEntity player, EventConstants.States state) {
         ServerPlayNetworking.send(player, HudDataPayload.ofState(state));
     }
 

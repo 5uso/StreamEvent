@@ -40,8 +40,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
+import suso.event_common.EventConstants;
 import suso.event_manage.EventManager;
-import suso.event_manage.EvtBaseConstants;
 import suso.event_manage.ModCheck;
 import suso.event_common.custom.network.payloads.HudDataPayload;
 import suso.event_manage.data.EventData;
@@ -132,7 +132,7 @@ public class PrimaticaIngameHandler implements StateHandler {
     public void score(AbstractTeam team, ServerPlayerEntity player) {
         scores.score(team, overtime ? 5 : 1);
         EventManager.getInstance().getServer().getPlayerManager().getPlayerList().forEach(this::updateClientScores);
-        HudUtil.broadcastFeedMessage(Objects.isNull(player) ? EvtBaseConstants.NULL_UUID : player.getUuid(), Identifier.ofVanilla("textures/block/sunflower_front.png"), null);
+        HudUtil.broadcastFeedMessage(Objects.isNull(player) ? EventConstants.NULL_UUID : player.getUuid(), Identifier.ofVanilla("textures/block/sunflower_front.png"), null);
     }
 
     public void resetScores() {
@@ -456,7 +456,7 @@ public class PrimaticaIngameHandler implements StateHandler {
             }
         }
         if(!displayed) {
-            HudUtil.broadcastFeedMessage(player.getUuid(), Identifier.ofVanilla("textures/block/poppy.png"), EvtBaseConstants.NULL_UUID);
+            HudUtil.broadcastFeedMessage(player.getUuid(), Identifier.ofVanilla("textures/block/poppy.png"), EventConstants.NULL_UUID);
         }
 
         return true;
@@ -635,7 +635,7 @@ public class PrimaticaIngameHandler implements StateHandler {
     }
 
     @Override
-    public EvtBaseConstants.States getState() {
-        return EvtBaseConstants.States.PRIMATICA_INGAME;
+    public EventConstants.States getState() {
+        return EventConstants.States.PRIMATICA_INGAME;
     }
 }

@@ -11,9 +11,9 @@ import net.minecraft.scoreboard.Team;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
-import suso.event_base.EvtBaseConstants;
 import suso.event_base.client.ModCheck;
 import suso.event_base.custom.render.CustomRender;
+import suso.event_common.EventConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,7 +114,7 @@ public class PrimaticaScore implements HudRenderCallback {
         MinecraftClient client = MinecraftClient.getInstance();
         World w = client.world;
         if(w != null) {
-            Team t = w.getScoreboard().getTeam(EvtBaseConstants.getTeamColor(teamColor.getColorIndex()));
+            Team t = w.getScoreboard().getTeam(EventConstants.getTeamColor(teamColor.getColorIndex()));
             w.getPlayers().stream().filter(p -> p.isTeamPlayer(t)).limit(3).forEach(
                     p -> skins.add(client.getSkinProvider().getSkinTextures(p.getGameProfile()).texture())
             );
