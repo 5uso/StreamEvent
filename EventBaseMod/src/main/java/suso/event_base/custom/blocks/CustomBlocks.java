@@ -11,6 +11,7 @@ import net.minecraft.registry.Registry;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.DyeColor;
 import suso.event_base.custom.blocks.entity.*;
+import suso.event_common.custom.blocks.EMPBlock;
 
 public class CustomBlocks {
     public static Block GRAY_HOLOBLOCK, WHITE_HOLOBLOCK, PINK_HOLOBLOCK, PURPLE_HOLOBLOCK, BLUE_HOLOBLOCK, CYAN_HOLOBLOCK, LIGHT_BLUE_HOLOBLOCK, GREEN_HOLOBLOCK, LIME_HOLOBLOCK, YELLOW_HOLOBLOCK, ORANGE_HOLOBLOCK, RED_HOLOBLOCK;
@@ -56,18 +57,18 @@ public class CustomBlocks {
         ORANGE_HOLOBLOCK = register("suso:orange_holoblock", new StainedGlassBlock(DyeColor.ORANGE, AbstractBlock.Settings.create().mapColor(MapColor.ORANGE).sounds(BlockSoundGroup.AMETHYST_BLOCK).nonOpaque()));
         RED_HOLOBLOCK = register("suso:red_holoblock", new StainedGlassBlock(DyeColor.RED, AbstractBlock.Settings.create().mapColor(MapColor.RED).sounds(BlockSoundGroup.AMETHYST_BLOCK).nonOpaque()));
 
-        GRAY_EMP = register("suso:gray_emp", new EMPBlock(AbstractBlock.Settings.create().strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()), false);
-        WHITE_EMP = register("suso:white_emp", new EMPBlock(AbstractBlock.Settings.create().strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()), false);
-        PINK_EMP = register("suso:pink_emp", new EMPBlock(AbstractBlock.Settings.create().strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()), false);
-        PURPLE_EMP = register("suso:purple_emp", new EMPBlock(AbstractBlock.Settings.create().strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()), false);
-        BLUE_EMP = register("suso:blue_emp", new EMPBlock(AbstractBlock.Settings.create().strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()), false);
-        CYAN_EMP = register("suso:cyan_emp", new EMPBlock(AbstractBlock.Settings.create().strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()), false);
-        LIGHT_BLUE_EMP = register("suso:light_blue_emp", new EMPBlock(AbstractBlock.Settings.create().strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()), false);
-        GREEN_EMP = register("suso:green_emp", new EMPBlock(AbstractBlock.Settings.create().strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()), false);
-        LIME_EMP = register("suso:lime_emp", new EMPBlock(AbstractBlock.Settings.create().strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()), false);
-        YELLOW_EMP = register("suso:yellow_emp", new EMPBlock(AbstractBlock.Settings.create().strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()), false);
-        ORANGE_EMP = register("suso:orange_emp", new EMPBlock(AbstractBlock.Settings.create().strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()), false);
-        RED_EMP = register("suso:red_emp", new EMPBlock(AbstractBlock.Settings.create().strength(-1.0F, 3600000.0F).dropsNothing().nonOpaque().noCollision()), false);
+        GRAY_EMP = register("suso:gray_emp", new EMPBlock(), false);
+        WHITE_EMP = register("suso:white_emp", new EMPBlock(), false);
+        PINK_EMP = register("suso:pink_emp", new EMPBlock(), false);
+        PURPLE_EMP = register("suso:purple_emp", new EMPBlock(), false);
+        BLUE_EMP = register("suso:blue_emp", new EMPBlock(), false);
+        CYAN_EMP = register("suso:cyan_emp", new EMPBlock(), false);
+        LIGHT_BLUE_EMP = register("suso:light_blue_emp", new EMPBlock(), false);
+        GREEN_EMP = register("suso:green_emp", new EMPBlock(), false);
+        LIME_EMP = register("suso:lime_emp", new EMPBlock(), false);
+        YELLOW_EMP = register("suso:yellow_emp", new EMPBlock(), false);
+        ORANGE_EMP = register("suso:orange_emp", new EMPBlock(), false);
+        RED_EMP = register("suso:red_emp", new EMPBlock(), false);
 
         GRAY_GUNK = register("suso:gray_gunk", new Block(AbstractBlock.Settings.create().mapColor(MapColor.GRAY).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)), false);
         WHITE_GUNK = register("suso:white_gunk", new Block(AbstractBlock.Settings.create().mapColor(MapColor.WHITE).slipperiness(0.99F).sounds(BlockSoundGroup.SLIME)), false);
