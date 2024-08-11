@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "event_common",
+  "version": "${version}",
+  "name": "EventCommonMod",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/event_common/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "suso.event_common.Event_common"
+    ]
+  },
+  "mixins": [
+    "event_common.mixins.json",
+    {
+      "config": "event_common.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}

@@ -6,4 +6,7 @@ pluginManagement {
         }
         gradlePluginPortal()
     }
+
+    rootProject.name = 'EventRoot'
+    include 'EventCommonMod', 'EventBaseMod', 'EventManageMod'
 }

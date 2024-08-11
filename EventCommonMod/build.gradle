@@ -13,13 +13,6 @@ repositories {
     // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
     // See https://docs.gradle.org/current/userguide/declaring_repositories.html
     // for more information about repositories.
-    maven {
-        name = 'GeckoLib'
-        url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
-        content {
-            includeGroup("software.bernie.geckolib")
-        }
-    }
 }
 
 dependencies {
@@ -30,12 +23,6 @@ dependencies {
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-    //modImplementation "software.bernie.geckolib:geckolib-fabric-${minecraft_version}:${geckolib_version}"
-    modImplementation "software.bernie.geckolib:geckolib-fabric-1.21:${geckolib_version}"
-
-    // Common elements between client and server
-    implementation project(path: ":EventCommonMod", configuration: "namedElements")
 }
 
 processResources {
@@ -82,5 +69,11 @@ jar {
 }
 
 loom {
-    accessWidenerPath = file("src/main/resources/event_base.accesswidener")
+    splitEnvironmentSourceSets()
+    mods {
+        "event_common" {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.client
+        }
+    }
 }
